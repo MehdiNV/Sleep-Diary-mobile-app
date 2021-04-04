@@ -9,7 +9,7 @@ const TabOneScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sleep Analyser</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
+      <View style={styles.separator} lightColor="#F9C7E4" darkColor="rgba(255,255,255,0.1)" />
 
       <Image
         style = {styles.imageProportions}
@@ -17,22 +17,24 @@ const TabOneScreen = ({ navigation }) => {
         resizeMode = "contain"
       />
 
-      <Button
-        style = {styles.button}
-        labelStyle = {{ color: "black" }}
-        mode = "contained"
-        onPress = {() => navigation.navigate("TabTwo")}
-      >
-        Login
-      </Button>
+      <View style = {styles.buttonGroup}>
+        <Button
+          style = {styles.button}
+          labelStyle = {{ color: "black" }}
+          mode = "contained"
+          onPress = {() => navigation.navigate("TabTwo")}
+        >
+          Login
+        </Button>
 
-      <Button
-        style = {styles.button}
-        labelStyle = {{ color: "black" }}
-        mode = "contained"
-      >
-        Sign Up
-      </Button>
+        <Button
+          style = {styles.button}
+          labelStyle = {{ color: "black" }}
+          mode = "contained"
+        >
+          Sign Up
+        </Button>
+      </View>
 
     </View>
   );
@@ -43,6 +45,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+    backgroundColor: "#F7E3D9", // Background color for whole screen
   },
   title: {
     fontSize: 35,
@@ -50,17 +53,23 @@ const styles = StyleSheet.create({
   },
   separator: {
     marginVertical: "3%",
-    height: 1,
+    height: 3,
     width: '75%',
   },
   imageProportions: {
     height: "45%",
     width: "85%",
   },
+  buttonGroup: {
+    marginTop: 30,
+    backgroundColor: "#F7E3D9", // Adds the background color to the box
+  },
   button: {
-    marginVertical: 5,
+    marginVertical: 20,
     width: 135,
     backgroundColor: "#F9C7E4",
+    borderColor: "black",
+    borderWidth: 1,
   }
 });
 
