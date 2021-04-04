@@ -5,7 +5,7 @@ import { Button } from 'react-native-paper';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 
-const TabOneScreen = ({ navigation }) => {
+const Landing = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sleep Analyser</Text>
@@ -22,7 +22,7 @@ const TabOneScreen = ({ navigation }) => {
           style = {styles.button}
           labelStyle = {{ color: "black" }}
           mode = "contained"
-          onPress = {() => navigation.navigate("TabTwo")}
+          onPress = {() => navigation.navigate("Home")}
         >
           Login
         </Button>
@@ -73,4 +73,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TabOneScreen;
+export default Landing;

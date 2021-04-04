@@ -7,7 +7,7 @@ import { View } from '../components/Themed';
 
 import moment from "moment";
 
-const TabTwoScreen = () => {
+const Home = () => {
   // Fetches the current date to display to the user
   const date = moment(new Date()).format("Do MMMM YYYY")
   const time = moment(new Date()).format("HH:mmA")
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default TabTwoScreen;
+export default Home;

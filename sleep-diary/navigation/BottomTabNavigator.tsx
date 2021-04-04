@@ -5,8 +5,8 @@ import React, {useState} from 'react';
 
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
-import TabOneScreen from '../screens/TabOneScreen';
-import TabTwoScreen from '../screens/TabTwoScreen';
+import Landing from '../screens/LandingScreen';
+import Home from '../screens/HomeScreen';
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -17,7 +17,7 @@ export default function BottomTabNavigator() {
 
   return (
     <BottomTab.Navigator
-      initialRouteName="TabOne"
+      initialRouteName="Landing"
       tabBarOptions={{
         activeTintColor: Colors[colorScheme].tint,
         showLabel: false,
@@ -30,8 +30,8 @@ export default function BottomTabNavigator() {
 
       {isLoginScreen ?
       <BottomTab.Screen
-        name="TabOne"
-        component={TabOneNavigator}
+        name="Landing"
+        component={LandingNavigator}
         options={{
           tabBarVisible: false,
         }}
@@ -39,8 +39,8 @@ export default function BottomTabNavigator() {
       : null
       }
       <BottomTab.Screen
-        name="TabTwo"
-        component={TabTwoNavigator}
+        name="Home"
+        component={HomeNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
         }}
@@ -62,35 +62,35 @@ function TabBarIcon(props: { name: React.ComponentProps<typeof Ionicons>['name']
 
 // Each tab has its own navigation stack, you can read more about this pattern here:
 // https://reactnavigation.org/docs/tab-based-navigation#a-stack-navigator-for-each-tab
-const TabOneStack = createStackNavigator<TabOneParamList>();
+const LandingStack = createStackNavigator<TabOneParamList>();
 
-function TabOneNavigator() {
+function LandingNavigator() {
   return (
-    <TabOneStack.Navigator>
-      <TabOneStack.Screen
-        name="TabOneScreen"
-        component={TabOneScreen}
+    <LandingStack.Navigator>
+      <LandingStack.Screen
+        name="Landing"
+        component={Landing}
         options={{
           headerShown: false,
           tabBarVisible: false,
         }}
       />
-    </TabOneStack.Navigator>
+    </LandingStack.Navigator>
   );
 }
 
-const TabTwoStack = createStackNavigator<TabTwoParamList>();
+const HomeStack = createStackNavigator<TabTwoParamList>();
 
-function TabTwoNavigator() {
+function HomeNavigator() {
   return (
-    <TabTwoStack.Navigator>
-      <TabTwoStack.Screen
-        name="TabTwoScreen"
-        component={TabTwoScreen}
+    <HomeStack.Navigator>
+      <HomeStack.Screen
+        name="Home"
+        component={Home}
         options={{
           headerShown: false,
         }}
       />
-    </TabTwoStack.Navigator>
+    </HomeStack.Navigator>
   );
 }
