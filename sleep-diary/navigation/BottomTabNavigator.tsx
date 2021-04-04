@@ -18,7 +18,7 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint}}>
+      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint, showLabel: false}}>
       {isLoginScreen ?
       <BottomTab.Screen
         name="TabOne"
@@ -79,7 +79,9 @@ function TabTwoNavigator() {
       <TabTwoStack.Screen
         name="TabTwoScreen"
         component={TabTwoScreen}
-        options={{ headerTitle: 'Tab Two Title' }}
+        options={{
+          headerShown: false,
+        }}
       />
     </TabTwoStack.Navigator>
   );

@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { StyleSheet, Image} from 'react-native';
+import { StyleSheet, Image, Text} from 'react-native';
 import { Button } from 'react-native-paper';
 
 import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 
 const TabOneScreen = ({ navigation }) => {
   return (

@@ -1,15 +1,50 @@
 import * as React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+import { Button } from 'react-native-paper';
 
 import EditScreenInfo from '../components/EditScreenInfo';
-import { Text, View } from '../components/Themed';
+import { View } from '../components/Themed';
 
 export default function TabTwoScreen() {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab Two</Text>
-      <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
-      <EditScreenInfo path="/screens/TabTwoScreen.tsx" />
+      <Text style={styles.title}>Home</Text>
+
+      <View style = {styles.screenContent}>
+        <Text>
+          Good TODO Time! The time and date
+          is currently X time, Y date
+        </Text>
+        <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
+
+
+        <Text style={styles.subtitle}>Sleep Length</Text>
+        <Text>Input data for your previous night - make sure to fill it out!</Text>
+        <Button
+          style = {styles.button}
+          mode = "contained"
+        >
+          Enter sleep data
+        </Button>
+
+        <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
+
+        <Text style={styles.subtitle}>Sleep Quality score</Text>
+        <Text>
+          Input 'Epworth Sleepiness scale' measure for the previous night.
+          Make sure to do so in order to build a reliable
+          stockpile of data to use
+        </Text>
+        <Button
+          style = {styles.button}
+          mode = "contained"
+        >
+          Enter todays Epworth score
+        </Button>
+
+
+      </View>
+
     </View>
   );
 }
@@ -19,16 +54,33 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: "red",
     backgroundColor: "#F7E3D9",
   },
   title: {
-    fontSize: 20,
+    fontSize: 35,
     fontWeight: 'bold',
   },
-  separator: {
-    marginVertical: 30,
-    height: 1,
-    width: '80%',
+  subtitle: {
+    textDecorationLine: "underline",
+    marginBottom: 15,
   },
+  separator: {
+    marginVertical: "3%",
+    height: 2,
+    width: '100%',
+  },
+  screenContent: {
+    marginTop: 20,
+    width: "85%",
+    backgroundColor: "#F7E3D9",
+  },
+  button: {
+    marginTop: 15,
+    marginBottom: 10,
+    width: "100%",
+    backgroundColor: "#F9C7E4",
+    borderColor: "black",
+    borderWidth: 1,
+    alignSelf: "center",
+  }
 });
