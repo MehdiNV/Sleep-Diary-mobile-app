@@ -34,7 +34,6 @@ export default function BottomTabNavigator() {
         component={TabOneNavigator}
         options={{
           tabBarVisible: false,
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />,
         }}
       />
       : null
@@ -43,7 +42,7 @@ export default function BottomTabNavigator() {
         name="TabTwo"
         component={TabTwoNavigator}
         options={{
-          tabBarIcon: ({ color }) => <TabBarIcon name="ios-code" color={color} />
+          tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
         }}
         listeners={({ navigation }) => ({
           focus: () => {
