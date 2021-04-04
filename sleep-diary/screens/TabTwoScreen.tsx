@@ -5,15 +5,33 @@ import { Button } from 'react-native-paper';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 
-export default function TabTwoScreen() {
+import moment from "moment";
+
+const TabTwoScreen = () => {
+  // Fetches the current date to display to the user
+  const date = moment(new Date()).format("Do MMMM YYYY")
+  const time = moment(new Date()).format("HH:mmA")
+
+  const currHour = moment().format("HH");
+  var dayPhase = ""
+  if (currHour >= 0 && currHour < 12){
+    dayPhase = "morning"
+  }
+  else if (currHour >= 12 && currHour <= 18){
+    dayPhase = "afternoon"
+  }
+  else if (currHour >= 18 && currHour <= 23){
+    dayPhase = "evening"
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Home</Text>
 
       <View style = {styles.screenContent}>
         <Text>
-          Good TODO Time! The time and date
-          is currently X time, Y date
+          Good {dayPhase}! The time and date
+          is currently {time}, {date}
         </Text>
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
 
@@ -84,3 +102,5 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   }
 });
+
+export default TabTwoScreen;
