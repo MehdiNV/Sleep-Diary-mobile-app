@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { StyleSheet, Image, Button} from 'react-native';
+import { StyleSheet, Image} from 'react-native';
+import { Button } from 'react-native-paper';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { Text, View } from '../components/Themed';
@@ -17,11 +18,21 @@ const TabOneScreen = ({ navigation }) => {
       />
 
       <Button
-        title = "LOGINBABY"
-        onPress = {() => {
-          navigation.navigate("TabTwo")
-        }}
-      />
+        style = {styles.button}
+        labelStyle = {{ color: "black" }}
+        mode = "contained"
+        onPress = {() => navigation.navigate("TabTwo")}
+      >
+        Login
+      </Button>
+
+      <Button
+        style = {styles.button}
+        labelStyle = {{ color: "black" }}
+        mode = "contained"
+      >
+        Sign Up
+      </Button>
 
     </View>
   );
@@ -45,6 +56,11 @@ const styles = StyleSheet.create({
   imageProportions: {
     height: "45%",
     width: "85%",
+  },
+  button: {
+    marginVertical: 5,
+    width: 135,
+    backgroundColor: "#F9C7E4",
   }
 });
 

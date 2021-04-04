@@ -18,7 +18,6 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabPress  = {() => console.log("Nya ichi ni san!!")}
       tabBarOptions={{ activeTintColor: Colors[colorScheme].tint}}>
       {isLoginScreen ?
       <BottomTab.Screen
