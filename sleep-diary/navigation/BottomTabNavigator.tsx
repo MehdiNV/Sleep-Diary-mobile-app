@@ -18,7 +18,16 @@ export default function BottomTabNavigator() {
   return (
     <BottomTab.Navigator
       initialRouteName="TabOne"
-      tabBarOptions={{ activeTintColor: Colors[colorScheme].tint, showLabel: false}}>
+      tabBarOptions={{
+        activeTintColor: Colors[colorScheme].tint,
+        showLabel: false,
+        style: {
+          backgroundColor: "#F7E3D9",
+          borderTopWidth: 0,
+          elevation: 0, // Removes shadow visuals from the border of the tab bar
+        }
+      }}>
+
       {isLoginScreen ?
       <BottomTab.Screen
         name="TabOne"
