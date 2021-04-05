@@ -6,13 +6,18 @@ import { View } from '../components/Themed';
 
 const AddEpworthData = () => {
   return (
-    <View>
-      <Text>Bonsoir!</Text>
+    <View style={styles.container}>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: "#F7E3D9", // Background color for whole screen
+  },
 });
 
 

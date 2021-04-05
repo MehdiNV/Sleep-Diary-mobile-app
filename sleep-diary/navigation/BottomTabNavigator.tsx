@@ -56,8 +56,8 @@ export default function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="AddSleepData"
-        component={AddSleepDataNavigator}
+        name="AddEpworthData"
+        component={AddEpworthDataNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="medkit" color={color} />
         }}
@@ -68,8 +68,8 @@ export default function BottomTabNavigator() {
         })}
       />
       <BottomTab.Screen
-        name="AddEpworthData"
-        component={AddEpworthDataNavigator}
+        name="AddSleepData"
+        component={AddSleepDataNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="add" color={color} />
         }}
