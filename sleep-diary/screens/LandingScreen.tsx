@@ -5,7 +5,7 @@ import { Button } from 'react-native-paper';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 
-const Landing = ({ navigation }) => {
+const Landing = ({ navigation, route}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sleep Analyser</Text>
@@ -22,7 +22,11 @@ const Landing = ({ navigation }) => {
           style = {styles.button}
           labelStyle = {{ color: "black" }}
           mode = "contained"
-          onPress = {() => navigation.navigate("Home")}
+          onPress = {() => {
+            console.log("Oh hey Mark")
+            console.log(route.params)
+            navigation.navigate("Home")}
+          }
         >
           Login
         </Button>

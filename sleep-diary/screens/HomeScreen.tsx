@@ -7,7 +7,7 @@ import { View } from '../components/Themed';
 
 import moment from "moment";
 
-const Home = ({ navigation }) => {
+const Home = ({ navigation, route }) => {
   // Fetches the current date to display to the user
   const date = moment(new Date()).format("Do MMMM YYYY")
   const time = moment(new Date()).format("HH:mmA")
@@ -42,7 +42,11 @@ const Home = ({ navigation }) => {
           style = {styles.button}
           mode = "contained"
           labelStyle = {{ color: "black" }} // Makes the text of the button black per design
-          onPress = {() => navigation.navigate("AddSleepData")}
+          onPress = {() => {
+            console.log("MY BESTO FRIENDO!!!")
+            console.log(route.params)
+            navigation.navigate("AddSleepData")
+          }}
         >
           Enter sleep data
         </Button>

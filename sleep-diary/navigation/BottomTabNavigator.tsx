@@ -19,6 +19,7 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
   const [isLoginScreen, setIsLoginScreen] = useState(true);
+  const ohai = 5;
 
   return (
     <BottomTab.Navigator
@@ -140,6 +141,7 @@ function HomeNavigator() {
       <HomeStack.Screen
         name="Home"
         component={Home}
+        initialParams = {{ johnny: 150 }}
         options={{
           headerShown: false,
         }}
