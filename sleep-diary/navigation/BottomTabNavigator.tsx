@@ -7,6 +7,11 @@ import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import Landing from '../screens/LandingScreen';
 import Home from '../screens/HomeScreen';
+import AddSleepData from '../screens/AddSleepDataScreen';
+import AddEpworthData from '../screens/AddEpworthDataScreen';
+import ViewData from '../screens/ViewDataScreen';
+import Settings from '../screens/SettingsScreen';
+
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -43,6 +48,54 @@ export default function BottomTabNavigator() {
         component={HomeNavigator}
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
+        }}
+        listeners={({ navigation }) => ({
+          focus: () => {
+            setIsLoginScreen(false)
+          },
+        })}
+      />
+      <BottomTab.Screen
+        name="AddSleepData"
+        component={AddSleepDataNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="medkit" color={color} />
+        }}
+        listeners={({ navigation }) => ({
+          focus: () => {
+            setIsLoginScreen(false)
+          },
+        })}
+      />
+      <BottomTab.Screen
+        name="AddEpworthData"
+        component={AddEpworthDataNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="add" color={color} />
+        }}
+        listeners={({ navigation }) => ({
+          focus: () => {
+            setIsLoginScreen(false)
+          },
+        })}
+      />
+      <BottomTab.Screen
+        name="ViewData"
+        component={ViewDataNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />
+        }}
+        listeners={({ navigation }) => ({
+          focus: () => {
+            setIsLoginScreen(false)
+          },
+        })}
+      />
+      <BottomTab.Screen
+        name="Settings"
+        component={SettingsNavigator}
+        options={{
+          tabBarIcon: ({ color }) => <TabBarIcon name="settings" color={color} />
         }}
         listeners={({ navigation }) => ({
           focus: () => {
@@ -92,5 +145,69 @@ function HomeNavigator() {
         }}
       />
     </HomeStack.Navigator>
+  );
+}
+
+const AddSleepDataStack = createStackNavigator();
+
+function AddSleepDataNavigator() {
+  return (
+    <AddSleepDataStack.Navigator>
+      <AddSleepDataStack.Screen
+        name="AddSleepData"
+        component={AddSleepData}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </AddSleepDataStack.Navigator>
+  );
+}
+
+const AddEpworthDataStack = createStackNavigator();
+
+function AddEpworthDataNavigator() {
+  return (
+    <AddEpworthDataStack.Navigator>
+      <AddEpworthDataStack.Screen
+        name="AddEpworthData"
+        component={AddEpworthData}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </AddEpworthDataStack.Navigator>
+  );
+}
+
+const ViewDataStack = createStackNavigator();
+
+function ViewDataNavigator() {
+  return (
+    <ViewDataStack.Navigator>
+      <ViewDataStack.Screen
+        name="ViewData"
+        component={ViewData}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </ViewDataStack.Navigator>
+  );
+}
+
+const SettingsStack = createStackNavigator();
+
+function SettingsNavigator() {
+  return (
+    <SettingsStack.Navigator>
+      <SettingsStack.Screen
+        name="Settings"
+        component={Settings}
+        options={{
+          headerShown: false,
+        }}
+      />
+    </SettingsStack.Navigator>
   );
 }
