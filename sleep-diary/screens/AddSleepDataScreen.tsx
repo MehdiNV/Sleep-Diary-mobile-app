@@ -50,7 +50,7 @@ const AddSleepData = () => {
   return (
     <View style={styles.container}>
       <View style = {styles.screenContent}>
-        <Text style = {styles.title}>Enter new date</Text>
+        <Text style = {styles.title}>Enter new data</Text>
 
         <View style = {styles.dateEntry}>
           <Text>Data for the night of</Text>
