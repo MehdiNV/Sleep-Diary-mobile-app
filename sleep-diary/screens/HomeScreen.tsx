@@ -43,8 +43,6 @@ const Home = ({ navigation, route }) => {
           mode = "contained"
           labelStyle = {{ color: "black" }} // Makes the text of the button black per design
           onPress = {() => {
-            console.log("MY BESTO FRIENDO!!!")
-            console.log(route.params)
             navigation.navigate("AddSleepData")
           }}
         >

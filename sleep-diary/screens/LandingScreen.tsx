@@ -23,8 +23,6 @@ const Landing = ({ navigation, route}) => {
           labelStyle = {{ color: "black" }}
           mode = "contained"
           onPress = {() => {
-            console.log("Oh hey Mark")
-            console.log(route.params)
             navigation.navigate("Home")}
           }
         >
