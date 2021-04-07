@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -71,9 +71,21 @@ const AddEpworthData = () => {
         </View>
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
 
-        <View style = {styles.questionnaireSection}>
-          <Text>Data for the night of</Text>
-        </View>
+        <ScrollView style = {styles.questionnaireSection}>
+          <Text>How likely are you to doze off or fall asleep in
+            the situations described below, in contrast to feeling tired?
+            This refers to your usual way of life in recent times</Text>
+
+            <Text>Even if you haven't done some of these things recently
+              try to work out how they would have affected you</Text>
+
+              <Text>Use the following scale to choose the most appropriate
+                number for each situation:</Text>
+                <Text>0 = would never doze</Text>
+                <Text>1 = Slight chance of dozing</Text>
+                <Text>2 = Moderate chance of dozing</Text>
+                <Text>3 = High chance of dozing</Text>
+        </ScrollView>
 
       </View>
     </View>
