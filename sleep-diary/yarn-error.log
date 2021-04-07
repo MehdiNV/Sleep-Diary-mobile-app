@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-native-date-picker
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js add react-native-modern-datepicker
 
 PATH: 
   C:\ProgramData\DockerDesktop\version-bin;C:\Program Files\Docker\Docker\Resources\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\Program Files (x86)\Brackets\command;C:\Program Files\Git\cmd;C:\TDM-GCC-64\bin;C:\Program Files\PuTTY\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files (x86)\Yarn\bin\;C:\Go\bin;C:\Program Files (x86)\Windows Kits\10\Windows Performance Toolkit\;C:\Program Files (x86)\Windows Kits\10\Microsoft Application Virtualization\Sequencer\;C:\Users\Mehdi\AppData\Local\Programs\Python\Python37-32\Scripts\;C:\Users\Mehdi\AppData\Local\Programs\Python\Python37-32\;C:\Program Files\MySQL\MySQL Shell 8.0\bin\;C:\Users\Mehdi\AppData\Local\Microsoft\WindowsApps;C:\Users\Mehdi\Google Drive\Personal life\Career files\Career\Applications\Yobota\Case Study\Submission\venv\Scripts;C:\Users\Mehdi\Anaconda3;C:\Users\Mehdi\Anaconda3\Scripts;C:\Users\Mehdi\AppData\Roaming\npm;C:\Users\Mehdi\AppData\Local\Yarn\bin;C:\Users\Mehdi\AppData\Local\atom\bin;C:\Program Files (x86)\GnuWin32\bin;C:\Users\Mehdi\go\bin;C:\Users\Mehdi\AppData\Local\GitHubDesktop\bin;C:\Program Files\heroku\bin;C:\Users\Mehdi\AppData\Local\Microsoft\WindowsApps;;C:\Users\Mehdi\AppData\Local\Programs\Microsoft VS Code\bin
@@ -49,6 +49,7 @@ npm manifest:
       "react": "16.13.1",
       "react-dom": "16.13.1",
       "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",
+      "react-native-date-picker": "^3.2.10",
       "react-native-gesture-handler": "~1.8.0",
       "react-native-paper": "^4.7.2",
       "react-native-safe-area-context": "3.1.9",
@@ -6968,6 +6969,11 @@ Lockfile:
     version "17.0.2"
     resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
     integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
+  
+  react-native-date-picker@^3.2.10:
+    version "3.2.10"
+    resolved "https://registry.yarnpkg.com/react-native-date-picker/-/react-native-date-picker-3.2.10.tgz#5e690db8e628255d8390e33b1e6f8fa9477f6fb9"
+    integrity sha512-/fA+htnZcr3rBw3eaOR/DvMwGLDTg59MCiiluin5YcHBxNZQYs/uYp/l6Hf719qZXndPGcixS46YIgso4Jf4gg==
   
   react-native-gesture-handler@~1.8.0:
     version "1.8.0"

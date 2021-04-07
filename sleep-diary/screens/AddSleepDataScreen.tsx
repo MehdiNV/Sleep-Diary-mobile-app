@@ -1,38 +1,41 @@
 import React, {useState} from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { StyleSheet, Text } from 'react-native';
-import { Button } from 'react-native-paper';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import DatePicker from 'react-native-modern-datepicker';
 
 import { View } from '../components/Themed';
 import moment from "moment";
+import { Modal, Portal, Button, Provider } from 'react-native-paper';
+
+import ModalTest from '../components/ModalTest';
 
 const AddSleepData = () => {
+  // Section for showing 'Date for the night of' part
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
+  // Section for picking the sleeping date and time
+  const [sleepDate, setSleepDate] = useState(new Date());
+  const [sleepTime, setSleepTime] = useState(new Date());
+  const [showSleepDatePicker, setShowSleepDatePicker] = useState(false);
+  const [showSleepTimePicker, setShowSleepTimePicker] = useState(false);
+
+  // Section for picking the awakening date and time
   const [awakeDate, setAwakeDate] = useState(new Date());
-  const [showAwakePicker, setShowAwakePicker] = useState(false);
+  const [awakeTime, setAwakeTime] = useState(new Date());
+  const [showAwakeDatePicker, setShowAwakeDatePicker] = useState(false);
+  const [showAwakeTimePicker, setShowAwakeTimePicker] = useState(false);
 
-
+  // Functions
+  // Calendar Sleep Entry Picker
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
     setDate(currentDate);
   };
 
-  const setAwakeTime = (event, selectedTime) => {
-    const currentDate = selectedTime || awakeDate;
-    setShowAwakePicker(Platform.OS === 'ios');
-    setAwakeDate(currentDate);
-  }
-
-  const showAwakeTimePicker = () => {
-    setShowAwakePicker(true);
-  }
-
-  // -----
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
@@ -46,12 +49,47 @@ const AddSleepData = () => {
     showMode('time');
   };
 
+  // Awake Picker
+  const updateAwakeTime = (event, selectedTime) => {
+    const currentDate = selectedTime || awakeTime;
+    setShowAwakeTimePicker(Platform.OS === 'ios');
+    setAwakeTime(selectedTime);
+  }
+
+  const updateAwakeDate = (event, selectedDate) => {
+    const currentDate = selectedDate || awakeDate;
+    setShowAwakeDatePicker(Platform.OS === 'ios');
+    setAwakeDate(selectedDate);
+  }
+
+  const showAwakePickerWidgets = () => {
+    setShowAwakeDatePicker(true);
+    setShowAwakeTimePicker(true);
+  }
+
+  // Sleep picker
+  const updateSleepTime = (event, selectedTime) => {
+    const currentDate = selectedTime || sleepTime;
+    setShowSleepTimePicker(Platform.OS === 'ios');
+    setSleepTime(selectedTime);
+  }
+
+  const updateSleepDate = (event, selectedDate) => {
+    const currentDate = selectedDate || sleepDate;
+    setShowSleepDatePicker(Platform.OS === 'ios');
+    setSleepDate(selectedDate);
+  }
+
+  const showSleepPickerWidgets = () => {
+    setShowSleepDatePicker(true);
+    setShowSleepTimePicker(true);
+  }
+
 
   return (
     <View style={styles.container}>
       <View style = {styles.screenContent}>
         <Text style = {styles.title}>Enter new data</Text>
-
         <View style = {styles.dateEntry}>
           <Text>Data for the night of</Text>
           <Button
@@ -91,10 +129,33 @@ const AddSleepData = () => {
             style = {styles.timeButton}
             mode = "contained"
             labelStyle = {{ color: "black", fontSize: 12}}
-            onPress = {showTimepicker}
+            onPress = {showSleepPickerWidgets}
           >
-          {moment(date).format("HH:mmA")}
+          {
+            moment(sleepDate).format("DD/MM/YY")
+            + " " +
+            moment(sleepTime).format("HH:mmA")
+          }
           </Button>
+
+          {(showSleepDatePicker && showSleepTimePicker) && (
+            <>
+              <DateTimePicker
+                value={sleepTime}
+                mode={"time"}
+                is24Hour={true}
+                display="default"
+                onChange={updateSleepTime}
+              />
+              <DateTimePicker
+                value={sleepDate}
+                mode={"calendar"}
+                is24Hour={true}
+                display="default"
+                onChange={updateSleepDate}
+              />
+            </>
+          )}
 
           <Ionicons
             size = {30}
@@ -115,41 +176,54 @@ const AddSleepData = () => {
               style = {styles.timeButton}
               mode = "contained"
               labelStyle = {{ color: "black", fontSize: 12}}
-              onPress = {showAwakeTimePicker}
+              onPress = {showAwakePickerWidgets}
             >
-            {moment(awakeDate).format("HH:mmA")}
+            {
+              moment(awakeDate).format("DD/MM/YY")
+              + " " +
+              moment(awakeTime).format("HH:mmA")
+            }
             </Button>
 
-            {showAwakePicker && (
-              <DateTimePicker
-                value={awakeDate}
-                mode={"time"}
-                is24Hour={true}
-                display="default"
-                onChange={setAwakeTime}
-              />
+            {(showAwakeDatePicker && showAwakeTimePicker) && (
+              <>
+                <DateTimePicker
+                  value={awakeDate}
+                  mode={"time"}
+                  is24Hour={true}
+                  display="default"
+                  onChange={updateAwakeTime}
+                />
+                <DateTimePicker
+                  value={awakeDate}
+                  mode={"calendar"}
+                  is24Hour={true}
+                  display="default"
+                  onChange={updateAwakeDate}
+                />
+              </>
             )}
 
             <Ionicons
               size = {30}
               name = "time"
               style = {{ marginTop: 5, marginLeft: 5 }}
-              onPress = {showAwakeTimePicker}
+              onPress = {showAwakePickerWidgets}
             />
 
           </View>
-
-
       </View>
+
       <View style = {styles.bottom}>
-      <Button
-        style = {styles.submitButton}
-        mode = "contained"
-        labelStyle = {{ color: "black", fontSize: 12}}
-      >
-        Submit
-      </Button>
+        <Button
+          style = {styles.submitButton}
+          mode = "contained"
+          labelStyle = {{ color: "black", fontSize: 12}}
+        >
+          Submit
+        </Button>
       </View>
+
     </View>
   )
 }
@@ -227,6 +301,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     width: "80%",
   },
+  dateTimePicker: {
+    position: 'absolute',
+    width: "100%",
+    bottom: '-5%',
+    zIndex: 100,
+  }
 
 });
 
