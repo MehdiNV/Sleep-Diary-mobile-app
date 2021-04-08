@@ -38,13 +38,15 @@ const ViewData = () => {
     setShowEndDatePicker(true);
   }
 
+  console.log(new Date())
+  console.log (endDate)
   return (
     <View style={styles.container}>
       <View style = {styles.screenContent}>
         <Text style={styles.title}>View your progress</Text>
 
+        <Text style = {styles.subtitle}>Show me data between:</Text>
         <View style = {styles.dateEntry}>
-          <Text>Data for the night of</Text>
           <Button
             style = {styles.button}
             mode = "contained"
@@ -53,12 +55,38 @@ const ViewData = () => {
           >
           {moment(startDate).format("DD/MM/YY")}
           </Button>
+          <Ionicons
+            size = {30}
+            name = "calendar"
+            style = {{ marginTop: 5, marginLeft: 5, marginRight: 10 }}
+            onPress = {showStartPicker}
+          />
 
+          <Text>to</Text>
+
+          <Button
+            style = {styles.button}
+            mode = "contained"
+            labelStyle = {{ color: "black", fontSize: 12}}
+            onPress = {showEndPicker}
+          >
+          {
+            moment(endDate).isSame(new Date(), "day") ?
+              "Present"
+            :
+              moment(endDate).format("DD/MM/YY")
+          }
+          </Button>
+          {/*The above checks if the end date is the current date - if so ...
+            ...then we change the text to display 'Present' instead.
+            The second parameter, "day", tells moment.js to check if the two dates...
+            ...have the same day, month and year (not necessarily time though).
+            */}
           <Ionicons
             size = {30}
             name = "calendar"
             style = {{ marginTop: 5, marginLeft: 5 }}
-            onPress = {showStartPicker}
+            onPress = {showEndPicker}
           />
 
           {showStartDatePicker && (
@@ -68,6 +96,16 @@ const ViewData = () => {
               is24Hour={true}
               display="default"
               onChange={onStartDateChange}
+            />
+          )}
+
+          {showEndDatePicker && (
+            <DateTimePicker
+              value={endDate}
+              mode={"calendar"}
+              is24Hour={true}
+              display="default"
+              onChange={onEndDateChange}
             />
           )}
         </View>
@@ -92,6 +130,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     fontWeight: 'bold',
   },
+  subtitle: {
+    marginTop: "5%",
+    textAlign: "center",
+  },
   screenContent: {
     marginTop: "25%",
     width: "85%",
@@ -103,7 +145,6 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   dateEntry: {
-    marginTop: "5%",
     backgroundColor: "#F7E3D9",
     flexDirection: "row",
     justifyContent: "center",
