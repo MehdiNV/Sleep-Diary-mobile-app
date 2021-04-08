@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 import { View } from '../components/Themed';
 import moment from "moment";
+import _ from 'lodash';
 
 const AddEpworthData = () => {
   // Section for showing 'Date for' calendar entry
@@ -15,8 +16,20 @@ const AddEpworthData = () => {
   const [show, setShow] = useState(false);
 
   const [epworthScore, setEpworthScore] = useState({})
-  console.log("Log of the State:")
-  console.log(epworthScore)
+  /*
+    Format for the code below in lodash is:
+    1) Convert the data strcture to have numbers instead (_.toNumber and _.map)
+    2) Get the values of this data structure (object)...
+    ...out solely - disregard the keys (_.values)
+    3) Now having a array of integers, sum them up (_.sum)
+    Basically, I wanted to get all the values saved in the state...
+    ...(which is an object), and sum them up. This accomplishes it by...
+    ...turning all the values into integers, packaging them into an array...
+    ...and away from their original key-value pairing, and then summing them
+  */
+  const currScore = _.sum(_.values(_.map(epworthScore, (element) => {
+                          return _.toNumber(element)
+                        })))
 
   // Methods used for the 'Date for' calendar entry
   const onChange = (event, selectedDate) => {
@@ -180,6 +193,22 @@ const AddEpworthData = () => {
               />
             </View>
           </View>
+          {/* End of the 'Row' section*/}
+
+          <View style = {styles.epworthResult}>
+            <Text style = {{ fontWeight: "bold"}}>Total</Text>
+            <Text>{currScore}
+            </Text>
+          </View>
+
+          <Button
+            style = {styles.submitButton}
+            mode = "contained"
+            labelStyle = {{ color: "black" }}
+          >
+            Submit
+          </Button>
+
       </ScrollView>
 
     </View>
@@ -255,6 +284,19 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginRight: 12, // Makes the TextInput be...
     //...better positioned under the 'Chance'
+  },
+  epworthResult: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  submitButton: {
+    marginTop: 15,
+    marginBottom: 10,
+    width: "95%",
+    backgroundColor: "#F9C7E4",
+    borderColor: "black",
+    alignSelf: "center",
+    borderWidth: 1,
   }
 });
 

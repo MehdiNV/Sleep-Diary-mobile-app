@@ -1,7 +1,7 @@
 {
   "expoServerNgrokUrl": "https://t6-qr7.anonymous.sleep-diary.exp.direct",
   "packagerNgrokUrl": "https://packager.t6-qr7.anonymous.sleep-diary.exp.direct",
-  "ngrokPid": 35712,
+  "ngrokPid": 24864,
   "expoServerPort": 19000,
   "devToolsPort": 19002,
   "packagerPort": 19000,
