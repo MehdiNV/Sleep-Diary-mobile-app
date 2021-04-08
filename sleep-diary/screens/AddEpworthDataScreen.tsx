@@ -179,34 +179,7 @@ const AddEpworthData = () => {
                 style = {{ backgroundColor: "white" }}
               />
             </View>
-
           </View>
-
-          { /*
-          <View style = { styles.epworthRow}>
-            <View style = {styles.questionsSection}>
-              <Text></Text>
-              <Text></Text>
-              <Text></Text>
-              <Text></Text>
-              <Text></Text>
-              <Text></Text>
-              <Text></Text>
-              <Text></Text>
-            </View>
-
-            <View style = {styles.scoring}>
-              <Text>Situation Dozing</Text>
-              <Text>Situation Dozing</Text>
-              <Text>Situation Dozing</Text>
-              <Text>Situation Dozing</Text>
-              <Text>Situation Dozing</Text>
-              <Text>Situation Dozing</Text>
-              <Text>Situation Dozing</Text>
-              <Text>Situation Dozing</Text>
-            </View>
-          </View>
-          */}
       </ScrollView>
 
     </View>
