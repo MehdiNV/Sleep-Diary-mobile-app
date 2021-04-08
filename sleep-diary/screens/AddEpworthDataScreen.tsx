@@ -16,7 +16,6 @@ const AddEpworthData = () => {
   const [show, setShow] = useState(false);
 
   const [epworthScore, setEpworthScore] = useState({})
-  console.log(epworthScore["nya"])
   /*
     Format for the code below in lodash is:
     1) Convert the data strcture to have numbers instead (_.toNumber and _.map)
@@ -55,9 +54,13 @@ const AddEpworthData = () => {
   // Text Handler for the number inputs (The epworth scoring)
   const handleTextChange = (inputIdentifier, value) => {
     if (/^\d+$/.test(value) || value === '') { // Checks if it's actually a number
-      // Take a copy of the state, and set the new value in it
-      // This ensures we update the state (using the ...epworth copy) instead of overwriting it
-      setEpworthScore({...epworthScore, [inputIdentifier]: value})
+      if (_.toNumber(value) >= 0 && _.toNumber(value) <= 3){
+        // Check as well if the number is between the permitted 0 to 3 range
+        
+        // Take a copy of the state, and set the new value in it
+        // This ensures we update the state (using the ...epworth copy) instead of overwriting it
+        setEpworthScore({...epworthScore, [inputIdentifier]: value})
+      }
     }
     // The Regex used to accomplish this can be found below:
     // https://gist.github.com/AlexisLeon/80b5641eb30b43bc598288e41052ac39
@@ -213,7 +216,7 @@ const AddEpworthData = () => {
         {/* End of the 'Row' section*/}
 
         <View style = {styles.epworthResult}>
-          <Text style = {{ fontWeight: "bold", alignSelf: "center"}}>Total</Text>
+          <Text style = {{ fontWeight: "bold", alignSelf: "center", fontSize: 17}}>Total</Text>
           <Text style = {styles.scoreBox}>{currScore}</Text>
         </View>
 
@@ -312,7 +315,7 @@ const styles = StyleSheet.create({
   },
   epworthResult: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     backgroundColor: "#F7E3D9",
     marginTop: 15,
   },
@@ -322,6 +325,8 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     backgroundColor: "white",
     padding: 5,
+    paddingLeft: 10,
+    paddingRight: 10,
     alignSelf: "center",
     textAlign: "center",
     textAlignVertical: "center",
