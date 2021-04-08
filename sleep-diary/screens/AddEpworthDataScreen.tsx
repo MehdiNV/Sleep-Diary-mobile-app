@@ -16,6 +16,7 @@ const AddEpworthData = () => {
   const [show, setShow] = useState(false);
 
   const [epworthScore, setEpworthScore] = useState({})
+  console.log(epworthScore)
   /*
     Format for the code below in lodash is:
     1) Convert the data strcture to have numbers instead (_.toNumber and _.map)
@@ -127,6 +128,7 @@ const AddEpworthData = () => {
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row1", value)}
                 style = {styles.textInput}
+                maxLength = {1}
               />
             </View>
             <View style = {styles.row}>
@@ -136,6 +138,7 @@ const AddEpworthData = () => {
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row2", value)}
                 style = {styles.textInput}
+                maxLength = {1}
               />
             </View>
             <View style = {styles.row}>
@@ -145,6 +148,7 @@ const AddEpworthData = () => {
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row3", value)}
                 style = {styles.textInput}
+                maxLength = {1}
               />
             </View>
             <View style = {styles.row}>
@@ -154,6 +158,7 @@ const AddEpworthData = () => {
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row4", value)}
                 style = {styles.textInput}
+                maxLength = {1}
               />
             </View>
             <View style = {styles.row}>
@@ -163,6 +168,7 @@ const AddEpworthData = () => {
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row5", value)}
                 style = {styles.textInput}
+                maxLength = {1}
               />
             </View>
             <View style = {styles.row}>
@@ -172,6 +178,7 @@ const AddEpworthData = () => {
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row6", value)}
                 style = {styles.textInput}
+                maxLength = {1}
               />
             </View>
             <View style = {styles.row}>
@@ -181,6 +188,7 @@ const AddEpworthData = () => {
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row7", value)}
                 style = {styles.textInput}
+                maxLength = {1}
               />
             </View>
             <View style = {styles.row}>
@@ -190,6 +198,7 @@ const AddEpworthData = () => {
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row8", value)}
                 style = {styles.textInput}
+                maxLength = {1}
               />
             </View>
           </View>
