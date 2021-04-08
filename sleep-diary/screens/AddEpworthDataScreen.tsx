@@ -253,6 +253,8 @@ const styles = StyleSheet.create({
     borderStyle: "solid",
     borderWidth: 1,
     alignSelf: "center",
+    marginRight: 12, // Makes the TextInput be...
+    //...better positioned under the 'Chance'
   }
 });
 
