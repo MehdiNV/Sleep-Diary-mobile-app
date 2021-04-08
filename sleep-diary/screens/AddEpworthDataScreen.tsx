@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text, ScrollView } from 'react-native';
+import { StyleSheet, Text, ScrollView, TextInput } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+
 
 import { View } from '../components/Themed';
 import moment from "moment";
@@ -13,6 +14,11 @@ const AddEpworthData = () => {
   const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
+  const [epworthScore, setEpworthScore] = useState({})
+  console.log("Log of the State:")
+  console.log(epworthScore)
+
+  // Methods used for the 'Date for' calendar entry
   const onChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
@@ -31,6 +37,15 @@ const AddEpworthData = () => {
   const showTimepicker = () => {
     showMode('time');
   };
+
+  // Text Handler for the number inputs (The epworth scoring)
+  const handleTextChange = (inputIdentifier, value) => {
+    if (/^\d+$/.test(value) || value === '') { // Checks if it's actually a number
+      // Take a copy of the state, and set the new value in it
+      // This ensures we update the state (using the ...epworth copy) instead of overwriting it
+      setEpworthScore({...epworthScore, [inputIdentifier]: value})
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -86,7 +101,6 @@ const AddEpworthData = () => {
           <Text>1 = Slight chance of dozing</Text>
           <Text>2 = Moderate chance of dozing</Text>
           <Text>3 = High chance of dozing</Text>
-
           <View style = {styles.rowSection}>
             <View style = {styles.row}>
               <Text style = {styles.rowHeader}>Situation Dozing</Text>
@@ -95,35 +109,75 @@ const AddEpworthData = () => {
 
             <View style = {styles.row}>
               <Text style = {styles.rowSituation}>Sitting and reading</Text>
-              <Text>Input</Text>
+              <TextInput
+                keyboardType = 'numeric'
+                textContentType='telephoneNumber'
+                onChangeText={(value) => handleTextChange("row1", value)}
+                style = {{ backgroundColor: "white" }}
+              />
             </View>
             <View style = {styles.row}>
               <Text style = {styles.rowSituation}>Watching TV</Text>
-              <Text>Input</Text>
+              <TextInput
+                keyboardType = 'numeric'
+                textContentType='telephoneNumber'
+                onChangeText={(value) => handleTextChange("row2", value)}
+                style = {{ backgroundColor: "white" }}
+              />
             </View>
             <View style = {styles.row}>
               <Text style = {styles.rowSituation}>Sitting, inactive in a public place (e.g. theatre or a meeting)</Text>
-              <Text>Input</Text>
+              <TextInput
+                keyboardType = 'numeric'
+                textContentType='telephoneNumber'
+                onChangeText={(value) => handleTextChange("row3", value)}
+                style = {{ backgroundColor: "white" }}
+              />
             </View>
             <View style = {styles.row}>
               <Text style = {styles.rowSituation}>As a passenger in a car for an hour without an break</Text>
-              <Text>Input</Text>
+              <TextInput
+                keyboardType = 'numeric'
+                textContentType='telephoneNumber'
+                onChangeText={(value) => handleTextChange("row4", value)}
+                style = {{ backgroundColor: "white" }}
+              />
             </View>
             <View style = {styles.row}>
               <Text style = {styles.rowSituation}>Lying down to rest in the afternoon when circumstances permit</Text>
-              <Text>Input</Text>
+              <TextInput
+                keyboardType = 'numeric'
+                textContentType='telephoneNumber'
+                onChangeText={(value) => handleTextChange("row5", value)}
+                style = {{ backgroundColor: "white" }}
+              />
             </View>
             <View style = {styles.row}>
               <Text style = {styles.rowSituation}>Sitting and talking to someone</Text>
-              <Text>Input</Text>
+              <TextInput
+                keyboardType = 'numeric'
+                textContentType='telephoneNumber'
+                onChangeText={(value) => handleTextChange("row6", value)}
+                style = {{ backgroundColor: "white" }}
+              />
             </View>
             <View style = {styles.row}>
               <Text style = {styles.rowSituation}>Sitting quietly after a lunch without alcohol</Text>
-              <Text>Input</Text>
+              <TextInput
+                keyboardType = 'numeric'
+                textContentType='telephoneNumber'
+                onChangeText={(value) => handleTextChange("row7", value)}
+                style = {{ backgroundColor: "white" }}
+              />
             </View>
             <View style = {styles.row}>
               <Text style = {styles.rowSituation}>In a car, while stopped for a few minutes in the traffic</Text>
-              <Text>Input</Text>
+              <TextInput
+                keyboardType = 'numeric'
+                textContentType='telephoneNumber'
+                onChangeText={(value) => handleTextChange("row8", value)}
+                style = {{ backgroundColor: "white" }}
+              />
             </View>
 
           </View>
@@ -205,7 +259,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   rowSection: {
-    marginTop: 15,
+    marginTop: 5,
   },
   row: {
     backgroundColor: "#F7E3D9",
