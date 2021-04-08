@@ -70,24 +70,91 @@ const AddEpworthData = () => {
           )}
         </View>
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
-
-        <ScrollView style = {styles.questionnaireSection}>
-          <Text>How likely are you to doze off or fall asleep in
-            the situations described below, in contrast to feeling tired?
-            This refers to your usual way of life in recent times</Text>
-
-            <Text>Even if you haven't done some of these things recently
-              try to work out how they would have affected you</Text>
-
-              <Text>Use the following scale to choose the most appropriate
-                number for each situation:</Text>
-                <Text>0 = would never doze</Text>
-                <Text>1 = Slight chance of dozing</Text>
-                <Text>2 = Moderate chance of dozing</Text>
-                <Text>3 = High chance of dozing</Text>
-        </ScrollView>
-
       </View>
+
+      <ScrollView style = {styles.questionnaireSection}>
+        <Text>How likely are you to doze off or fall asleep in
+          the situations described below, in contrast to feeling tired?
+          This refers to your usual way of life in recent times</Text>
+
+          <Text>Even if you haven't done some of these things recently
+            try to work out how they would have affected you</Text>
+
+          <Text>Use the following scale to choose the most appropriate
+            number for each situation:</Text>
+          <Text>0 = would never doze</Text>
+          <Text>1 = Slight chance of dozing</Text>
+          <Text>2 = Moderate chance of dozing</Text>
+          <Text>3 = High chance of dozing</Text>
+
+          <View style = {styles.rowSection}>
+            <View style = {styles.row}>
+              <Text style = {styles.rowHeader}>Situation Dozing</Text>
+              <Text style = {styles.rowHeader}>Chance</Text>
+            </View>
+
+            <View style = {styles.row}>
+              <Text style = {styles.rowSituation}>Sitting and reading</Text>
+              <Text>Input</Text>
+            </View>
+            <View style = {styles.row}>
+              <Text style = {styles.rowSituation}>Watching TV</Text>
+              <Text>Input</Text>
+            </View>
+            <View style = {styles.row}>
+              <Text style = {styles.rowSituation}>Sitting, inactive in a public place (e.g. theatre or a meeting)</Text>
+              <Text>Input</Text>
+            </View>
+            <View style = {styles.row}>
+              <Text style = {styles.rowSituation}>As a passenger in a car for an hour without an break</Text>
+              <Text>Input</Text>
+            </View>
+            <View style = {styles.row}>
+              <Text style = {styles.rowSituation}>Lying down to rest in the afternoon when circumstances permit</Text>
+              <Text>Input</Text>
+            </View>
+            <View style = {styles.row}>
+              <Text style = {styles.rowSituation}>Sitting and talking to someone</Text>
+              <Text>Input</Text>
+            </View>
+            <View style = {styles.row}>
+              <Text style = {styles.rowSituation}>Sitting quietly after a lunch without alcohol</Text>
+              <Text>Input</Text>
+            </View>
+            <View style = {styles.row}>
+              <Text style = {styles.rowSituation}>In a car, while stopped for a few minutes in the traffic</Text>
+              <Text>Input</Text>
+            </View>
+
+          </View>
+
+          { /*
+          <View style = { styles.epworthRow}>
+            <View style = {styles.questionsSection}>
+              <Text></Text>
+              <Text></Text>
+              <Text></Text>
+              <Text></Text>
+              <Text></Text>
+              <Text></Text>
+              <Text></Text>
+              <Text></Text>
+            </View>
+
+            <View style = {styles.scoring}>
+              <Text>Situation Dozing</Text>
+              <Text>Situation Dozing</Text>
+              <Text>Situation Dozing</Text>
+              <Text>Situation Dozing</Text>
+              <Text>Situation Dozing</Text>
+              <Text>Situation Dozing</Text>
+              <Text>Situation Dozing</Text>
+              <Text>Situation Dozing</Text>
+            </View>
+          </View>
+          */}
+      </ScrollView>
+
     </View>
   )
 }
@@ -110,7 +177,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7E3D9",
   },
   dateEntry: {
-    marginTop: "10%",
+    marginTop: "5%",
     backgroundColor: "#F7E3D9",
     flexDirection: "row",
     justifyContent: "center",
@@ -130,6 +197,27 @@ const styles = StyleSheet.create({
     marginVertical: "3%",
     height: 2,
     width: '100%',
+  },
+  questionnaireSection: {
+    marginTop: 5,
+    backgroundColor: "#F7E3D9",
+    width: "85%",
+    marginBottom: 10,
+  },
+  rowSection: {
+    marginTop: 15,
+  },
+  row: {
+    backgroundColor: "#F7E3D9",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingVertical: 5,
+  },
+  rowHeader: {
+    fontWeight: "bold",
+  },
+  rowSituation: {
+    width: "80%",
   },
 });
 
