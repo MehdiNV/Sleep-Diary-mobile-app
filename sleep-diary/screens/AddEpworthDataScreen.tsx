@@ -16,7 +16,7 @@ const AddEpworthData = () => {
   const [show, setShow] = useState(false);
 
   const [epworthScore, setEpworthScore] = useState({})
-  console.log(epworthScore)
+  console.log(epworthScore["nya"])
   /*
     Format for the code below in lodash is:
     1) Convert the data strcture to have numbers instead (_.toNumber and _.map)
@@ -127,6 +127,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row1", value)}
+                value = {epworthScore["row1"]}
                 style = {styles.textInput}
                 maxLength = {1}
               />
@@ -137,6 +138,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row2", value)}
+                value = {epworthScore["row2"]}
                 style = {styles.textInput}
                 maxLength = {1}
               />
@@ -147,6 +149,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row3", value)}
+                value = {epworthScore["row3"]}
                 style = {styles.textInput}
                 maxLength = {1}
               />
@@ -157,6 +160,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row4", value)}
+                value = {epworthScore["row4"]}
                 style = {styles.textInput}
                 maxLength = {1}
               />
@@ -167,6 +171,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row5", value)}
+                value = {epworthScore["row5"]}
                 style = {styles.textInput}
                 maxLength = {1}
               />
@@ -177,6 +182,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row6", value)}
+                value = {epworthScore["row6"]}
                 style = {styles.textInput}
                 maxLength = {1}
               />
@@ -187,6 +193,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row7", value)}
+                value = {epworthScore["row7"]}
                 style = {styles.textInput}
                 maxLength = {1}
               />
@@ -197,6 +204,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row8", value)}
+                value = {epworthScore["row8"]}
                 style = {styles.textInput}
                 maxLength = {1}
               />
