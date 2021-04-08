@@ -113,7 +113,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row1", value)}
-                style = {{ backgroundColor: "white" }}
+                style = {styles.textInput}
               />
             </View>
             <View style = {styles.row}>
@@ -122,7 +122,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row2", value)}
-                style = {{ backgroundColor: "white" }}
+                style = {styles.textInput}
               />
             </View>
             <View style = {styles.row}>
@@ -131,7 +131,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row3", value)}
-                style = {{ backgroundColor: "white" }}
+                style = {styles.textInput}
               />
             </View>
             <View style = {styles.row}>
@@ -140,7 +140,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row4", value)}
-                style = {{ backgroundColor: "white" }}
+                style = {styles.textInput}
               />
             </View>
             <View style = {styles.row}>
@@ -149,7 +149,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row5", value)}
-                style = {{ backgroundColor: "white" }}
+                style = {styles.textInput}
               />
             </View>
             <View style = {styles.row}>
@@ -158,7 +158,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row6", value)}
-                style = {{ backgroundColor: "white" }}
+                style = {styles.textInput}
               />
             </View>
             <View style = {styles.row}>
@@ -167,7 +167,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row7", value)}
-                style = {{ backgroundColor: "white" }}
+                style = {styles.textInput}
               />
             </View>
             <View style = {styles.row}>
@@ -176,7 +176,7 @@ const AddEpworthData = () => {
                 keyboardType = 'numeric'
                 textContentType='telephoneNumber'
                 onChangeText={(value) => handleTextChange("row8", value)}
-                style = {{ backgroundColor: "white" }}
+                style = {styles.textInput}
               />
             </View>
           </View>
@@ -246,6 +246,14 @@ const styles = StyleSheet.create({
   rowSituation: {
     width: "80%",
   },
+  textInput: {
+    height: 28,
+    backgroundColor: "white",
+    borderColor: "black",
+    borderStyle: "solid",
+    borderWidth: 1,
+    alignSelf: "center",
+  }
 });
 
 
