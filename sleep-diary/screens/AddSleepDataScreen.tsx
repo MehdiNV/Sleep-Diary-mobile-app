@@ -7,6 +7,7 @@ import DatePicker from 'react-native-modern-datepicker';
 import { View } from '../components/Themed';
 import moment from "moment";
 import { Modal, Portal, Button, Provider } from 'react-native-paper';
+import Toast from 'react-native-toast-message';
 
 import ModalTest from '../components/ModalTest';
 
@@ -31,9 +32,23 @@ const AddSleepData = () => {
   // Functions
   // Calendar Sleep Entry Picker
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
+    if (moment(selectedDate).isAfter(new Date(), "day")) {
+      Toast.show({
+        type: 'error',
+        position: 'bottom',
+        text1: 'You cannot enter a date into the future!',
+        text2: 'Please enter a different date',
+        visibilityTime: 4000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+    }
+    else {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+    }
   };
 
   const showMode = (currentMode) => {

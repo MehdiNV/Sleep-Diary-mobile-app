@@ -3,6 +3,7 @@ import { StyleSheet, Text, ScrollView, TextInput } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import Toast from 'react-native-toast-message';
 
 
 import { View } from '../components/Themed';
@@ -33,9 +34,23 @@ const AddEpworthData = () => {
 
   // Methods used for the 'Date for' calendar entry
   const onChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
     setShow(Platform.OS === 'ios');
-    setDate(currentDate);
+    if (moment(selectedDate).isAfter(new Date(), "day")){
+      Toast.show({
+        type: 'error',
+        position: 'bottom',
+        text1: 'You cannot enter a date into the future!',
+        text2: 'Please enter a different date',
+        visibilityTime: 4000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+    }
+    else {
+      const currentDate = selectedDate || date;
+      setDate(currentDate);
+    }
   };
 
   const showMode = (currentMode) => {
@@ -56,7 +71,7 @@ const AddEpworthData = () => {
     if (/^\d+$/.test(value) || value === '') { // Checks if it's actually a number
       if (_.toNumber(value) >= 0 && _.toNumber(value) <= 3){
         // Check as well if the number is between the permitted 0 to 3 range
-        
+
         // Take a copy of the state, and set the new value in it
         // This ensures we update the state (using the ...epworth copy) instead of overwriting it
         setEpworthScore({...epworthScore, [inputIdentifier]: value})
