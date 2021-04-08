@@ -59,6 +59,8 @@ const AddEpworthData = () => {
       // This ensures we update the state (using the ...epworth copy) instead of overwriting it
       setEpworthScore({...epworthScore, [inputIdentifier]: value})
     }
+    // The Regex used to accomplish this can be found below:
+    // https://gist.github.com/AlexisLeon/80b5641eb30b43bc598288e41052ac39
   }
 
   return (
@@ -213,9 +215,8 @@ const AddEpworthData = () => {
           {/* End of the 'Row' section*/}
 
           <View style = {styles.epworthResult}>
-            <Text style = {{ fontWeight: "bold"}}>Total</Text>
-            <Text>{currScore}
-            </Text>
+            <Text style = {{ fontWeight: "bold", alignSelf: "center"}}>Total</Text>
+            <Text style = {styles.scoreBox}>{currScore}</Text>
           </View>
 
           <Button
@@ -298,6 +299,8 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderStyle: "solid",
     borderWidth: 1,
+    textAlign: "center",
+    textAlignVertical: "center",
     alignSelf: "center",
     marginRight: 12, // Makes the TextInput be...
     //...better positioned under the 'Chance'
@@ -305,10 +308,22 @@ const styles = StyleSheet.create({
   epworthResult: {
     flexDirection: "row",
     justifyContent: "space-around",
+    backgroundColor: "#F7E3D9",
+    marginTop: 15,
+  },
+  scoreBox: {
+    borderColor: "black",
+    borderWidth: 3,
+    borderStyle: "solid",
+    backgroundColor: "white",
+    padding: 5,
+    alignSelf: "center",
+    textAlign: "center",
+    textAlignVertical: "center",
   },
   submitButton: {
     marginTop: 15,
-    marginBottom: 10,
+    marginBottom: 25,
     width: "95%",
     backgroundColor: "#F9C7E4",
     borderColor: "black",
