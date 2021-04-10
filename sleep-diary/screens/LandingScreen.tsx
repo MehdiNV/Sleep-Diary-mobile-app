@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { StyleSheet, Image, Text} from 'react-native';
-import { Button } from 'react-native-paper';
+import { Button, TextInput} from 'react-native-paper';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
@@ -9,9 +9,10 @@ import Modal from 'react-native-modal';
 
 const Landing = ({ navigation, route}) => {
   const [showModal, setShowModal] = useState(false);
+  const [registerUserName, setRegisterUserName] = useState("");
 
-  const makeModalVisible = () => {
-    setShowModal(true);
+  const changeModalVisibility = () => {
+    setShowModal(!showModal);
   }
 
   return (
@@ -41,16 +42,58 @@ const Landing = ({ navigation, route}) => {
           style = {styles.button}
           labelStyle = {{ color: "black" }}
           mode = "contained"
-          onPress ={makeModalVisible}
+          onPress ={changeModalVisibility}
         >
           Sign Up
         </Button>
       </View>
 
-      <View style = {styles.modalContainer}>
-        <Modal isVisible={showModal}>
-          <View style={{flex: 1}}>
-            <Text>I am the modal content!</Text>
+      <View>
+        <Modal
+          isVisible={showModal}
+          onBackdropPress = {changeModalVisibility}
+        >
+          <View style = {styles.modalContainer}>
+            <Text style = {styles.modalTitle}>Register as a new user</Text>
+            <TextInput
+              label="Enter a new user name"
+              placeholder = "Type a unique username here!"
+              value={registerUserName}
+              onChangeText={newText => setRegisterUserName(newText)}
+              numberOfLines = {1}
+              theme={{colors: {primary: 'black'}}}
+              style = {styles.modalTextInput}
+            />
+
+            <TextInput
+              label="Enter a password"
+              placeholder = "Make sure it's not easy to guess!"
+              value={registerUserName}
+              onChangeText={newText => setRegisterUserName(newText)}
+              numberOfLines = {1}
+              theme={{colors: {primary: 'black'}}}
+              style = {styles.modalTextInput}
+            />
+
+            <View style = {styles.modalButtonContainer}>
+              <Button
+                style = {styles.modalButton}
+                labelStyle = {{ color: "black" }}
+                mode = "contained"
+                onPress ={changeModalVisibility}
+              >
+                Register
+              </Button>
+
+              <Button
+                style = {styles.modalButton}
+                labelStyle = {{ color: "black" }}
+                mode = "contained"
+                onPress ={changeModalVisibility}
+              >
+                Dismiss
+              </Button>
+            </View>
           </View>
         </Modal>
       </View>
@@ -89,6 +132,34 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9C7E4",
     borderColor: "black",
     borderWidth: 1,
+  },
+  modalContainer: {
+    height: "40%",
+    backgroundColor: "#FEEDCF",
+    borderColor: "#C6D8D5",
+    borderWidth: 3,
+  },
+  modalTitle: {
+    marginTop: 20,
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: "center",
+  },
+  modalTextInput: {
+    marginTop: "5%",
+    width: "90%",
+    alignSelf: "center",
+  },
+  modalButtonContainer: {
+    flexDirection: "row",
+    backgroundColor: "#FEEDCF",
+    justifyContent: "space-evenly",
+  },
+  modalButton: {
+    backgroundColor: "#F9C7E4",
+    borderColor: "black",
+    borderWidth: 1,
+    marginTop: 20,
   }
 });
 
