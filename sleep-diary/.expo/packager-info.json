@@ -1,10 +1,10 @@
 {
-  "expoServerNgrokUrl": "https://t6-qr7.anonymous.sleep-diary.exp.direct",
-  "packagerNgrokUrl": "https://packager.t6-qr7.anonymous.sleep-diary.exp.direct",
-  "ngrokPid": 3604,
   "expoServerPort": 19000,
-  "devToolsPort": 19002,
   "packagerPort": 19000,
   "packagerPid": null,
-  "webpackServerPort": null
+  "expoServerNgrokUrl": "https://t6-qr7.anonymous.sleep-diary.exp.direct",
+  "packagerNgrokUrl": "https://packager.t6-qr7.anonymous.sleep-diary.exp.direct",
+  "ngrokPid": 32136,
+  "webpackServerPort": null,
+  "devToolsPort": 19002
 }

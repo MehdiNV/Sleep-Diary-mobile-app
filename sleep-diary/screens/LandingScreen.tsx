@@ -5,11 +5,16 @@ import { Button, TextInput} from 'react-native-paper';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import Modal from 'react-native-modal';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import 'react-native-get-random-values';
+import { v4 as uuidv4 } from 'uuid';
 
 
 const Landing = ({ navigation, route}) => {
   const [showModal, setShowModal] = useState(false);
   const [registerUserName, setRegisterUserName] = useState("");
+  const [registerPassword, setRegisterPassword] = useState("");
+  console.log(uuidv4());
 
   const changeModalVisibility = () => {
     setShowModal(!showModal);
@@ -68,8 +73,9 @@ const Landing = ({ navigation, route}) => {
             <TextInput
               label="Enter a password"
               placeholder = "Make sure it's not easy to guess!"
-              value={registerUserName}
-              onChangeText={newText => setRegisterUserName(newText)}
+              value={registerPassword}
+              onChangeText={newText => setRegisterPassword(newText)}
+              secureTextEntry={true}
               numberOfLines = {1}
               theme={{colors: {primary: 'black'}}}
               style = {styles.modalTextInput}
@@ -89,7 +95,11 @@ const Landing = ({ navigation, route}) => {
                 style = {styles.modalButton}
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
-                onPress ={changeModalVisibility}
+                onPress ={() => {
+                  setRegisterUserName("")
+                  setRegisterPassword("")
+                  changeModalVisibility()
+                }}
               >
                 Dismiss
               </Button>
