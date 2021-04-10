@@ -13,12 +13,21 @@ import { v4 as uuidv4 } from 'uuid';
 
 
 const Landing = ({ navigation, route}) => {
-  const [showModal, setShowModal] = useState(false);
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [registerUserName, setRegisterUserName] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
 
-  const changeModalVisibility = () => {
-    setShowModal(!showModal);
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginUserName, setLoginUserName] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+
+  const changeModalVisibility = (type) => {
+    if (type == "login"){
+      setShowLoginModal(!showLoginModal);
+    }
+    else if (type == "registration"){
+      setShowRegistrationModal(!showRegistrationModal);
+    }
   }
 
   async function registerNewUser(username, password) {
@@ -42,7 +51,14 @@ const Landing = ({ navigation, route}) => {
   }
 
   async function loginUser(username, password) {
-    //TODO 
+    const userAndPassChain = "username" + username + "pass" + password
+    const loginResult = await SecureStore.getItemAsync(userAndPassChain);
+    if (loginResult) {
+      console.log("Success! The UUID is " + loginResult);
+    } else {
+      console.log("Failure!");
+    }
+
   }
 
   return (
@@ -62,8 +78,8 @@ const Landing = ({ navigation, route}) => {
           labelStyle = {{ color: "black" }}
           mode = "contained"
           onPress = {() => {
-            navigation.navigate("Home")}
-          }
+            changeModalVisibility("login");
+          }}
         >
           Login
         </Button>
@@ -72,7 +88,7 @@ const Landing = ({ navigation, route}) => {
           style = {styles.button}
           labelStyle = {{ color: "black" }}
           mode = "contained"
-          onPress = {changeModalVisibility}
+          onPress = {() => {changeModalVisibility("registration")}}
         >
           Sign Up
         </Button>
@@ -80,8 +96,12 @@ const Landing = ({ navigation, route}) => {
 
       <View>
         <Modal
-          isVisible={showModal}
-          onBackdropPress = {changeModalVisibility}
+          isVisible={showRegistrationModal}
+          onBackdropPress = {() => {
+            setRegisterUserName("");
+            setRegisterPassword("");
+            changeModalVisibility("registration");
+          }}
         >
           <View style = {styles.modalContainer}>
             <Text style = {styles.modalTitle}>Register as a new user</Text>
@@ -115,7 +135,7 @@ const Landing = ({ navigation, route}) => {
                   registerNewUser(registerUserName, registerPassword);
                   setRegisterUserName("");
                   setRegisterPassword("");
-                  changeModalVisibility();
+                  changeModalVisibility("registration");
                 }}
               >
                 Register
@@ -128,7 +148,7 @@ const Landing = ({ navigation, route}) => {
                 onPress ={() => {
                   setRegisterUserName("");
                   setRegisterPassword("");
-                  changeModalVisibility();
+                  changeModalVisibility("registration");
                 }}
               >
                 Dismiss
@@ -137,6 +157,74 @@ const Landing = ({ navigation, route}) => {
           </View>
         </Modal>
       </View>
+
+      {/* Login Modal - future improvement that can be made here is to combine
+        the two into 1 modifiable component. In the meantime, a similar modal
+        to the above is denoted below*/}
+
+      <View>
+        <Modal
+          isVisible={showLoginModal}
+          onBackdropPress = {() => {
+            setLoginUserName("");
+            setLoginPassword("");
+            changeModalVisibility("login");
+          }}
+        >
+          <View style = {styles.modalContainer}>
+            <Text style = {styles.modalTitle}>Login to the app</Text>
+            <TextInput
+              label="Enter your user name"
+              value={loginUserName}
+              onChangeText={newText => setLoginUserName(newText)}
+              numberOfLines = {1}
+              theme={{colors: {primary: 'black'}}}
+              style = {styles.modalTextInput}
+            />
+
+            <TextInput
+              label="Enter your password"
+              placeholder = "Make sure to remember correctly!"
+              value={loginPassword}
+              onChangeText={newText => setLoginPassword(newText)}
+              secureTextEntry={true}
+              numberOfLines = {1}
+              theme={{colors: {primary: 'black'}}}
+              style = {styles.modalTextInput}
+            />
+
+            <View style = {styles.modalButtonContainer}>
+              <Button
+                style = {styles.modalButton}
+                labelStyle = {{ color: "black" }}
+                mode = "contained"
+                onPress ={() => {
+                  loginUser(loginUserName, loginPassword);
+                  setLoginUserName("");
+                  setLoginPassword("");
+                  changeModalVisibility("login");
+                }}
+              >
+                Login
+              </Button>
+
+              <Button
+                style = {styles.modalButton}
+                labelStyle = {{ color: "black" }}
+                mode = "contained"
+                onPress ={() => {
+                  setLoginUserName("");
+                  setLoginPassword("");
+                  changeModalVisibility("login");
+                }}
+              >
+                Dismiss
+              </Button>
+            </View>
+          </View>
+        </Modal>
+      </View>
+      {/* End of the Login Modal */}
 
     </View>
   );
