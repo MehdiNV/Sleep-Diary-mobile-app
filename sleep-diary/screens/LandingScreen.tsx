@@ -1,11 +1,19 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, Image, Text} from 'react-native';
 import { Button } from 'react-native-paper';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
+import Modal from 'react-native-modal';
+
 
 const Landing = ({ navigation, route}) => {
+  const [showModal, setShowModal] = useState(false);
+
+  const makeModalVisible = () => {
+    setShowModal(true);
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sleep Analyser</Text>
@@ -33,9 +41,18 @@ const Landing = ({ navigation, route}) => {
           style = {styles.button}
           labelStyle = {{ color: "black" }}
           mode = "contained"
+          onPress ={makeModalVisible}
         >
           Sign Up
         </Button>
+      </View>
+
+      <View style = {styles.modalContainer}>
+        <Modal isVisible={showModal}>
+          <View style={{flex: 1}}>
+            <Text>I am the modal content!</Text>
+          </View>
+        </Modal>
       </View>
 
     </View>
