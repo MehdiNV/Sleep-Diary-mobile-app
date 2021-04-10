@@ -134,7 +134,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   modalContainer: {
-    height: "40%",
     backgroundColor: "#FEEDCF",
     borderColor: "#C6D8D5",
     borderWidth: 3,
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#F9C7E4",
     borderColor: "black",
     borderWidth: 1,
-    marginTop: 20,
+    marginVertical: 20,
   }
 });
 
