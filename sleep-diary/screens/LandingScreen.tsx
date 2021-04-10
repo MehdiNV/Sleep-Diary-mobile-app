@@ -5,7 +5,9 @@ import { Button, TextInput} from 'react-native-paper';
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import Modal from 'react-native-modal';
+import Toast from 'react-native-toast-message';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -14,10 +16,33 @@ const Landing = ({ navigation, route}) => {
   const [showModal, setShowModal] = useState(false);
   const [registerUserName, setRegisterUserName] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
-  console.log(uuidv4());
 
   const changeModalVisibility = () => {
     setShowModal(!showModal);
+  }
+
+  async function registerNewUser(username, password) {
+    /*
+     Create a new user - get the username, and password
+     Combine those two values together to a usernameApassB
+     Then link it to a unique uuid (e.g. in key-val relationship)
+    */
+    const userAndPassChain = "username" + username + "pass" + password
+    await SecureStore.setItemAsync(userAndPassChain, uuidv4());
+    Toast.show({
+      type: 'success',
+      position: 'bottom',
+      text1: 'You have succesfully registered!',
+      text2: 'Please login using your username and password',
+      visibilityTime: 4000,
+      autoHide: true,
+      topOffset: 30,
+      bottomOffset: 40,
+    });
+  }
+
+  async function loginUser(username, password) {
+    //TODO 
   }
 
   return (
@@ -47,7 +72,7 @@ const Landing = ({ navigation, route}) => {
           style = {styles.button}
           labelStyle = {{ color: "black" }}
           mode = "contained"
-          onPress ={changeModalVisibility}
+          onPress = {changeModalVisibility}
         >
           Sign Up
         </Button>
@@ -86,7 +111,12 @@ const Landing = ({ navigation, route}) => {
                 style = {styles.modalButton}
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
-                onPress ={changeModalVisibility}
+                onPress ={() => {
+                  registerNewUser(registerUserName, registerPassword);
+                  setRegisterUserName("");
+                  setRegisterPassword("");
+                  changeModalVisibility();
+                }}
               >
                 Register
               </Button>
@@ -96,9 +126,9 @@ const Landing = ({ navigation, route}) => {
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
                 onPress ={() => {
-                  setRegisterUserName("")
-                  setRegisterPassword("")
-                  changeModalVisibility()
+                  setRegisterUserName("");
+                  setRegisterPassword("");
+                  changeModalVisibility();
                 }}
               >
                 Dismiss
