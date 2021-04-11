@@ -23,6 +23,7 @@ const Home = ({ navigation, route }) => {
   else if (currHour >= 18 && currHour <= 23){
     dayPhase = "evening"
   }
+  console.log(navigation);
 
   return (
     <View style={styles.container}>

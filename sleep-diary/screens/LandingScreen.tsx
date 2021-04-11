@@ -54,9 +54,28 @@ const Landing = ({ navigation, route}) => {
     const userAndPassChain = "username" + username + "pass" + password
     const loginResult = await SecureStore.getItemAsync(userAndPassChain);
     if (loginResult) {
-      console.log("Success! The UUID is " + loginResult);
+      Toast.show({
+        type: 'success',
+        position: 'bottom',
+        text1: "Welcome back user " + username + "!",
+        text2: 'Logging you in now',
+        visibilityTime: 4000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+      return [true, loginResult]; // User logged in correctly!
     } else {
-      console.log("Failure!");
+      Toast.show({
+        type: 'error',
+        position: 'bottom',
+        text1: 'Incorrect username or password!',
+        text2: 'Your username or password was wrong, please re-try',
+        visibilityTime: 4000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
     }
 
   }
@@ -198,11 +217,21 @@ const Landing = ({ navigation, route}) => {
                 style = {styles.modalButton}
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
-                onPress ={() => {
-                  loginUser(loginUserName, loginPassword);
+                onPress ={async () => {
+                  const [result, userUuid] = await loginUser(loginUserName, loginPassword);
                   setLoginUserName("");
                   setLoginPassword("");
-                  changeModalVisibility("login");
+                  // For some reason, doing a call to changeModalVisibility
+                  // causes a React State warning. However, a brute state change
+                  // via the below does not, hence I why used a direct way below instead
+                  // Since it avoids the warning and does not do anything concerning 
+                  setShowLoginModal(false);
+                  if (result){
+                    console.log("Test")
+                    console.log(result)
+                    console.log(userUuid)
+                    navigation.navigate("Home", {uuid: [userUuid]});
+                  }
                 }}
               >
                 Login
