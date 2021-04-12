@@ -8,6 +8,8 @@ import { View } from '../components/Themed';
 import moment from "moment";
 import { Modal, Portal, Button, Provider } from 'react-native-paper';
 import Toast from 'react-native-toast-message';
+import * as SecureStore from 'expo-secure-store';
+import _ from 'lodash';
 
 import ModalTest from '../components/ModalTest';
 
@@ -16,8 +18,6 @@ import { useSelector } from 'react-redux';
 
 const AddSleepData = ({ route }) => {
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
-  console.log("Add Sleep Data Screen")
-  console.log(uuid)
 
   // Section for showing 'Date for the night of' part
   const [date, setDate] = useState(new Date());
@@ -107,6 +107,85 @@ const AddSleepData = ({ route }) => {
     setShowSleepTimePicker(true);
   }
 
+  // Date Storage Section
+  const storeSleepData = async () => {
+    // Format the Date and Time of both into one
+    const sleepDateTime = moment(sleepDate).format("DD/MM/YY") +
+      " " + moment(sleepTime).format("HH:mmA")
+
+    // Likewise for Awakening counter-part
+    const awakeDateTime = moment(awakeDate).format("DD/MM/YY") +
+      " " + moment(awakeTime).format("HH:mmA")
+
+
+    let sleepingRecords = await SecureStore.getItemAsync(uuid);
+    sleepingRecords = JSON.parse(sleepingRecords); // Convert it to its array format
+
+    const matchingDate = _.filter(sleepingRecords, function(element) {
+        return (moment(element.date).isSame(date, "day"));
+    });
+
+    const newEntryValue = {type: "sleep",
+      date: date,
+      value: {fallingAsleep: sleepDateTime, awake: awakeDateTime}
+    }
+
+    if (matchingDate.length == 0){
+      sleepingRecords.push(newEntryValue);
+      await SecureStore.setItemAsync(uuid, JSON.stringify(sleepingRecords));
+      Toast.show({
+        type: 'info',
+        position: 'bottom',
+        text1: "One second....",
+        text2: 'Please hold - added the entry now...',
+        visibilityTime: 3000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+    }
+    else {
+      Toast.show({
+        type: 'info',
+        position: 'bottom',
+        text1: "Entry for this date already exists",
+        text2: 'Please hold - overwriting the values with the new entry...',
+        visibilityTime: 3000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+
+      var overwrittenSleepingRecords = _.map(sleepingRecords, function(element) {
+        return (moment(element.date).isSame(date, "day")) ?
+            newEntryValue
+          :
+            element;
+      });
+
+      await SecureStore.setItemAsync(uuid, JSON.stringify(overwrittenSleepingRecords));
+    }
+
+    // A tiny function that waits until the info messages have been seen for some time
+    // before showcasing the positive 'entry added' message
+    setTimeout(async () => {
+      notifyStorageSuccess();
+    }, 3500);
+  }
+
+  const notifyStorageSuccess = async () => {
+    Toast.show({
+      type: 'success',
+      position: 'bottom',
+      text1: "Entry is now added in!",
+      text2: 'This date now has your data added in',
+      visibilityTime: 4000,
+      autoHide: true,
+      topOffset: 30,
+      bottomOffset: 40,
+    });
+  }
+
 
   return (
     <View style={styles.container}>
@@ -183,7 +262,7 @@ const AddSleepData = ({ route }) => {
             size = {30}
             name = "time"
             style = {{ marginTop: 5, marginLeft: 5 }}
-            onPress = {showTimepicker}
+            onPress = {showSleepPickerWidgets}
           />
 
         </View>
@@ -210,7 +289,7 @@ const AddSleepData = ({ route }) => {
             {(showAwakeDatePicker && showAwakeTimePicker) && (
               <>
                 <DateTimePicker
-                  value={awakeDate}
+                  value={awakeTime}
                   mode={"time"}
                   is24Hour={true}
                   display="default"
@@ -241,6 +320,7 @@ const AddSleepData = ({ route }) => {
           style = {styles.submitButton}
           mode = "contained"
           labelStyle = {{ color: "black", fontSize: 12}}
+          onPress = {async () => {storeSleepData()}}
         >
           Submit
         </Button>

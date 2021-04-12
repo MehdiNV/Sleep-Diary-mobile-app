@@ -136,12 +136,23 @@ const AddEpworthData = ({ route }) => {
 
     sleepingRecords = await SecureStore.getItemAsync(uuid);
     sleepingRecords = JSON.parse(sleepingRecords);
-    
+
     console.log("After----");
     console.log("After: Sleeping Records")
     console.log(sleepingRecords)
     console.log("After: Matching Dates")
     console.log(matchingDate)
+
+    Toast.show({
+      type: 'success',
+      position: 'bottom',
+      text1: "Entry is now added in!",
+      text2: 'This date now has your data added in',
+      visibilityTime: 4000,
+      autoHide: true,
+      topOffset: 30,
+      bottomOffset: 40,
+    });
   }
 
 
