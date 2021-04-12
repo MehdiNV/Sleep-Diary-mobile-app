@@ -92,24 +92,27 @@ const AddEpworthData = ({ route }) => {
     sleepingRecords = JSON.parse(sleepingRecords); // Convert it to its array format
 
     const matchingDate = _.filter(sleepingRecords, function(element) {
-        console.log ("Elements date " + element.date)
-        console.log ("My date " + date);
-        return (moment(element.date).isSame(date, "day"));
+        return (moment(element.date).isSame(date, "day") &&
+          element.type == "epworth");
     });
 
     const newEntryValue = {type: "epworth", date: date, value: currScore}
-
-    console.log("Before----");
-    console.log("Before: Sleeping Records")
-    console.log(sleepingRecords)
-    console.log("Before: Matching Dates")
-    console.log(matchingDate)
 
     if (matchingDate.length == 0){ // Checks if no other dates matched
       // If so, then this is a wholly new contribution that can be added in!
       sleepingRecords.push(newEntryValue); // Add a new record
       // And save the new sleeping records for the user
       await SecureStore.setItemAsync(uuid, JSON.stringify(sleepingRecords));
+      Toast.show({
+        type: 'info',
+        position: 'bottom',
+        text1: "One second....",
+        text2: 'Please hold - added the entry now...',
+        visibilityTime: 3000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
     }
     else { // We already have an entry for this night / date
       // Hence, we should replace the record we have here instead
@@ -117,8 +120,8 @@ const AddEpworthData = ({ route }) => {
         type: 'info',
         position: 'bottom',
         text1: "Entry for this date already exists",
-        text2: 'Overwriting this entry with new value',
-        visibilityTime: 4000,
+        text2: 'Please hold - overwriting the values with the new entry...',
+        visibilityTime: 3000,
         autoHide: true,
         topOffset: 30,
         bottomOffset: 40,
@@ -134,15 +137,12 @@ const AddEpworthData = ({ route }) => {
       await SecureStore.setItemAsync(uuid, JSON.stringify(overwrittenSleepingRecords));
     }
 
-    sleepingRecords = await SecureStore.getItemAsync(uuid);
-    sleepingRecords = JSON.parse(sleepingRecords);
+    setTimeout(async () => {
+      notifyStorageSuccess();
+    }, 3500);
+  }
 
-    console.log("After----");
-    console.log("After: Sleeping Records")
-    console.log(sleepingRecords)
-    console.log("After: Matching Dates")
-    console.log(matchingDate)
-
+  const notifyStorageSuccess = async () => {
     Toast.show({
       type: 'success',
       position: 'bottom',

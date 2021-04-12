@@ -121,8 +121,11 @@ const AddSleepData = ({ route }) => {
     let sleepingRecords = await SecureStore.getItemAsync(uuid);
     sleepingRecords = JSON.parse(sleepingRecords); // Convert it to its array format
 
+    // Check all the objects in the sleeping records [] array
+    // See if any have the same day and type
     const matchingDate = _.filter(sleepingRecords, function(element) {
-        return (moment(element.date).isSame(date, "day"));
+        return (moment(element.date).isSame(date, "day") &&
+          element.type == "sleep");
     });
 
     const newEntryValue = {type: "sleep",
