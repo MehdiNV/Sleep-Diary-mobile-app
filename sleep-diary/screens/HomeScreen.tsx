@@ -4,10 +4,16 @@ import { Button } from 'react-native-paper';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
+import { useSelector } from 'react-redux';
 
 import moment from "moment";
 
 const Home = ({ navigation, route }) => {
+  // Getting UUID / Handing Login
+  const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
+  console.log("Home")
+  console.log(uuid)
+
   // Fetches the current date to display to the user
   const date = moment(new Date()).format("Do MMMM YYYY")
   const time = moment(new Date()).format("HH:mmA")
@@ -23,10 +29,6 @@ const Home = ({ navigation, route }) => {
   else if (currHour >= 18 && currHour <= 23){
     dayPhase = "evening"
   }
-
-  const uuid = route.params.uuid[0] // Get the UUID passed in
-  console.log("Home")
-  console.log(uuid)
 
   return (
     <View style={styles.container}>

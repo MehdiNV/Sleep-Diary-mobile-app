@@ -4,20 +4,19 @@ import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { View } from '../components/Themed';
 import moment from "moment";
 import _ from 'lodash';
 
-const AddEpworthData = ({ route }) => {
-  console.log(route);
+// Import needed for Redux
+import { useSelector } from 'react-redux';
 
-  /*
-  const uuid = route.params.uuid[0] // Get the UUID of the logged in account
+const AddEpworthData = ({ route }) => {
+  const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
   console.log("Add Sleep Data Screen")
   console.log(uuid)
-  */
 
   // Section for showing 'Date for' calendar entry
   const [date, setDate] = useState(new Date());
@@ -88,6 +87,13 @@ const AddEpworthData = ({ route }) => {
     // The Regex used to accomplish this can be found below:
     // https://gist.github.com/AlexisLeon/80b5641eb30b43bc598288e41052ac39
   }
+
+  // Method that adds the data to the storage for the user
+  const addEpworthData = async () => {
+    const sleepingData = await SecureStore.getItemAsync(uuid);
+    console.log(":3c")
+  }
+
 
   return (
     <View style={styles.container}>
@@ -247,6 +253,7 @@ const AddEpworthData = ({ route }) => {
           style = {styles.submitButton}
           mode = "contained"
           labelStyle = {{ color: "black" }}
+          onPress = {async () => {await addEpworthData}}
         >
           Submit
         </Button>

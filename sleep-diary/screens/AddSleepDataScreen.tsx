@@ -11,13 +11,13 @@ import Toast from 'react-native-toast-message';
 
 import ModalTest from '../components/ModalTest';
 
+// Import needed for Redux
+import { useSelector } from 'react-redux';
+
 const AddSleepData = ({ route }) => {
-  console.log(route);
-  /*
-  const uuid = route.params.uuid[0] // Get the UUID of the logged in account
+  const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
   console.log("Add Sleep Data Screen")
   console.log(uuid)
-  */
 
   // Section for showing 'Date for the night of' part
   const [date, setDate] = useState(new Date());

@@ -11,8 +11,13 @@ import * as SecureStore from 'expo-secure-store';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
+// Import needed for Redux
+import { useSelector, useDispatch } from 'react-redux';
 
 const Landing = ({ navigation, route}) => {
+  // Used for updating the Global Redux store e.g. when logging in
+  const dispatch = useDispatch();
+
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [registerUserName, setRegisterUserName] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
@@ -20,6 +25,7 @@ const Landing = ({ navigation, route}) => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginUserName, setLoginUserName] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
+
 
   const changeModalVisibility = (type) => {
     if (type == "login"){
@@ -223,7 +229,8 @@ const Landing = ({ navigation, route}) => {
                   setLoginUserName("");
                   setLoginPassword("");
                   if (result){
-                    navigation.navigate("Home", {screen: "Home", params: {uuid: [userUuid]}});
+                    dispatch({type: "setUUID", payload: userUuid})
+                    navigation.navigate("Home");
                   }
                   else { // Incorrect credentials made
                     changeModalVisibility("login");
