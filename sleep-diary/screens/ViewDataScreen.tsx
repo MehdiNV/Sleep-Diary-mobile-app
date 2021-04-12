@@ -8,6 +8,7 @@ import Toast from 'react-native-toast-message';
 import { useSelector } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
+import _ from 'lodash';
 
 
 const ViewData = () => {
@@ -21,6 +22,13 @@ const ViewData = () => {
   // State used for holding the 'End date' entry
   const [endDate, setEndDate] = useState(new Date());
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+
+  // State holding sleep averages and related statistics
+  const [avgSleepData, setAvgSleepData] = useState({
+    avgDuration: "Insufficient data",
+    avgAsleepTime: "Insufficient data",
+    avgWakeTime: "Insufficient data",
+  });
 
   // Methods used for changing the states
   // For Start Date - the onChange and Show methods
@@ -77,7 +85,48 @@ const ViewData = () => {
 
   // Calculate data needed for the date ranges specified
   const calculateSleepingRecords = async () => {
-    console.log(":3c")
+    // Fetch all the sleeping records that are linked to this account
+    let sleepingRecords = await SecureStore.getItemAsync(uuid);
+    sleepingRecords = JSON.parse(sleepingRecords);
+
+    // Filter the records to only the ones that are within range
+    const entriesWithinRange = _.filter(sleepingRecords, function(element) {
+      return (
+        moment(element.date).isSameOrAfter(startDate, "day") &&
+        moment(element.date).isSameOrBefore(endDate, "day")
+      )
+    });
+
+    // Filter the entries by their type
+    const sleepEntries = _.filter(entriesWithinRange, function(element) {
+      return (
+        element.type == "sleep"
+      )
+    });
+
+    const epworthEntries = _.filter(entriesWithinRange, function(element) {
+      return (
+        element.type == "epworth"
+      )
+    });
+
+    if (sleepEntries.length == 0){ // No data to use, so set the below
+      setAvgSleepData({
+        avgDuration: "Insufficient data",
+        avgAsleepTime: "Insufficient data",
+        avgWakeTime: "Insufficient data",
+      })
+    }
+    else { // We have some data we can use for averages!
+      // Pass
+    }
+
+    console.log("Output of Logs")
+    console.log(sleepingRecords);
+    console.log(entriesWithinRange)
+    console.log(sleepEntries)
+    console.log(epworthEntries)
+    console.log("----------------")
   }
 
   useEffect(() => {
@@ -162,16 +211,16 @@ const ViewData = () => {
       <ScrollView style = {styles.dataScrollView}>
         <Text style = {styles.subheader}>Stats</Text>
         <View style = {styles.dataRow}>
-          <Text style = {styles.rowSituation}>Average sleep duration:</Text>
-          <Text>TODO</Text>
+          <Text style = {styles.dataHeader}>Average sleep duration:</Text>
+          <Text>{avgSleepData.avgDuration}</Text>
         </View>
         <View style = {styles.dataRow}>
-          <Text style = {styles.rowSituation}>Average falling asleep time:</Text>
-          <Text>TODO</Text>
+          <Text style = {styles.dataHeader}>Average falling asleep time:</Text>
+          <Text>{avgSleepData.avgAsleepTime}</Text>
         </View>
         <View style = {styles.dataRow}>
-          <Text style = {styles.rowSituation}>Average wake-up time:</Text>
-          <Text>TODO</Text>
+          <Text style = {styles.dataHeader}>Average wake-up time:</Text>
+          <Text>{avgSleepData.avgWakeTime}</Text>
         </View>
 
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
@@ -250,10 +299,10 @@ const styles = StyleSheet.create({
     backgroundColor: "#F7E3D9",
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 5  ,
+    paddingVertical: 5,
   },
-  rowSituation: {
-    width: "80%",
+  dataHeader: {
+    width: "65%",
     textAlignVertical: "center",
   },
 });

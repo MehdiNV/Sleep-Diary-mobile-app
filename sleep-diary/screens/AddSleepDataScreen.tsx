@@ -110,13 +110,15 @@ const AddSleepData = ({ route }) => {
   // Date Storage Section
   const storeSleepData = async () => {
     // Format the Date and Time of both into one
-    const sleepDateTime = moment(sleepDate).format("DD/MM/YY") +
-      " " + moment(sleepTime).format("HH:mmA")
+    const sleepDateTime = moment((moment(sleepDate).format("DD/MM/YY") +
+      " " + moment(sleepTime).format("HH:mmA")),
+      "DD/MM/YY HH:mmA").toDate();
 
     // Likewise for Awakening counter-part
-    const awakeDateTime = moment(awakeDate).format("DD/MM/YY") +
-      " " + moment(awakeTime).format("HH:mmA")
-
+    const awakeDateTime = moment((moment(awakeDate).format("DD/MM/YY") +
+      " " + moment(awakeTime).format("HH:mmA")),
+      "DD/MM/YY HH:mmA").toDate();
+    // By this point, they're now tidily converted into two Date objects we can save
 
     let sleepingRecords = await SecureStore.getItemAsync(uuid);
     sleepingRecords = JSON.parse(sleepingRecords); // Convert it to its array format
