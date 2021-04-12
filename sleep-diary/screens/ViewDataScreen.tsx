@@ -1,14 +1,19 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, Text, ScrollView } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { View } from '../components/Themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
+import { useSelector } from 'react-redux';
+import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
 
 
 const ViewData = () => {
+  // The UUID of the logged-in user
+  const uuid = useSelector(state => state.uuid);
+
   // State used for holding the 'Start Date' entry
   const [startDate, setStartDate] = useState(new Date());
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
@@ -19,7 +24,7 @@ const ViewData = () => {
 
   // Methods used for changing the states
   // For Start Date - the onChange and Show methods
-  const onStartDateChange = (event, selectedDate) => {
+  const onStartDateChange = async (event, selectedDate) => {
       setShowStartDatePicker(Platform.OS === 'ios');
       if (moment(selectedDate).isAfter(endDate, "day")){
         Toast.show({
@@ -36,14 +41,16 @@ const ViewData = () => {
       else {
         const currentDate = selectedDate || startDate;
         setStartDate(currentDate);
+        await calculateSleepingRecords();
       }
+
   };
 
   const showStartPicker = () => {
     setShowStartDatePicker(true);
   }
   // Likewise for the End Date
-  const onEndDateChange = (event, selectedDate) => {
+  const onEndDateChange = async (event, selectedDate) => {
     setShowEndDatePicker(Platform.OS === 'ios');
     if (moment(selectedDate).isAfter(new Date(), "day")){
       Toast.show({
@@ -60,6 +67,7 @@ const ViewData = () => {
     else{
       const currentDate = selectedDate || endDate;
       setEndDate(currentDate);
+      await calculateSleepingRecords();
     }
   };
 
@@ -67,8 +75,18 @@ const ViewData = () => {
     setShowEndDatePicker(true);
   }
 
-  console.log(new Date())
-  console.log (endDate)
+  // Calculate data needed for the date ranges specified
+  const calculateSleepingRecords = async () => {
+    console.log(":3c")
+  }
+
+  useEffect(() => {
+    async function loadInitialData(){
+      calculateSleepingRecords();
+    }
+    loadInitialData();
+  }, [])
+
   return (
     <View style={styles.container}>
       <View style = {styles.screenContent}>
