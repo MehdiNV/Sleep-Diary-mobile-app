@@ -1,18 +1,28 @@
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { Button } from 'react-native-paper';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import { useSelector } from 'react-redux';
-
+import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
 
 const Home = ({ navigation, route }) => {
   // Getting UUID / Handing Login
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
-  console.log("Home")
-  console.log(uuid)
+
+  useEffect(() => {
+    async function setInitialUser() {
+      const uuidCheck = await SecureStore.getItemAsync(uuid);
+      if (!uuidCheck){ // If the value is Null, as in there is no uuid in the storage
+        // Then that means this user has no sleeping records at at all
+        // What we can do here is set them up with an empty [] initially
+        await SecureStore.setItemAsync(uuid, JSON.stringify([]))
+      }
+    }
+    setInitialUser();
+  },[]);
 
   // Fetches the current date to display to the user
   const date = moment(new Date()).format("Do MMMM YYYY")

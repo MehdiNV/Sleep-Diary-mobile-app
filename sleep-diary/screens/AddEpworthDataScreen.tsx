@@ -4,7 +4,7 @@ import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
 
 import { View } from '../components/Themed';
 import moment from "moment";
@@ -15,8 +15,6 @@ import { useSelector } from 'react-redux';
 
 const AddEpworthData = ({ route }) => {
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
-  console.log("Add Sleep Data Screen")
-  console.log(uuid)
 
   // Section for showing 'Date for' calendar entry
   const [date, setDate] = useState(new Date());
@@ -90,8 +88,60 @@ const AddEpworthData = ({ route }) => {
 
   // Method that adds the data to the storage for the user
   const addEpworthData = async () => {
-    const sleepingData = await SecureStore.getItemAsync(uuid);
-    console.log(":3c")
+    let sleepingRecords = await SecureStore.getItemAsync(uuid);
+    sleepingRecords = JSON.parse(sleepingRecords); // Convert it to its array format
+
+    const matchingDate = _.filter(sleepingRecords, function(element) {
+        console.log ("Elements date " + element.date)
+        console.log ("My date " + date);
+        return (moment(element.date).isSame(date, "day"));
+    });
+
+    const newEntryValue = {type: "epworth", date: date, value: currScore}
+
+    console.log("Before----");
+    console.log("Before: Sleeping Records")
+    console.log(sleepingRecords)
+    console.log("Before: Matching Dates")
+    console.log(matchingDate)
+
+    if (matchingDate.length == 0){ // Checks if no other dates matched
+      // If so, then this is a wholly new contribution that can be added in!
+      sleepingRecords.push(newEntryValue); // Add a new record
+      // And save the new sleeping records for the user
+      await SecureStore.setItemAsync(uuid, JSON.stringify(sleepingRecords));
+    }
+    else { // We already have an entry for this night / date
+      // Hence, we should replace the record we have here instead
+      Toast.show({
+        type: 'info',
+        position: 'bottom',
+        text1: "Entry for this date already exists",
+        text2: 'Overwriting this entry with new value',
+        visibilityTime: 4000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+
+      var overwrittenSleepingRecords = _.map(sleepingRecords, function(element) {
+        return (moment(element.date).isSame(date, "day")) ?
+            newEntryValue
+          :
+            element;
+      });
+
+      await SecureStore.setItemAsync(uuid, JSON.stringify(overwrittenSleepingRecords));
+    }
+
+    sleepingRecords = await SecureStore.getItemAsync(uuid);
+    sleepingRecords = JSON.parse(sleepingRecords);
+    
+    console.log("After----");
+    console.log("After: Sleeping Records")
+    console.log(sleepingRecords)
+    console.log("After: Matching Dates")
+    console.log(matchingDate)
   }
 
 
@@ -253,7 +303,7 @@ const AddEpworthData = ({ route }) => {
           style = {styles.submitButton}
           mode = "contained"
           labelStyle = {{ color: "black" }}
-          onPress = {async () => {await addEpworthData}}
+          onPress = {async () => {await addEpworthData()}}
         >
           Submit
         </Button>
