@@ -10,7 +10,15 @@ import { View } from '../components/Themed';
 import moment from "moment";
 import _ from 'lodash';
 
-const AddEpworthData = () => {
+const AddEpworthData = ({ route }) => {
+  console.log(route);
+
+  /*
+  const uuid = route.params.uuid[0] // Get the UUID of the logged in account
+  console.log("Add Sleep Data Screen")
+  console.log(uuid)
+  */
+
   // Section for showing 'Date for' calendar entry
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');

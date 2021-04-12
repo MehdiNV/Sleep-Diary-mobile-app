@@ -6,6 +6,8 @@ import useCachedResources from './hooks/useCachedResources';
 import useColorScheme from './hooks/useColorScheme';
 import Navigation from './navigation';
 import Toast from 'react-native-toast-message';
+import { createStore } from 'redux';
+
 
 
 export default function App() {

@@ -23,7 +23,10 @@ const Home = ({ navigation, route }) => {
   else if (currHour >= 18 && currHour <= 23){
     dayPhase = "evening"
   }
-  console.log(navigation);
+
+  const uuid = route.params.uuid[0] // Get the UUID passed in
+  console.log("Home")
+  console.log(uuid)
 
   return (
     <View style={styles.container}>
@@ -44,7 +47,7 @@ const Home = ({ navigation, route }) => {
           mode = "contained"
           labelStyle = {{ color: "black" }} // Makes the text of the button black per design
           onPress = {() => {
-            navigation.navigate("AddSleepData")
+            navigation.navigate("AddSleepData", {screen: "AddSleepData", params: {uuid: [uuid]}})
           }}
         >
           Enter sleep data
@@ -62,7 +65,9 @@ const Home = ({ navigation, route }) => {
           style = {styles.button}
           mode = "contained"
           labelStyle = {{ color: "black" }}
-          onPress = {() => navigation.navigate("AddEpworthData")}
+          onPress = {() =>
+            navigation.navigate("AddEpworthData", {screen: "AddEpworthData", params: {uuid: [uuid]}})
+          }
         >
           Enter todays Epworth score
         </Button>

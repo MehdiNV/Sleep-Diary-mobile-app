@@ -11,7 +11,14 @@ import Toast from 'react-native-toast-message';
 
 import ModalTest from '../components/ModalTest';
 
-const AddSleepData = () => {
+const AddSleepData = ({ route }) => {
+  console.log(route);
+  /*
+  const uuid = route.params.uuid[0] // Get the UUID of the logged in account
+  console.log("Add Sleep Data Screen")
+  console.log(uuid)
+  */
+
   // Section for showing 'Date for the night of' part
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');

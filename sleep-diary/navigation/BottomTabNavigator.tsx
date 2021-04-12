@@ -141,7 +141,6 @@ function HomeNavigator() {
       <HomeStack.Screen
         name="Home"
         component={Home}
-        initialParams = {{ johnny: 150 }}
         options={{
           headerShown: false,
         }}

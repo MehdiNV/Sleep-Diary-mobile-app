@@ -76,6 +76,7 @@ const Landing = ({ navigation, route}) => {
         topOffset: 30,
         bottomOffset: 40,
       });
+      return [false, null];
     }
 
   }
@@ -221,16 +222,11 @@ const Landing = ({ navigation, route}) => {
                   const [result, userUuid] = await loginUser(loginUserName, loginPassword);
                   setLoginUserName("");
                   setLoginPassword("");
-                  // For some reason, doing a call to changeModalVisibility
-                  // causes a React State warning. However, a brute state change
-                  // via the below does not, hence I why used a direct way below instead
-                  // Since it avoids the warning and does not do anything concerning 
-                  setShowLoginModal(false);
                   if (result){
-                    console.log("Test")
-                    console.log(result)
-                    console.log(userUuid)
-                    navigation.navigate("Home", {uuid: [userUuid]});
+                    navigation.navigate("Home", {screen: "Home", params: {uuid: [userUuid]}});
+                  }
+                  else { // Incorrect credentials made
+                    changeModalVisibility("login");
                   }
                 }}
               >
