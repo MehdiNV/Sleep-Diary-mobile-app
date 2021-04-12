@@ -110,6 +110,12 @@ const ViewData = () => {
       )
     });
 
+    console.log("Output of Logs")
+    console.log(entriesWithinRange)
+    console.log(sleepEntries)
+    console.log(epworthEntries)
+    console.log("----------------")
+
     if (sleepEntries.length == 0){ // No data to use, so set the below
       setAvgSleepData({
         avgDuration: "Insufficient data",
@@ -118,15 +124,10 @@ const ViewData = () => {
       })
     }
     else { // We have some data we can use for averages!
-      // Pass
+      // Iterate through all the entries now
+      
     }
 
-    console.log("Output of Logs")
-    console.log(sleepingRecords);
-    console.log(entriesWithinRange)
-    console.log(sleepEntries)
-    console.log(epworthEntries)
-    console.log("----------------")
   }
 
   useEffect(() => {

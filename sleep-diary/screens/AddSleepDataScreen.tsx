@@ -73,15 +73,15 @@ const AddSleepData = ({ route }) => {
 
   // Awake Picker
   const updateAwakeTime = (event, selectedTime) => {
-    const currentDate = selectedTime || awakeTime;
+    const currAwakeTime = selectedTime || awakeTime;
     setShowAwakeTimePicker(Platform.OS === 'ios');
-    setAwakeTime(selectedTime);
+    setAwakeTime(currAwakeTime);
   }
 
   const updateAwakeDate = (event, selectedDate) => {
-    const currentDate = selectedDate || awakeDate;
+    const currAwakeDate = selectedDate || awakeDate;
     setShowAwakeDatePicker(Platform.OS === 'ios');
-    setAwakeDate(selectedDate);
+    setAwakeDate(currAwakeDate);
   }
 
   const showAwakePickerWidgets = () => {
@@ -91,15 +91,15 @@ const AddSleepData = ({ route }) => {
 
   // Sleep picker
   const updateSleepTime = (event, selectedTime) => {
-    const currentDate = selectedTime || sleepTime;
+    const currSleepTime = selectedTime || sleepTime;
     setShowSleepTimePicker(Platform.OS === 'ios');
-    setSleepTime(selectedTime);
+    setSleepTime(currSleepTime);
   }
 
   const updateSleepDate = (event, selectedDate) => {
-    const currentDate = selectedDate || sleepDate;
+    const currSleepDate = selectedDate || sleepDate;
     setShowSleepDatePicker(Platform.OS === 'ios');
-    setSleepDate(selectedDate);
+    setSleepDate(currSleepDate);
   }
 
   const showSleepPickerWidgets = () => {
