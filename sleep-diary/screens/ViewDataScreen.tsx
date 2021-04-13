@@ -136,6 +136,8 @@ const ViewData = () => {
       // Iterate through all the entries now
       // So at this point, we have an array like: [{}, ...., {}, {}] etc
       // Each object inside this array is a record we can use
+
+      // Calculate the Average Sleep Length
       let totalSleepingHours = _.sumBy(sleepEntries, function(record) {
         const sleepDate = record.value.fallingAsleep
         const awakeDate = record.value.awake
@@ -147,6 +149,38 @@ const ViewData = () => {
       const averageSleepLength = durationTime.hours() + " hours" + (
         durationTime.minutes() != 0 ? (" and " + durationTime.minutes() + " minutes")
           : "")
+
+      // Calculate the Average Falling Asleep Time
+      // Method here is particularly strange, but I believe the best way to accomplish
+      // this form of calculation. We take the 1st record available, and compare all other
+      // records to it (e.g. lets say the 1st is 8pm. We'll ask - what's the offset values
+      // of all other sleeping times to 8pm? Get that difference, get the mean, and
+      // add it onto 8 / subtract from it to get the actual average sleeping time)
+      const firstRecord = sleepEntries[0]
+      const firstRecordSleepTime = firstRecord.value.fallingAsleep
+
+      let totalOffset = _.sumBy(sleepEntries, function(record) {
+        if (firstRecord.date == record.date) {
+          return
+        }
+
+        const currSleepDate = record.value.fallingAsleep
+        const currSleepHour = moment(currSleepDate).hour()
+        const currSleepMinute = moment(currSleepDate).minute()
+        const sleepString = "01-01-2000 " + currSleepHour + ":" + currSleepMinute
+
+        const firstRecordHour = moment(firstRecordSleepTime).hour()
+        const firstRecordMinute = moment(firstRecordSleepTime).minute()
+        const firstRecordString = "01-01-2000 " + firstRecordHour + ":" + firstRecordMinute
+
+        return moment(sleepString, "DD-MM-YYYY HH:mm").diff
+          (moment(firstRecordString, "DD-MM-YYYY HH:mm"), "hours", true);
+      });
+      // Calculate the mean offset
+      totalOffset = totalOffset / sleepEntries.length
+      // Add that offset to the first entry - that should now be our avg sleep time
+      // The offset could be +ve or -ve - so the firstRecord time could go forward or backward
+      const avgSleepingTime = moment(firstRecordSleepTime).add(totalOffset, "hours")
     }
   }
 
