@@ -148,18 +148,7 @@ const ViewData = () => {
         durationTime.minutes() != 0 ? (" and " + durationTime.minutes() + " minutes")
           : "")
     }
-
   }
-
-  /*
-  useEffect(() => {
-    async function loadInitialData(){
-      calculateSleepingRecords();
-    }
-    loadInitialData();
-  }, [])
-  */
-
 
   return (
     <View style={styles.container}>
