@@ -71,13 +71,19 @@ const AddSleepData = ({ route }) => {
     showMode('time');
   };
 
-  // Awake Picker
+  // Methods that are linked to the Awake Picker (Widgets for selecting time
+  // ...and date)
+  // Func: updateAwakeTime
+  // This is called when the user selects a new time using the time Widget
+  // Once they do, we recieve their new choice (or cancellation) and appropriately
+  // update the state information we hold
   const updateAwakeTime = (event, selectedTime) => {
     const currAwakeTime = selectedTime || awakeTime;
     setShowAwakeTimePicker(Platform.OS === 'ios');
     setAwakeTime(currAwakeTime);
   }
-
+  // Func: updateAwakeDate
+  // Likewise like the above, but for the date (that you wake up on) instead
   const updateAwakeDate = (event, selectedDate) => {
     const currAwakeDate = selectedDate || awakeDate;
     setShowAwakeDatePicker(Platform.OS === 'ios');

@@ -30,6 +30,13 @@ const ViewData = () => {
     avgWakeTime: "Insufficient data",
   });
 
+  useEffect(() => {
+    async function loadInitialData(){
+      await calculateSleepingRecords();
+    }
+    loadInitialData();
+  }, [startDate, endDate])
+
   // Methods used for changing the states
   // For Start Date - the onChange and Show methods
   const onStartDateChange = async (event, selectedDate) => {
@@ -47,9 +54,8 @@ const ViewData = () => {
         });
       }
       else {
-        const currentDate = selectedDate || startDate;
-        setStartDate(currentDate);
-        await calculateSleepingRecords();
+        const currStartDate = selectedDate || startDate;
+        setStartDate(currStartDate);
       }
 
   };
@@ -73,9 +79,8 @@ const ViewData = () => {
       });
     }
     else{
-      const currentDate = selectedDate || endDate;
-      setEndDate(currentDate);
-      await calculateSleepingRecords();
+      const currEndDate = selectedDate || endDate;
+      setEndDate(currEndDate);
     }
   };
 
@@ -111,6 +116,10 @@ const ViewData = () => {
     });
 
     console.log("Output of Logs")
+    console.log("Timing values")
+    console.log(startDate)
+    console.log(endDate)
+    console.log("Data Structures")
     console.log(entriesWithinRange)
     console.log(sleepEntries)
     console.log(epworthEntries)
@@ -125,17 +134,21 @@ const ViewData = () => {
     }
     else { // We have some data we can use for averages!
       // Iterate through all the entries now
-      
+      // So at this point, we have an array like: [{}, ...., {}, {}] etc
+      // Each object inside this array is a record we can use
     }
 
   }
 
+  /*
   useEffect(() => {
     async function loadInitialData(){
       calculateSleepingRecords();
     }
     loadInitialData();
   }, [])
+  */
+
 
   return (
     <View style={styles.container}>
