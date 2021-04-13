@@ -33,6 +33,7 @@
     "expo-web-browser": "~8.6.0",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
+    "moment-duration-format": "^2.3.2",
     "react": "16.13.1",
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-40.0.1.tar.gz",

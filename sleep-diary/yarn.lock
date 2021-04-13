@@ -6188,6 +6188,11 @@ mkdirp@^0.5.1:
   dependencies:
     minimist "^1.2.5"
 
+moment-duration-format@^2.3.2:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/moment-duration-format/-/moment-duration-format-2.3.2.tgz#5fa2b19b941b8d277122ff3f87a12895ec0d6212"
+  integrity sha512-cBMXjSW+fjOb4tyaVHuaVE/A5TqkukDWiOfxxAjY+PEqmmBQlLwn+8OzwPiG3brouXKY5Un4pBjAeB6UToXHaQ==
+
 moment-jalaali@^0.9.2:
   version "0.9.2"
   resolved "https://registry.yarnpkg.com/moment-jalaali/-/moment-jalaali-0.9.2.tgz#1c67917aa13003db19c070ea4118945fcb626250"

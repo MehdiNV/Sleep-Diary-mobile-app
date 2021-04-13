@@ -136,6 +136,17 @@ const ViewData = () => {
       // Iterate through all the entries now
       // So at this point, we have an array like: [{}, ...., {}, {}] etc
       // Each object inside this array is a record we can use
+      let totalSleepingHours = _.sumBy(sleepEntries, function(record) {
+        const sleepDate = record.value.fallingAsleep
+        const awakeDate = record.value.awake
+        return moment(awakeDate).diff(moment(sleepDate), "hours", true);
+      });
+      // Now, we wrap the resulting number (e.g. 9.75) into a duration object
+      const durationTime = moment.duration(totalSleepingHours, "hours")
+      // Afterwards, we then format it into a X hours (and y minutes if minutes > 0)
+      const averageSleepLength = durationTime.hours() + " hours" + (
+        durationTime.minutes() != 0 ? (" and " + durationTime.minutes() + " minutes")
+          : "")
     }
 
   }
