@@ -114,17 +114,7 @@ const ViewData = () => {
         element.type == "epworth"
       )
     });
-
-    console.log("Output of Logs")
-    console.log("Timing values")
-    console.log(startDate)
-    console.log(endDate)
-    console.log("Data Structures")
-    console.log(entriesWithinRange)
-    console.log(sleepEntries)
-    console.log(epworthEntries)
-    console.log("----------------")
-
+    
     if (sleepEntries.length == 0){ // No data to use, so set the below
       setAvgSleepData({
         avgDuration: "Insufficient data",
@@ -136,11 +126,12 @@ const ViewData = () => {
       // Iterate through all the entries now
       // So at this point, we have an array like: [{}, ...., {}, {}] etc
       // Each object inside this array is a record we can use
-
+      console.log("Sleeping")
       // Calculate the Average Sleep Length
       let totalSleepingHours = _.sumBy(sleepEntries, function(record) {
         const sleepDate = record.value.fallingAsleep
         const awakeDate = record.value.awake
+        console.log(moment(awakeDate).diff(moment(sleepDate), "hours", true))
         return moment(awakeDate).diff(moment(sleepDate), "hours", true);
       });
       // Now, we wrap the resulting number (e.g. 9.75) into a duration object
@@ -164,6 +155,12 @@ const ViewData = () => {
           return
         }
 
+        // Format both the current records sleeping value, and the first value to be the same date
+        // The reason they have to be the same date is so that it makes the .diff calculations easier
+        // If they are different dates, the number of hours between them will include days (which
+        // skews the final output). Hence, I reset them to be 1st Jan, 2000 but keep the hour and
+        // minute (so that now, we can use the avg angle calculation method correctly here - as it
+        // only applies to the hours on the clock face / 360 degree instead of incl. days)
         const currSleepDate = record.value.fallingAsleep
         const currSleepHour = moment(currSleepDate).hour()
         const currSleepMinute = moment(currSleepDate).minute()
@@ -181,6 +178,45 @@ const ViewData = () => {
       // Add that offset to the first entry - that should now be our avg sleep time
       // The offset could be +ve or -ve - so the firstRecord time could go forward or backward
       const avgSleepingTime = moment(firstRecordSleepTime).add(totalOffset, "hours")
+
+      // Calculate the average wake-up time
+      // We'll just do the same approach as the above, but using wake-up times instead
+      const firstRecordWakeValue = firstRecord.value.awake
+      // Overwrite the totalOffset - but for our avg wake up values instead
+      totalOffset = _.sumBy(sleepEntries, function(record) {
+        if (firstRecord.date == record.date) {
+          return
+        }
+
+        // Format both the current records sleeping value, and the first value to be the same date
+        // The reason they have to be the same date is so that it makes the .diff calculations easier
+        // If they are different dates, the number of hours between them will include days (which
+        // skews the final output). Hence, I reset them to be 1st Jan, 2000 but keep the hour and
+        // minute (so that now, we can use the avg angle calculation method correctly here - as it
+        // only applies to the hours on the clock face / 360 degree instead of incl. days)
+        const currAwakeDate = record.value.awake
+        const currAwakeHour = moment(currAwakeDate).hour()
+        const currAwakeMinute = moment(currAwakeDate).minute()
+        const awakeString = "01-01-2000 " + currAwakeHour + ":" + currAwakeMinute
+
+        const firstRecordHour = moment(firstRecordSleepTime).hour()
+        const firstRecordMinute = moment(firstRecordSleepTime).minute()
+        const firstRecordString = "01-01-2000 " + firstRecordHour + ":" + firstRecordMinute
+
+        return moment(awakeString, "DD-MM-YYYY HH:mm").diff
+          (moment(firstRecordString, "DD-MM-YYYY HH:mm"), "hours", true);
+      });
+      // Calculate the mean offset
+      totalOffset = totalOffset / sleepEntries.length
+      // Add that offset to the first entry - that should now be our avg sleep time
+      // The offset could be +ve or -ve - so the firstRecord time could go forward or backward
+      const avgWakeTime = moment(firstRecordSleepTime).add(totalOffset, "hours")
+
+      setAvgSleepData({
+        avgDuration: averageSleepLength,
+        avgAsleepTime: moment(avgSleepingTime).format("HH:mmA"),
+        avgWakeTime: moment(avgWakeTime).format("HH:mmA"),
+      })
     }
   }
 
