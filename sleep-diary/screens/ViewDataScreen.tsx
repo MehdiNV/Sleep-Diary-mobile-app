@@ -148,6 +148,8 @@ const ViewData = () => {
         const awakeDate = record.value.awake
         return moment(awakeDate).diff(moment(sleepDate), "hours", true);
       });
+      // Divide it by the number of nights to get the average length of sleep
+      totalSleepingHours = totalSleepingHours / sleepEntries.length
       // Now, we wrap the resulting number (e.g. 9.75) into a duration object
       const durationTime = moment.duration(totalSleepingHours, "hours")
       // Afterwards, we then format it into a X hours (and y minutes if minutes > 0)
@@ -224,7 +226,7 @@ const ViewData = () => {
       totalOffset = totalOffset / sleepEntries.length
       // Add that offset to the first entry - that should now be our avg sleep time
       // The offset could be +ve or -ve - so the firstRecord time could go forward or backward
-      const avgWakeTime = moment(firstRecordSleepTime).add(totalOffset, "hours")
+      const avgWakeTime = moment(firstRecordWakeValue).add(totalOffset, "hours")
 
       setAvgSleepData({
         avgDuration: averageSleepLength,
@@ -241,14 +243,11 @@ const ViewData = () => {
     sleepEntries = _.sortBy(sleepEntries, [function(record) {return record.date}]);
     epworthEntries = _.sortBy(epworthEntries, [function(record) {return record.date}]);
 
-    // Sorted Versions
-    console.log(sleepEntries)
-    console.log(epworthEntries)
-
     // Perform calculations to ensure we can show the sleep chart data corerctly
     if (sleepEntries.length == 0) {
       console.log("No Sleep Records")
       setShowSleepChart(false);
+      setSleepChartData({});
     }
     else {
       // Get an array of all the sleep lengths in the records we have
@@ -259,7 +258,26 @@ const ViewData = () => {
           const awakeDate = record.value.awake
           return moment(awakeDate).diff(moment(sleepDate), "hours", true);
       })
+
+      const sleepDates = _.map(sleepEntries, function(record) {
+          return moment(record.date).format("Do");
+      })
+
+      console.log("Sleeping Chart Data")
       console.log(sleepingLengths)
+      console.log(sleepDates)
+
+      setSleepChartData({
+        labels: sleepDates,
+        datasets: [
+          {
+            data: sleepingLengths
+          }
+        ]
+      })
+
+      setShowSleepChart(true);
+
     }
 
     // Perform calculations likewise for the Epworth data
@@ -286,7 +304,7 @@ const ViewData = () => {
           }
         ]
       })
-      console.log(epworthChartData)
+
       setShowEpworthChart(true);
     }
 
@@ -384,32 +402,18 @@ const ViewData = () => {
         <View style = {{ backgroundColor: "#F7E3D9"}}>
           {showSleepChart ?
             <LineChart
-              data={{
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-                datasets: [
-                  {
-                    data: [
-                      5,
-                      10,
-                      7,
-                      8,
-                      11,
-                      6,
-                      6,
-                    ]
-                  }
-                ]
-              }}
+              data={sleepChartData}
               yAxisSuffix=" hrs"
               width={380} // from react-native
               height={210}
               fromZero
+              segments = {7}
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundColor: "#e26a00",
                 backgroundGradientFrom: "#F7E3D9",
                 backgroundGradientTo: "#F7E3D9",
-                decimalPlaces: 2, // optional, defaults to 2dp
+                decimalPlaces: 0, // optional, defaults to 2dp
                 color: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
                 labelColor: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
                 propsForDots: {
@@ -421,7 +425,8 @@ const ViewData = () => {
               style={{
                 paddingVertical: 2,
                 backgroundColor: "#F7E3D9",
-                borderRadius: 4
+                borderRadius: 4,
+                alignSelf: "center",
               }}
             />
           :
