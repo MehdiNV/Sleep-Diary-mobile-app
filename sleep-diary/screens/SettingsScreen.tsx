@@ -16,6 +16,11 @@ const Settings = () => {
     setWarningModal(!showWarningModal);
   }
 
+  const purgeData = async () => {
+    // Reset all the data - reset the UUID to associate with an empty (data) array
+    await SecureStore.setItemAsync(uuid, JSON.stringify([]));
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Settings</Text>
@@ -43,23 +48,30 @@ const Settings = () => {
           }}
         >
           <View style = {styles.modalContainer}>
-            <Text style = {styles.modalTitle}>Login to the app</Text>
+            <Text style = {styles.modalTitle}>Warning! This will delete all records</Text>
+            <Text style = {styles.modalText}>To check, are you sure you want to delete everything?
+              If so then press the 'Delete all' button, otherwise press 'Cancel'</Text>
 
             <View style = {styles.modalButtonContainer}>
               <Button
                 style = {styles.modalButton}
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
+                onPress = {async () => {
+                  await purgeData();
+                  changeModalVisibility();
+                }}
               >
-                Button 1
+                Delete all
               </Button>
 
               <Button
                 style = {styles.modalButton}
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
+                onPress = {changeModalVisibility}
               >
-                Button 2
+                Cancel
               </Button>
             </View>
           </View>
@@ -104,7 +116,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignSelf: "center",
   },
-
   modalContainer: {
     backgroundColor: "#FEEDCF",
     borderColor: "#C6D8D5",
@@ -116,10 +127,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: "center",
   },
-  modalTextInput: {
-    marginTop: "5%",
-    width: "90%",
+  modalText: {
+    width: "85%",
     alignSelf: "center",
+    textAlign: "center",
+    marginTop: 5,
   },
   modalButtonContainer: {
     flexDirection: "row",
