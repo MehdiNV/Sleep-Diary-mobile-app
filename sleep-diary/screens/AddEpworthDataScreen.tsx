@@ -127,8 +127,14 @@ const AddEpworthData = ({ route }) => {
         bottomOffset: 40,
       });
 
+      sleepingRecords = _.uniqBy(sleepingRecords, function(record) {
+        // ID records by their date+type (and remove any that match the same date+type)
+        return (record.date + record.type)
+      })
+
       var overwrittenSleepingRecords = _.map(sleepingRecords, function(element) {
-        return (moment(element.date).isSame(date, "day")) ?
+        return (moment(element.date).isSame(date, "day")
+          && element.type == "epworth") ?
             newEntryValue
           :
             element;

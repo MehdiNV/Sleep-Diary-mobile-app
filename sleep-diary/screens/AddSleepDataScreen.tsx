@@ -142,8 +142,10 @@ const AddSleepData = ({ route }) => {
     }
 
     if (matchingDate.length == 0){
+      // Given that the records are an array, all we do here is push a new obj into them
       sleepingRecords.push(newEntryValue);
       await SecureStore.setItemAsync(uuid, JSON.stringify(sleepingRecords));
+      // Notify the user to wait / that it'll be added in
       Toast.show({
         type: 'info',
         position: 'bottom',
@@ -156,6 +158,7 @@ const AddSleepData = ({ route }) => {
       });
     }
     else {
+      // Notify the user that they already had an entry
       Toast.show({
         type: 'info',
         position: 'bottom',
@@ -167,11 +170,19 @@ const AddSleepData = ({ route }) => {
         bottomOffset: 40,
       });
 
-
+      // There could be duplicate sleep entries in our records, although this shouldn't be possible
+      // However, for safety / caution, we can just remove any that exists using Lodash's uniqBy method
       sleepingRecords = _.uniqBy(sleepingRecords, function(record) {
+        // This says to identify records by their date+type (and remove any that match the same date+type)
         return (record.date + record.type)
       })
 
+      // We still have the Key-Val pairing with our Secure Store - as in, we have uuid -> sleepRecords
+      // Since we want to update this, all we can do is set the Key to point to a new sleep record e.g.
+      // it's now uuid -> (updated) sleep record (by overwriting the previous key-val relationship)
+      // This is done via map method - iterate through the records, and keep the ones that are unique
+      // and overwrite (e.g. use the newEntryValue obj instead of the existing element) for elements that
+      // match the current date
       var overwrittenSleepingRecords = _.map(sleepingRecords, function(element) {
         return ((moment(element.date).isSame(date, "day"))
           && element.type == "sleep") ?
