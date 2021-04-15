@@ -264,8 +264,9 @@ const ViewData = () => {
 
     // Perform calculations likewise for the Epworth data
     if (epworthEntries.length == 0) {
-      console.log("No Epworth Scores")
+      // No epworth scores are present, so no worth in displaying chart
       setShowEpworthChart(false);
+      setEpworthChartData({});
     }
     else {
       const epworthScores = _.map(epworthEntries, function(record) {
@@ -273,7 +274,20 @@ const ViewData = () => {
           return epworthScore;
       })
 
-      console.log(epworthScores)
+      const epworthDates = _.map(epworthEntries, function(record) {
+          return moment(record.date).format("Do");
+      })
+
+      setEpworthChartData({
+        labels: epworthDates,
+        datasets: [
+          {
+            data: epworthScores
+          }
+        ]
+      })
+      console.log(epworthChartData)
+      setShowEpworthChart(true);
     }
 
   }
@@ -421,32 +435,17 @@ const ViewData = () => {
         <View style = {{ backgroundColor: "#F7E3D9" }}>
           {showEpworthChart ?
             <LineChart
-              data={{
-                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-                datasets: [
-                  {
-                    data: [
-                      5,
-                      10,
-                      7,
-                      8,
-                      11,
-                      6,
-                      6,
-                    ]
-                  }
-                ]
-              }}
-              yAxisSuffix=" hrs"
+              data={epworthChartData}
               width={380} // from react-native
               height={210}
               fromZero
+              segments = {7}
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundColor: "#e26a00",
                 backgroundGradientFrom: "#F7E3D9",
                 backgroundGradientTo: "#F7E3D9",
-                decimalPlaces: 2, // optional, defaults to 2dp
+                decimalPlaces: 0, // optional, defaults to 2dp
                 color: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
                 labelColor: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
                 propsForDots: {
@@ -458,7 +457,8 @@ const ViewData = () => {
               style={{
                 paddingVertical: 2,
                 backgroundColor: "#F7E3D9",
-                borderRadius: 4
+                borderRadius: 4,
+                alignSelf: "center",
               }}
             />
             :
