@@ -26,9 +26,12 @@ const Settings = () => {
       <Text style={styles.title}>Settings</Text>
 
       <View style = {styles.screenContent}>
-        <Text>TODO Write some text here</Text>
+        <Text>Adjust the app settings and behaviour here</Text>
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
         <Text style={styles.subtitle}>Reset your sleeping records</Text>
+        <Text>If you wish, you can reset your account by deleting all the sleep entries
+          that were made using the button below. Please note that this will delete
+          everything though (Sleep Data, Epworth, etc)</Text>
         <Button
           style = {styles.button}
           mode = "contained"
@@ -37,6 +40,11 @@ const Settings = () => {
         >
           Delete all sleeping records
         </Button>
+        <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
+        <Text style={styles.subtitle}>Want to get in contact? Here's how</Text>
+        <Text>You can get in contact by emailing me (Mehdi, creator of the app) at
+          <Text style = {{fontStyle: "italic"}}> m.naderi-varandi@newcastle.ac.uk</Text>
+        </Text>
       </View>
       {/* End of Screen Content View */}
 
@@ -95,7 +103,7 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     textDecorationLine: "underline",
-    marginBottom: 15,
+    marginBottom: 10,
   },
   screenContent: {
     marginTop: 20,
