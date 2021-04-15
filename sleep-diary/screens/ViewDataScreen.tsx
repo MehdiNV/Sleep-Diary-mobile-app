@@ -215,8 +215,8 @@ const ViewData = () => {
         const currAwakeMinute = moment(currAwakeDate).minute()
         const awakeString = "01-01-2000 " + currAwakeHour + ":" + currAwakeMinute
 
-        const firstRecordHour = moment(firstRecordSleepTime).hour()
-        const firstRecordMinute = moment(firstRecordSleepTime).minute()
+        const firstRecordHour = moment(firstRecordWakeValue).hour()
+        const firstRecordMinute = moment(firstRecordWakeValue).minute()
         const firstRecordString = "01-01-2000 " + firstRecordHour + ":" + firstRecordMinute
 
         return moment(awakeString, "DD-MM-YYYY HH:mm").diff
