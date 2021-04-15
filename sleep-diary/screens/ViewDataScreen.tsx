@@ -324,52 +324,66 @@ const ViewData = () => {
 
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
         <Text style = {styles.subheader}>Sleep durations</Text>
-        <View>
-          <LineChart
-            data={{
-              labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
-              datasets: [
-                {
-                  data: [
-                    0,
-                    5,
-                    10,
-                    7,
-                    8,
-                    11,
-                    6,
-                    6,
-                  ]
+        <View style = {{ backgroundColor: "#F7E3D9"}}>
+          {showSleepChart ?
+            <LineChart
+              data={{
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                datasets: [
+                  {
+                    data: [
+                      0,
+                      5,
+                      10,
+                      7,
+                      8,
+                      11,
+                      6,
+                      6,
+                    ]
+                  }
+                ]
+              }}
+              yAxisSuffix=" hrs"
+              width={380} // from react-native
+              height={210}
+              yAxisInterval={1} // optional, defaults to 1
+              chartConfig={{
+                backgroundColor: "#e26a00",
+                backgroundGradientFrom: "#F7E3D9",
+                backgroundGradientTo: "#F7E3D9",
+                decimalPlaces: 2, // optional, defaults to 2dp
+                color: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
+                labelColor: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
+                propsForDots: {
+                  r: "2",
+                  strokeWidth: "2",
+                  stroke: "black"
                 }
-              ]
-            }}
-            yAxisSuffix=" hrs"
-            width={380} // from react-native
-            height={210}
-            yAxisInterval={1} // optional, defaults to 1
-            chartConfig={{
-              backgroundColor: "#e26a00",
-              backgroundGradientFrom: "#F7E3D9",
-              backgroundGradientTo: "#F7E3D9",
-              decimalPlaces: 2, // optional, defaults to 2dp
-              color: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
-              labelColor: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
-              propsForDots: {
-                r: "2",
-                strokeWidth: "2",
-                stroke: "black"
-              }
-            }}
-            style={{
-              paddingVertical: 2,
-              backgroundColor: "#F7E3D9",
-              borderRadius: 4
-            }}
-          />
+              }}
+              style={{
+                paddingVertical: 2,
+                backgroundColor: "#F7E3D9",
+                borderRadius: 4
+              }}
+            />
+          :
+          <Text
+            style = {{ alignSelf: "center", backgroundColor: "#F7E3D9"}}
+          >Insufficient data for Sleep chart</Text>
+          }
         </View>
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
         <Text style = {styles.subheader}>Epworth Score</Text>
-        <Text>TODO - Epworth graph</Text>
+        <View style = {{ backgroundColor: "#F7E3D9" }}>
+          {showEpworthChart ?
+            <Text>:3c</Text>
+            :
+            <Text
+              style = {{ alignSelf: "center", backgroundColor: "#F7E3D9"}}
+            >Insufficient data for Epworth chart</Text>
+          }
+        </View>
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
         <Text style = {styles.subheader}>Note</Text>
         <Text>Keep up the good work! The more data you have,
