@@ -153,8 +153,8 @@ const ViewData = () => {
       // Now, we wrap the resulting number (e.g. 9.75) into a duration object
       const durationTime = moment.duration(totalSleepingHours, "hours")
       // Afterwards, we then format it into a X hours (and y minutes if minutes > 0)
-      const averageSleepLength = durationTime.hours() + " hours" + (
-        durationTime.minutes() != 0 ? (" and " + durationTime.minutes() + " minutes")
+      const averageSleepLength = durationTime.hours() + " hrs" + (
+        durationTime.minutes() != 0 ? (" and " + durationTime.minutes() + " mins")
           : "")
 
       // Calculate the Average Falling Asleep Time
@@ -228,6 +228,7 @@ const ViewData = () => {
       // The offset could be +ve or -ve - so the firstRecord time could go forward or backward
       const avgWakeTime = moment(firstRecordWakeValue).add(totalOffset, "hours")
 
+      // Update the state var used for the statistics with the new values
       setAvgSleepData({
         avgDuration: averageSleepLength,
         avgAsleepTime: moment(avgSleepingTime).format("HH:mmA"),
@@ -242,7 +243,7 @@ const ViewData = () => {
     // Sort the two arrays by their date
     sleepEntries = _.sortBy(sleepEntries, [function(record) {return record.date}]);
     epworthEntries = _.sortBy(epworthEntries, [function(record) {return record.date}]);
-
+    console.log(sleepEntries)
     // Perform calculations to ensure we can show the sleep chart data corerctly
     if (sleepEntries.length == 0) {
       console.log("No Sleep Records")

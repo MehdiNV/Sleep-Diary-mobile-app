@@ -167,8 +167,14 @@ const AddSleepData = ({ route }) => {
         bottomOffset: 40,
       });
 
+
+      sleepingRecords = _.uniqBy(sleepingRecords, function(record) {
+        return (record.date + record.type)
+      })
+
       var overwrittenSleepingRecords = _.map(sleepingRecords, function(element) {
-        return (moment(element.date).isSame(date, "day")) ?
+        return ((moment(element.date).isSame(date, "day"))
+          && element.type == "sleep") ?
             newEntryValue
           :
             element;
