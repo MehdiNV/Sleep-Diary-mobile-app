@@ -141,12 +141,11 @@ const ViewData = () => {
       // Iterate through all the entries now
       // So at this point, we have an array like: [{}, ...., {}, {}] etc
       // Each object inside this array is a record we can use
-      console.log("Sleeping")
+
       // Calculate the Average Sleep Length
       let totalSleepingHours = _.sumBy(sleepEntries, function(record) {
         const sleepDate = record.value.fallingAsleep
         const awakeDate = record.value.awake
-        console.log(moment(awakeDate).diff(moment(sleepDate), "hours", true))
         return moment(awakeDate).diff(moment(sleepDate), "hours", true);
       });
       // Now, we wrap the resulting number (e.g. 9.75) into a duration object
@@ -233,6 +232,50 @@ const ViewData = () => {
         avgWakeTime: moment(avgWakeTime).format("HH:mmA"),
       })
     }
+
+    calculateChartData(sleepEntries, epworthEntries);
+  }
+
+  const calculateChartData = (sleepEntries, epworthEntries) => {
+    // Sort the two arrays by their date
+    sleepEntries = _.sortBy(sleepEntries, [function(record) {return record.date}]);
+    epworthEntries = _.sortBy(epworthEntries, [function(record) {return record.date}]);
+
+    // Sorted Versions
+    console.log(sleepEntries)
+    console.log(epworthEntries)
+
+    // Perform calculations to ensure we can show the sleep chart data corerctly
+    if (sleepEntries.length == 0) {
+      console.log("No Sleep Records")
+      setShowSleepChart(false);
+    }
+    else {
+      // Get an array of all the sleep lengths in the records we have
+      // So this may look like: [8, 9, 10, 11, 6, 7] each number being the
+      // length of hours the user had
+      const sleepingLengths = _.map(sleepEntries, function(record) {
+          const sleepDate = record.value.fallingAsleep
+          const awakeDate = record.value.awake
+          return moment(awakeDate).diff(moment(sleepDate), "hours", true);
+      })
+      console.log(sleepingLengths)
+    }
+
+    // Perform calculations likewise for the Epworth data
+    if (epworthEntries.length == 0) {
+      console.log("No Epworth Scores")
+      setShowEpworthChart(false);
+    }
+    else {
+      const epworthScores = _.map(epworthEntries, function(record) {
+          const epworthScore = record.value
+          return epworthScore;
+      })
+
+      console.log(epworthScores)
+    }
+
   }
 
   return (
@@ -332,7 +375,6 @@ const ViewData = () => {
                 datasets: [
                   {
                     data: [
-                      0,
                       5,
                       10,
                       7,
@@ -347,6 +389,7 @@ const ViewData = () => {
               yAxisSuffix=" hrs"
               width={380} // from react-native
               height={210}
+              fromZero
               yAxisInterval={1} // optional, defaults to 1
               chartConfig={{
                 backgroundColor: "#e26a00",
@@ -377,7 +420,47 @@ const ViewData = () => {
         <Text style = {styles.subheader}>Epworth Score</Text>
         <View style = {{ backgroundColor: "#F7E3D9" }}>
           {showEpworthChart ?
-            <Text>:3c</Text>
+            <LineChart
+              data={{
+                labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+                datasets: [
+                  {
+                    data: [
+                      5,
+                      10,
+                      7,
+                      8,
+                      11,
+                      6,
+                      6,
+                    ]
+                  }
+                ]
+              }}
+              yAxisSuffix=" hrs"
+              width={380} // from react-native
+              height={210}
+              fromZero
+              yAxisInterval={1} // optional, defaults to 1
+              chartConfig={{
+                backgroundColor: "#e26a00",
+                backgroundGradientFrom: "#F7E3D9",
+                backgroundGradientTo: "#F7E3D9",
+                decimalPlaces: 2, // optional, defaults to 2dp
+                color: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
+                labelColor: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
+                propsForDots: {
+                  r: "2",
+                  strokeWidth: "2",
+                  stroke: "black"
+                }
+              }}
+              style={{
+                paddingVertical: 2,
+                backgroundColor: "#F7E3D9",
+                borderRadius: 4
+              }}
+            />
             :
             <Text
               style = {{ alignSelf: "center", backgroundColor: "#F7E3D9"}}
