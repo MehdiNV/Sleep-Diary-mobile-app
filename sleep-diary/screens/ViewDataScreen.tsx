@@ -1,10 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, Text, ScrollView } from 'react-native';
+import { StyleSheet, Text, ScrollView, Dimensions } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { View } from '../components/Themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
+import {
+  LineChart,
+  BarChart,
+  PieChart,
+  ProgressChart,
+  ContributionGraph,
+  StackedBarChart
+} from "react-native-chart-kit";
 import { useSelector } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
@@ -29,6 +37,13 @@ const ViewData = () => {
     avgAsleepTime: "Insufficient data",
     avgWakeTime: "Insufficient data",
   });
+
+  const [sleepChartData, setSleepChartData] = useState({})
+  const [showSleepChart, setShowSleepChart] = useState(false);
+
+  const [epworthChartData, setEpworthChartData] = useState({});
+  const [showEpworthChart, setShowEpworthChart] = useState(false);
+
 
   useEffect(() => {
     async function loadInitialData(){
@@ -114,7 +129,7 @@ const ViewData = () => {
         element.type == "epworth"
       )
     });
-    
+
     if (sleepEntries.length == 0){ // No data to use, so set the below
       setAvgSleepData({
         avgDuration: "Insufficient data",
@@ -309,7 +324,49 @@ const ViewData = () => {
 
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
         <Text style = {styles.subheader}>Sleep durations</Text>
-        <Text>TODO Sleep Graph</Text>
+        <View>
+          <LineChart
+            data={{
+              labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+              datasets: [
+                {
+                  data: [
+                    0,
+                    5,
+                    10,
+                    7,
+                    8,
+                    11,
+                    6,
+                    6,
+                  ]
+                }
+              ]
+            }}
+            yAxisSuffix=" hrs"
+            width={380} // from react-native
+            height={210}
+            yAxisInterval={1} // optional, defaults to 1
+            chartConfig={{
+              backgroundColor: "#e26a00",
+              backgroundGradientFrom: "#F7E3D9",
+              backgroundGradientTo: "#F7E3D9",
+              decimalPlaces: 2, // optional, defaults to 2dp
+              color: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
+              labelColor: (opacity = 0.1) => `rgba(0, 0, 0, ${opacity})`,
+              propsForDots: {
+                r: "2",
+                strokeWidth: "2",
+                stroke: "black"
+              }
+            }}
+            style={{
+              paddingVertical: 2,
+              backgroundColor: "#F7E3D9",
+              borderRadius: 4
+            }}
+          />
+        </View>
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
         <Text style = {styles.subheader}>Epworth Score</Text>
         <Text>TODO - Epworth graph</Text>
@@ -369,7 +426,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
   },
   dataScrollView: {
-    marginTop: 5,
+    marginVertical: 10,
     width: "85%",
   },
   subheader: {
