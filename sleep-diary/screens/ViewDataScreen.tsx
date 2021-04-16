@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { StyleSheet, Text, ScrollView, Dimensions } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
@@ -17,6 +17,7 @@ import { useSelector } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
 import _ from 'lodash';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 const ViewData = () => {
@@ -51,6 +52,15 @@ const ViewData = () => {
     }
     loadInitialData();
   }, [startDate, endDate])
+
+  useFocusEffect(
+    useCallback(() => {
+      async function loadInitialData(){
+        await calculateSleepingRecords();
+      }
+      loadInitialData();
+    }, [])
+  );
 
   // Methods used for changing the states
   // For Start Date - the onChange and Show methods

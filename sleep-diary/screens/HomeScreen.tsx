@@ -1,19 +1,24 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import Toast from 'react-native-toast-message';
 import { useSelector, useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+
 
 const Home = ({ navigation, route }) => {
   // Getting UUID / Handing Login
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
   const dispatch = useDispatch();
+
+  // Fetches the current date to display to the user
+  const [date, setDate] = useState(moment(new Date()).format("Do MMMM YYYY"))
+  const [time, setTime] = useState(moment(new Date()).format("HH:mmA"))
 
   useEffect(() => {
     async function setInitialUser() {
@@ -27,9 +32,16 @@ const Home = ({ navigation, route }) => {
     setInitialUser();
   },[]);
 
-  // Fetches the current date to display to the user
-  const date = moment(new Date()).format("Do MMMM YYYY")
-  const time = moment(new Date()).format("HH:mmA")
+  // Hook that runs every time Home screen comes into focus / navigated to
+  // Once so, we just run a quick state change and update the date & time to reflect
+  // the current time at that moment
+  useFocusEffect(
+    useCallback(() => {
+      setDate(moment(new Date()).format("Do MMMM YYYY"))
+      setTime(moment(new Date()).format("HH:mmA"))
+    }, [])
+  );
+
 
   const currHour = moment().format("HH");
   var dayPhase = ""
