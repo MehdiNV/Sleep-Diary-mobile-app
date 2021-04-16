@@ -78,13 +78,8 @@ const AddEpworthData = () => {
 
   // Text Handler for the number inputs (The epworth scoring)
   const handleTextChange = (inputIdentifier, value) => {
-    console.log("Checking Input Status")
-    console.log(inputIdentifier)
-    console.log(value)
     if (/^\d+$/.test(value) || value === '') { // Checks if it's actually a number
-      console.log("Past first conditional statement")
       if (_.toNumber(value) >= 0 && _.toNumber(value) <= 3){
-        console.log("Past second conditional statement")
         // Check as well if the number is between the permitted 0 to 3 range
 
         // Take a copy of the state, and set the new value in it
@@ -94,7 +89,6 @@ const AddEpworthData = () => {
     }
     // The Regex used to accomplish this can be found below:
     // https://gist.github.com/AlexisLeon/80b5641eb30b43bc598288e41052ac39
-    console.log("-")
   }
 
   // Method that adds the data to the storage for the user

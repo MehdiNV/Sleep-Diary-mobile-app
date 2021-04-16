@@ -1,22 +1,17 @@
 import React, {useState} from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { StyleSheet, Text } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import DatePicker from 'react-native-modern-datepicker';
-
-import { View } from '../components/Themed';
-import moment from "moment";
-import { Modal, Portal, Button, Provider } from 'react-native-paper';
-import Toast from 'react-native-toast-message';
-import * as SecureStore from 'expo-secure-store';
-import _ from 'lodash';
-
-import ModalTest from '../components/ModalTest';
-
-// Import needed for Redux
 import { useSelector } from 'react-redux';
 
-const AddSleepData = ({ route }) => {
+import { StyleSheet, Text } from 'react-native';
+import { Modal, Portal, Button, Provider } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
+import { View } from '../components/Themed';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import Toast from 'react-native-toast-message';
+import * as SecureStore from 'expo-secure-store';
+import moment from "moment";
+import _ from 'lodash';
+
+const AddSleepData = () => {
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
 
   // Section for showing 'Date for the night of' part
@@ -89,31 +84,39 @@ const AddSleepData = ({ route }) => {
     setShowAwakeDatePicker(Platform.OS === 'ios');
     setAwakeDate(currAwakeDate);
   }
-
+  // showAwakePickerWidgets: Shows the time and date widgets (for selecting time and date user woke up on)
   const showAwakePickerWidgets = () => {
     setShowAwakeDatePicker(true);
     setShowAwakeTimePicker(true);
   }
 
-  // Sleep picker
+  // Methods for the Sleep picker / widget used for sleeping date & time
+  // updateSleepTime: recieves the selected time inputted, and updates the state that holds it
   const updateSleepTime = (event, selectedTime) => {
     const currSleepTime = selectedTime || sleepTime;
     setShowSleepTimePicker(Platform.OS === 'ios');
     setSleepTime(currSleepTime);
   }
-
+  // updateSleepDate: Same as the above, but for dates instead
   const updateSleepDate = (event, selectedDate) => {
     const currSleepDate = selectedDate || sleepDate;
     setShowSleepDatePicker(Platform.OS === 'ios');
     setSleepDate(currSleepDate);
   }
-
+  // showSleepPickerWidgets: Shows both the time and date pickers
+  // The calendar / date one is shown first (overlays the time) - idea here is that to the user,
+  // they still get the option of adding both date and time without being aware that it's just
+  // two widgets back-to-back
   const showSleepPickerWidgets = () => {
     setShowSleepDatePicker(true);
     setShowSleepTimePicker(true);
   }
 
   // Date Storage Section
+  // Function: storeSleepData
+  // Function that essentially saves the inputs of the user into Expo's SecureStore
+  // If the record already exists, then we overwrite it there instead. This works near-identically
+  // to the mechanism used in AddEpworthData, so all comments from there apply equally as well
   const storeSleepData = async () => {
     // Format the Date and Time of both into one
     const sleepDateTime = moment((moment(sleepDate).format("DD/MM/YY") +
@@ -136,12 +139,15 @@ const AddSleepData = ({ route }) => {
           element.type == "sleep");
     });
 
-    const newEntryValue = {type: "sleep",
+    // The new object we intend to add into this users array records
+    const newEntryValue = {
+      type: "sleep",
       date: date,
       value: {fallingAsleep: sleepDateTime, awake: awakeDateTime}
     }
 
-    if (matchingDate.length == 0){
+    if (matchingDate.length == 0){ // Check if any records matched / the user already had an entry
+      // If not, continue here
       // Given that the records are an array, all we do here is push a new obj into them
       sleepingRecords.push(newEntryValue);
       await SecureStore.setItemAsync(uuid, JSON.stringify(sleepingRecords));
@@ -158,7 +164,7 @@ const AddSleepData = ({ route }) => {
       });
     }
     else {
-      // Notify the user that they already had an entry
+      // Notify the user that they already had an entry - and that we are goingt overwrite it
       Toast.show({
         type: 'info',
         position: 'bottom',
@@ -191,6 +197,7 @@ const AddSleepData = ({ route }) => {
             element;
       });
 
+      // Save the item into storage (now it goes from uuid -> records to uuid -> (updated, overwritten) records)
       await SecureStore.setItemAsync(uuid, JSON.stringify(overwrittenSleepingRecords));
     }
 
@@ -213,7 +220,6 @@ const AddSleepData = ({ route }) => {
       bottomOffset: 40,
     });
   }
-
 
   return (
     <View style={styles.container}>
@@ -250,8 +256,10 @@ const AddSleepData = ({ route }) => {
 
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
         <Text style={styles.subtitle}>What time did you go to sleep?</Text>
-        <Text>Don't worry if it's not accurate - try to think of the time you went
-          into bed / tried to fully sleep</Text>
+        <Text>
+          Don't worry if it's not accurate - try to think of the time you went
+          into bed / tried to fully sleep
+        </Text>
 
         <View style = {styles.timeEntry}>
           <Button
@@ -266,7 +274,9 @@ const AddSleepData = ({ route }) => {
             moment(sleepTime).format("HH:mmA")
           }
           </Button>
-
+          {
+            /* Checks whether we should show the widgets or not. If both are true, then we do */
+          }
           {(showSleepDatePicker && showSleepTimePicker) && (
             <>
               <DateTimePicker
@@ -297,64 +307,69 @@ const AddSleepData = ({ route }) => {
 
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
         <Text style={styles.subtitle}>What time did you wake up at?</Text>
-        <Text>Approximations are fine here! Here, enter your final wake-up time only
-          (i.e. the time you woke up fully and did not return back to sleep)</Text>
+        <Text>
+          Approximations are fine here! Here, enter your final wake-up time only
+          (i.e. the time you woke up fully and did not return back to sleep)
+        </Text>
 
-          <View style = {styles.timeEntry}>
-            <Button
-              style = {styles.timeButton}
-              mode = "contained"
-              labelStyle = {{ color: "black", fontSize: 12}}
-              onPress = {showAwakePickerWidgets}
-            >
-            {
-              moment(awakeDate).format("DD/MM/YY")
-              + " " +
-              moment(awakeTime).format("HH:mmA")
-            }
-            </Button>
+        <View style = {styles.timeEntry}>
+          <Button
+            style = {styles.timeButton}
+            mode = "contained"
+            labelStyle = {{ color: "black", fontSize: 12}}
+            onPress = {showAwakePickerWidgets}
+          >
+          {
+            moment(awakeDate).format("DD/MM/YY")
+            + " " +
+            moment(awakeTime).format("HH:mmA")
+          }
+          </Button>
+          {
+            /* Checks whether we should show the awake picker widgets or not.
+            If both are true, then we do*/
+          }
+          {(showAwakeDatePicker && showAwakeTimePicker) && (
+            <>
+              <DateTimePicker
+                value={awakeTime}
+                mode={"time"}
+                is24Hour={true}
+                display="default"
+                onChange={updateAwakeTime}
+              />
+              <DateTimePicker
+                value={awakeDate}
+                mode={"calendar"}
+                is24Hour={true}
+                display="default"
+                onChange={updateAwakeDate}
+              />
+            </>
+          )}
 
-            {(showAwakeDatePicker && showAwakeTimePicker) && (
-              <>
-                <DateTimePicker
-                  value={awakeTime}
-                  mode={"time"}
-                  is24Hour={true}
-                  display="default"
-                  onChange={updateAwakeTime}
-                />
-                <DateTimePicker
-                  value={awakeDate}
-                  mode={"calendar"}
-                  is24Hour={true}
-                  display="default"
-                  onChange={updateAwakeDate}
-                />
-              </>
-            )}
+          <Ionicons
+            size = {30}
+            name = "time"
+            style = {{ marginTop: 5, marginLeft: 5 }}
+            onPress = {showAwakePickerWidgets}
+          />
 
-            <Ionicons
-              size = {30}
-              name = "time"
-              style = {{ marginTop: 5, marginLeft: 5 }}
-              onPress = {showAwakePickerWidgets}
-            />
-
-          </View>
-      </View>
-
-      <View style = {styles.bottom}>
-        <Button
-          style = {styles.submitButton}
-          mode = "contained"
-          labelStyle = {{ color: "black", fontSize: 12}}
-          onPress = {async () => {storeSleepData()}}
-        >
-          Submit
-        </Button>
-      </View>
-
+        </View>
     </View>
+
+    <View style = {styles.bottom}>
+      <Button
+        style = {styles.submitButton}
+        mode = "contained"
+        labelStyle = {{ color: "black", fontSize: 12}}
+        onPress = {async () => {storeSleepData()}}
+      >
+        Submit
+      </Button>
+    </View>
+
+  </View>
   )
 }
 
