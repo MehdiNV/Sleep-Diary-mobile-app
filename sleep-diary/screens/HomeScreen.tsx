@@ -1,25 +1,32 @@
 import React, {useState, useEffect, useCallback} from 'react';
 import { StyleSheet, Text } from 'react-native';
+import { useFocusEffect, useIsFocused } from '@react-navigation/native';
+import { useSelector, useDispatch } from 'react-redux';
+// Above are imports for functions / hooks / general React, below for components or aux libraries
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
-import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import Toast from 'react-native-toast-message';
-import { useSelector, useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
-import { useFocusEffect, useIsFocused } from '@react-navigation/native';
 
-
-const Home = ({ navigation, route }) => {
+const Home = ({ navigation }) => {
   // Getting UUID / Handing Login
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
+
+  // Function that connects to the global store - this acts as the pathway to pass data to the global store
+  // So, if we do dispatch({data}), this will send that data to that global store and update the info held there
   const dispatch = useDispatch();
 
-  // Fetches the current date to display to the user
+  // Fetches the current date & time to display to the user, using moment()
   const [date, setDate] = useState(moment(new Date()).format("Do MMMM YYYY"))
   const [time, setTime] = useState(moment(new Date()).format("HH:mmA"))
 
+  // Hook that runs when the component renders (/comes onto the app for the 1st time)
+  // This should occur when we've just logged in. What we do here is just check if the uuid
+  // user actually has records - if not, then they're likely a newly-registered account. If so,
+  // we assign them a empty array to act as their records (since the app relies on a
+  // UUID -> [Array of Records] relationship)
   useEffect(() => {
     async function setInitialUser() {
       const uuidCheck = await SecureStore.getItemAsync(uuid);
@@ -31,6 +38,8 @@ const Home = ({ navigation, route }) => {
     }
     setInitialUser();
   },[]);
+  // The second parameter, the ,[] specifically, just ensures the useEffect hook is ran
+  // only once (that is, just when this component loads for the first time)
 
   // Hook that runs every time Home screen comes into focus / navigated to
   // Once so, we just run a quick state change and update the date & time to reflect
@@ -42,16 +51,17 @@ const Home = ({ navigation, route }) => {
     }, [])
   );
 
-
+  // Calculate what type of 'Time' to show - e.g. if its between 00:00 - 12:00
+  // then display 'Morning'. If it's past 12pm, then 'Afternoon'
   const currHour = moment().format("HH");
   var dayPhase = ""
-  if (currHour >= 0 && currHour < 12){
+  if (currHour >= 0 && currHour < 12){ // Check if hour is 00:00 - 12:00PM
     dayPhase = "morning"
   }
-  else if (currHour >= 12 && currHour <= 18){
+  else if (currHour >= 12 && currHour <= 18){ // Check if 12:00PM - 18:00PM
     dayPhase = "afternoon"
   }
-  else if (currHour >= 18 && currHour <= 23){
+  else if (currHour >= 18 && currHour <= 23){ // Check if 18:00PM - 23:00PM
     dayPhase = "evening"
   }
 
@@ -60,7 +70,13 @@ const Home = ({ navigation, route }) => {
       <View style = {styles.signOutContainer}>
         <Text
           onPress = {() => {
+            // Pass to the Global Store a true value for showing the Login / Landing screen
+            // This will make that screen be visible and usable for the navigation - making it
+            // feasible to now navigate towards it later on
             dispatch({type: "changeLoginVisibility", payload: true});
+            // Making the Landing screen visible makes the tab bar slightly look weird -
+            // to alleivate this, I display a Toast to the user to hide this visual irregularity
+            // It has to be hidden as the Landing screen won't work otherwise unfortunately per testing
             Toast.show({
               type: 'success',
               position: 'bottom',
@@ -71,7 +87,15 @@ const Home = ({ navigation, route }) => {
               topOffset: 30,
               bottomOffset: 10,
             });
+            // Reset the UUID we hold in the global Redux store as well by sending
+            // the "N/A" value - this makes the UUID be unusable value / ensure the
+            // user is properly logged out as we no longer hold the uuid
             dispatch({type: "setUUID", payload: "N/A"})
+            // There is a slight lag (about just by 1) when we dispatch to the Global Store
+            // to make the Landing Screen visible / usable by the navigation - hence, I use the
+            // setTimeout function to briefly wait for 5 (I believe milliseconds) before we call
+            // the navigation.navigate("Landing") - the delay just ensures it's loaded in time,
+            // while being short enough that users wont notice
             setTimeout(() => {
               navigation.navigate("Landing");
             }, 5);
@@ -80,6 +104,7 @@ const Home = ({ navigation, route }) => {
         <Ionicons
           style = {{ marginLeft: 3, marginTop: 3}}
           onPress = {() => {
+            // Same approach as the above - the same is just applied to the icon as well
             dispatch({type: "changeLoginVisibility", payload: true});
             Toast.show({
               type: 'success',
@@ -116,7 +141,7 @@ const Home = ({ navigation, route }) => {
           mode = "contained"
           labelStyle = {{ color: "black" }} // Makes the text of the button black per design
           onPress = {() => {
-            navigation.navigate("AddSleepData", {screen: "AddSleepData", params: {uuid: [uuid]}})
+            navigation.navigate("AddSleepData")
           }}
         >
           Enter sleep data
@@ -135,7 +160,7 @@ const Home = ({ navigation, route }) => {
           mode = "contained"
           labelStyle = {{ color: "black" }}
           onPress = {() =>
-            navigation.navigate("AddEpworthData", {screen: "AddEpworthData", params: {uuid: [uuid]}})
+            navigation.navigate("AddEpworthData")
           }
         >
           Enter todays Epworth score
@@ -145,6 +170,7 @@ const Home = ({ navigation, route }) => {
   );
 }
 
+// Set of styling to apply for components e.g. Text or the View
 const styles = StyleSheet.create({
   container: {
     flex: 1,
