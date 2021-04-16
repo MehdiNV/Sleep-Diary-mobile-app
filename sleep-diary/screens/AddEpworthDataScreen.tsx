@@ -16,10 +16,22 @@ const AddEpworthData = () => {
 
   // Section for showing 'Date for' calendar entry
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState('date');
   const [show, setShow] = useState(false);
 
-  const [epworthScore, setEpworthScore] = useState({})
+  // Stores the values that is associated with each row input box
+  // For example, the value paired with row1 ('Sitting and reading' question
+  // of the Epworth questionnaire). These values would be overwritten later by what
+  // the user writes in e.g. row1: "3" which would be the epworth score for that row
+  const [epworthScore, setEpworthScore] = useState({
+    "row1":"",
+    "row2":"",
+    "row3":"",
+    "row4":"",
+    "row5":"",
+    "row6":"",
+    "row7":"",
+    "row8":"",
+  })
   /*
     Format for the code below in lodash is:
     1) Convert the data strcture to have numbers instead (_.toNumber and _.map)
@@ -66,8 +78,13 @@ const AddEpworthData = () => {
 
   // Text Handler for the number inputs (The epworth scoring)
   const handleTextChange = (inputIdentifier, value) => {
+    console.log("Checking Input Status")
+    console.log(inputIdentifier)
+    console.log(value)
     if (/^\d+$/.test(value) || value === '') { // Checks if it's actually a number
+      console.log("Past first conditional statement")
       if (_.toNumber(value) >= 0 && _.toNumber(value) <= 3){
+        console.log("Past second conditional statement")
         // Check as well if the number is between the permitted 0 to 3 range
 
         // Take a copy of the state, and set the new value in it
@@ -77,6 +94,7 @@ const AddEpworthData = () => {
     }
     // The Regex used to accomplish this can be found below:
     // https://gist.github.com/AlexisLeon/80b5641eb30b43bc598288e41052ac39
+    console.log("-")
   }
 
   // Method that adds the data to the storage for the user
@@ -186,7 +204,7 @@ const AddEpworthData = () => {
             onPress = {() => {
               // Makes the date-picker widget visible
               setShow(true);
-            })}
+            }}
           >
           {moment(date).format("DD/MM/YY")}
           </Button>
@@ -198,13 +216,13 @@ const AddEpworthData = () => {
             onPress = {() => {
               // Like the above - makes the date widget visible for the user
               setShow(true);
-            })}
+            }}
           />
 
           {show && (
             <DateTimePicker
               value={date}
-              mode={mode}
+              mode={"date"}
               is24Hour={true}
               display="default"
               onChange={onDateChange}
