@@ -1,32 +1,31 @@
 import React, {useState} from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 import { StyleSheet, Image, Text} from 'react-native';
 import { Button, TextInput} from 'react-native-paper';
-
-import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
 
-// Import needed for Redux
-import { useSelector, useDispatch } from 'react-redux';
-
-const Landing = ({ navigation, route}) => {
+const Landing = ({ navigation }) => {
   // Used for updating the Global Redux store e.g. when logging in
   const dispatch = useDispatch();
 
+  // State variables that hold the users input in the registration modal, as well as
+  // whether to show that modal or not
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
   const [registerUserName, setRegisterUserName] = useState("");
   const [registerPassword, setRegisterPassword] = useState("");
 
+  // Same as the above, but for the Login modal instead
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginUserName, setLoginUserName] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
 
-
+  // changeModalVisibility: Changes the visibility of the specified modal via the type parameter
   const changeModalVisibility = (type) => {
     if (type == "login"){
       setShowLoginModal(!showLoginModal);
@@ -36,6 +35,7 @@ const Landing = ({ navigation, route}) => {
     }
   }
 
+  // registerNewUser: Using the username & password state vars from above, create a new uuid / user
   async function registerNewUser(username, password) {
     /*
      Create a new user - get the username, and password
@@ -43,6 +43,10 @@ const Landing = ({ navigation, route}) => {
      Then link it to a unique uuid (e.g. in key-val relationship)
     */
     const userAndPassChain = "username" + username + "pass" + password
+    // This now sets the process as: username+password -> uuid (the unique identifier to a users
+    // sleep records). This ensures a form of safety since external actors would need the uuid
+    // to actually access sleeping records - without it, all they can do is guess the username
+    // and password in order to get that uuid (hence as a result, we have good level of security)
     await SecureStore.setItemAsync(userAndPassChain, uuidv4());
     Toast.show({
       type: 'success',
@@ -56,10 +60,14 @@ const Landing = ({ navigation, route}) => {
     });
   }
 
+  // loginUser: Using username & password specified, check if this user exists - if so,
+  // then navigate to the next screen
   async function loginUser(username, password) {
     const userAndPassChain = "username" + username + "pass" + password
+    // The below checks if an actual Key-Val pairing exists for userAndPassChain
     const loginResult = await SecureStore.getItemAsync(userAndPassChain);
-    if (loginResult) {
+    if (loginResult) { // Check if the result is correct / user does exist
+      // If so, then we display the Toast message below
       Toast.show({
         type: 'success',
         position: 'bottom',
@@ -70,8 +78,11 @@ const Landing = ({ navigation, route}) => {
         topOffset: 30,
         bottomOffset: 40,
       });
-      return [true, loginResult]; // User logged in correctly!
+      // We now return 'true' and the loginResult (the resulting uuid that we fetched)
+      // to the function caller
+      return [true, loginResult];
     } else {
+      // Else, we display the message below since the username + password combo fetched no value / uuid
       Toast.show({
         type: 'error',
         position: 'bottom',
@@ -82,9 +93,8 @@ const Landing = ({ navigation, route}) => {
         topOffset: 30,
         bottomOffset: 40,
       });
-      return [false, null];
+      return [false, null]; // And we return these values to reflect the credentials failure
     }
-
   }
 
   return (
@@ -114,7 +124,9 @@ const Landing = ({ navigation, route}) => {
           style = {styles.button}
           labelStyle = {{ color: "black" }}
           mode = "contained"
-          onPress = {() => {changeModalVisibility("registration")}}
+          onPress = {() => {
+            changeModalVisibility("registration");
+          }}
         >
           Sign Up
         </Button>
@@ -158,7 +170,11 @@ const Landing = ({ navigation, route}) => {
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
                 onPress ={() => {
+                  // If this is pressed, then we send the username and password the user has
+                  // inputted so far to the registerNewUser function
                   registerNewUser(registerUserName, registerPassword);
+                  // Afterwards, we reset the states holding the username and password, and hide the modal
+                  // as it is no longer needed
                   setRegisterUserName("");
                   setRegisterPassword("");
                   changeModalVisibility("registration");
@@ -172,6 +188,8 @@ const Landing = ({ navigation, route}) => {
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
                 onPress ={() => {
+                  // If this is pressed, then we just hide the model (& reset the username
+                  // + password in the input boxes / ones held)
                   setRegisterUserName("");
                   setRegisterPassword("");
                   changeModalVisibility("registration");
@@ -184,10 +202,13 @@ const Landing = ({ navigation, route}) => {
         </Modal>
       </View>
 
-      {/* Login Modal - future improvement that can be made here is to combine
-        the two into 1 modifiable component. In the meantime, a similar modal
-        to the above is denoted below*/}
-
+      { /*
+        Login Modal - future improvement that can be made here is to combine
+        the two into 1 modifiable component. For the time being, for the sake of faster
+        development speed and simplicity, I made two modals. The second one
+        (used for registration) can be found below after this one
+        */
+      }
       <View>
         <Modal
           isVisible={showLoginModal}
@@ -226,13 +247,18 @@ const Landing = ({ navigation, route}) => {
                 mode = "contained"
                 onPress ={async () => {
                   const [result, userUuid] = await loginUser(loginUserName, loginPassword);
+                  // Reset the username and password on hand to nothing - as they won't be needed anymore
                   setLoginUserName("");
                   setLoginPassword("");
-                  if (result){
+                  if (result){ // If the result was True (the login succeeded), then we proceed below
+                    // We first send to the Global Store the uuid of the user who just logged in - to
+                    // retain for other screens (e.g. so they can use it for referring to the user)
                     dispatch({type: "setUUID", payload: userUuid})
+                    // After this, we just navigate to the Home screen as the user is now logged in!
                     navigation.navigate("Home");
                   }
-                  else { // Incorrect credentials made
+                  else {
+                    // Else, incorrect credentials were made - so we just hide the modal
                     changeModalVisibility("login");
                   }
                 }}
@@ -245,6 +271,8 @@ const Landing = ({ navigation, route}) => {
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
                 onPress ={() => {
+                  // If the user presses this, then we just hide the modal
+                  // We just remove the username & password made, and make the modal visibility to be false
                   setLoginUserName("");
                   setLoginPassword("");
                   changeModalVisibility("login");
