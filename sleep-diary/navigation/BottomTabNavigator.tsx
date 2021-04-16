@@ -1,8 +1,7 @@
+import React, {useState} from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
-import React, {useState} from 'react';
-
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import Landing from '../screens/LandingScreen';

@@ -1,18 +1,18 @@
 import React, {useEffect} from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { Button } from 'react-native-paper';
+import { Ionicons } from '@expo/vector-icons';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
 
 const Home = ({ navigation, route }) => {
   // Getting UUID / Handing Login
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
-  console.log("This is the UUID at hand")
-  console.log(uuid)
+  const dispatch = useDispatch();
 
   useEffect(() => {
     async function setInitialUser() {
@@ -44,6 +44,27 @@ const Home = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+      <View style = {styles.signOutContainer}>
+        <Text
+          onPress = {() => {
+            dispatch({type: "changeLoginVisibility", payload: true});
+            setTimeout(() => {
+              navigation.navigate("Landing");
+            }, 5)
+          }}
+        >Sign Out</Text>
+        <Ionicons
+          style = {{ marginLeft: 3, marginTop: 3}}
+          onPress = {() => {
+            dispatch({type: "changeLoginVisibility", payload: true});
+            setTimeout(() => {
+              navigation.navigate("Landing");
+            }, 5)
+          }}
+          name="log-out"
+          size = {20}
+        />
+      </View>
       <Text style={styles.title}>Home</Text>
 
       <View style = {styles.screenContent}>
@@ -52,7 +73,6 @@ const Home = ({ navigation, route }) => {
           is currently {time}, {date}
         </Text>
         <View style={styles.separator} lightColor="black" darkColor="rgba(255,255,255,0.1)" />
-
 
         <Text style={styles.subtitle}>Sleep Length</Text>
         <Text>Input data for your previous night - make sure to fill it out!</Text>
@@ -96,6 +116,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: "#F7E3D9",
+  },
+  signOutContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F7E3D9",
+    alignSelf: "flex-end",
+    top: 58,
+    right: 12,
+    position: "absolute",
   },
   title: {
     fontSize: 35,
