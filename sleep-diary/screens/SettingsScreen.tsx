@@ -1,21 +1,28 @@
 import React, {useState} from 'react';
-import { StyleSheet, Text } from 'react-native';
 import { useSelector } from 'react-redux';
+
+import { StyleSheet, Text } from 'react-native';
 import { Button } from 'react-native-paper';
+import { View } from '../components/Themed';
 import Modal from 'react-native-modal';
 import Toast from 'react-native-toast-message';
 import * as SecureStore from 'expo-secure-store';
 
-import { View } from '../components/Themed';
-
 const Settings = () => {
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
+
+  // State variable that holds visibility of warning modal / whether to show it or not
   const [showWarningModal, setWarningModal] = useState(false);
 
+  // changeModalVisibility: When called, either shows or hides the warning Modal (modal which
+  // is used to warn a user of whether they want to purge their data, before they make a final
+  // decision)
   const changeModalVisibility = () => {
     setWarningModal(!showWarningModal);
   }
 
+  // purgeData: Deletes all the data associated with this user (uuid) - resets it all back to
+  // a empty array (like they are a newly registered user)
   const purgeData = async () => {
     // Reset all the data - reset the UUID to associate with an empty (data) array
     await SecureStore.setItemAsync(uuid, JSON.stringify([]));
@@ -57,8 +64,10 @@ const Settings = () => {
         >
           <View style = {styles.modalContainer}>
             <Text style = {styles.modalTitle}>Warning! This will delete all records</Text>
-            <Text style = {styles.modalText}>To check, are you sure you want to delete everything?
-              If so then press the 'Delete all' button, otherwise press 'Cancel'</Text>
+            <Text style = {styles.modalText}>
+              To check, are you sure you want to delete everything?
+              If so then press the 'Delete all' button, otherwise press 'Cancel'
+            </Text>
 
             <View style = {styles.modalButtonContainer}>
               <Button
@@ -66,6 +75,7 @@ const Settings = () => {
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
                 onPress = {async () => {
+                  // Calls the function to reset the users data, and afterwards hides the modal
                   await purgeData();
                   changeModalVisibility();
                 }}
