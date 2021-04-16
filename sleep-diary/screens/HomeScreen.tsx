@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import EditScreenInfo from '../components/EditScreenInfo';
 import { View } from '../components/Themed';
+import Toast from 'react-native-toast-message';
 import { useSelector, useDispatch } from 'react-redux';
 import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
@@ -48,18 +49,40 @@ const Home = ({ navigation, route }) => {
         <Text
           onPress = {() => {
             dispatch({type: "changeLoginVisibility", payload: true});
+            Toast.show({
+              type: 'success',
+              position: 'bottom',
+              text1: "You are now logged out!",
+              text2: 'Thanks for using the app!',
+              visibilityTime: 3000,
+              autoHide: true,
+              topOffset: 30,
+              bottomOffset: 10,
+            });
+            dispatch({type: "setUUID", payload: "N/A"})
             setTimeout(() => {
               navigation.navigate("Landing");
-            }, 5)
+            }, 5);
           }}
         >Sign Out</Text>
         <Ionicons
           style = {{ marginLeft: 3, marginTop: 3}}
           onPress = {() => {
             dispatch({type: "changeLoginVisibility", payload: true});
+            Toast.show({
+              type: 'success',
+              position: 'bottom',
+              text1: "You are now logged out!",
+              text2: 'Thanks for using the app!',
+              visibilityTime: 3000,
+              autoHide: true,
+              topOffset: 30,
+              bottomOffset: 10,
+            });
+            dispatch({type: "setUUID", payload: "N/A"})
             setTimeout(() => {
               navigation.navigate("Landing");
-            }, 5)
+            }, 5);
           }}
           name="log-out"
           size = {20}
