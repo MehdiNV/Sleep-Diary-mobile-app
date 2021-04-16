@@ -1,19 +1,17 @@
 import React, {useState} from 'react';
+import { useSelector } from 'react-redux';
+
 import { StyleSheet, Text, ScrollView, TextInput } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
+import { View } from '../components/Themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
 import * as SecureStore from 'expo-secure-store';
-
-import { View } from '../components/Themed';
 import moment from "moment";
 import _ from 'lodash';
 
-// Import needed for Redux
-import { useSelector } from 'react-redux';
-
-const AddEpworthData = ({ route }) => {
+const AddEpworthData = () => {
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
 
   // Section for showing 'Date for' calendar entry
@@ -38,9 +36,16 @@ const AddEpworthData = ({ route }) => {
                         })))
 
   // Methods used for the 'Date for' calendar entry
-  const onChange = (event, selectedDate) => {
+  // Function: onChange
+  // This is called when the user changes the date they want to enter a epworth score for
+  // For example, the user changes the date from 15/04/2021 to 16/04/2021
+  const onDateChange = (event, selectedDate) => {
     setShow(Platform.OS === 'ios');
+    // Do a quick check to see if it's the same day - if so, do not set that date
+    // As it would be illogical to have a epworth score entered for a date that is in the future
     if (moment(selectedDate).isAfter(new Date(), "day")){
+      // If it is past the current date, then show an error message to the uers and ask them to
+      // enter a different date (and not save the value that was entered)
       Toast.show({
         type: 'error',
         position: 'bottom',
@@ -53,22 +58,10 @@ const AddEpworthData = ({ route }) => {
       });
     }
     else {
+      // If we reach this point, then the date input is fine - hence, we change the calendar date
       const currentDate = selectedDate || date;
       setDate(currentDate);
     }
-  };
-
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
-  const showDatepicker = () => {
-    showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
   };
 
   // Text Handler for the number inputs (The epworth scoring)
@@ -91,11 +84,15 @@ const AddEpworthData = ({ route }) => {
     let sleepingRecords = await SecureStore.getItemAsync(uuid);
     sleepingRecords = JSON.parse(sleepingRecords); // Convert it to its array format
 
+    // Filters all the records we have, and sees if we have any record that match the date and type
+    // As in, checks if we already have an entry specifically for this date
+    // If nothing matches, this should be empty. Otherwise, it won't (and hence we have to overwrrite the existing date value)
     const matchingDate = _.filter(sleepingRecords, function(element) {
         return (moment(element.date).isSame(date, "day") &&
           element.type == "epworth");
     });
 
+    // New Record / Entry that is going to be included in this users data
     const newEntryValue = {type: "epworth", date: date, value: currScore}
 
     if (matchingDate.length == 0){ // Checks if no other dates matched
@@ -103,6 +100,7 @@ const AddEpworthData = ({ route }) => {
       sleepingRecords.push(newEntryValue); // Add a new record
       // And save the new sleeping records for the user
       await SecureStore.setItemAsync(uuid, JSON.stringify(sleepingRecords));
+      // Notify to the user to wait / that it's being added - we'll show a 'success' msg right after
       Toast.show({
         type: 'info',
         position: 'bottom',
@@ -127,11 +125,16 @@ const AddEpworthData = ({ route }) => {
         bottomOffset: 40,
       });
 
+      // Unique-fy all the sleeping records we have on hand; that is, remove any duplicates
+      // just in case if any actually exists (distinguish them by the combo we get using
+      // date + type of a record)
       sleepingRecords = _.uniqBy(sleepingRecords, function(record) {
         // ID records by their date+type (and remove any that match the same date+type)
         return (record.date + record.type)
       })
 
+      // Same behaviour / approach as the one taken in Add Sleep Data - comments from there
+      // apply just as equally to this var
       var overwrittenSleepingRecords = _.map(sleepingRecords, function(element) {
         return (moment(element.date).isSame(date, "day")
           && element.type == "epworth") ?
@@ -139,15 +142,19 @@ const AddEpworthData = ({ route }) => {
           :
             element;
       });
-
+      // Overwrite the current UUID -> record with a new sleeping record, so the relationship will
+      // now look like UUID -> new (updated) sleeping records
       await SecureStore.setItemAsync(uuid, JSON.stringify(overwrittenSleepingRecords));
     }
-
+    // We want to have a delay between the 'loading' and 'success' messages, so we add a timeout / delay
+    // using the code below (e.g. wait 3.5 seconds). This makes the app more intuitive (the user feels
+    // like something is happening, they have an understanding of what is going on at all times)
     setTimeout(async () => {
       notifyStorageSuccess();
     }, 3500);
   }
 
+  // When called, shows a 'success' toast to denote the new entry was added in
   const notifyStorageSuccess = async () => {
     Toast.show({
       type: 'success',
@@ -160,7 +167,6 @@ const AddEpworthData = ({ route }) => {
       bottomOffset: 40,
     });
   }
-
 
   return (
     <View style={styles.container}>
@@ -177,7 +183,10 @@ const AddEpworthData = ({ route }) => {
             style = {styles.button}
             mode = "contained"
             labelStyle = {{ color: "black", fontSize: 12}}
-            onPress = {showDatepicker}
+            onPress = {() => {
+              // Makes the date-picker widget visible
+              setShow(true);
+            })}
           >
           {moment(date).format("DD/MM/YY")}
           </Button>
@@ -186,7 +195,10 @@ const AddEpworthData = ({ route }) => {
             size = {30}
             name = "calendar"
             style = {{ marginTop: 5, marginLeft: 5 }}
-            onPress = {showDatepicker}
+            onPress = {() => {
+              // Like the above - makes the date widget visible for the user
+              setShow(true);
+            })}
           />
 
           {show && (
@@ -195,7 +207,7 @@ const AddEpworthData = ({ route }) => {
               mode={mode}
               is24Hour={true}
               display="default"
-              onChange={onChange}
+              onChange={onDateChange}
             />
           )}
         </View>
@@ -203,17 +215,31 @@ const AddEpworthData = ({ route }) => {
       </View>
 
       <ScrollView style = {styles.questionnaireSection}>
-        <Text style = {{marginBottom: 20}}>How likely are you to doze off or fall asleep in
+        <Text style = {{marginBottom: 20}}>
+          How likely are you to doze off or fall asleep in
           the situations described below, in contrast to feeling tired?
-          This refers to your usual way of life in recent times</Text>
-        <Text style = {{marginBottom: 20}}>Even if you haven't done some of these things recently
-          try to work out how they would have affected you</Text>
-        <Text>Use the following scale to choose the most appropriate
-          number for each situation:</Text>
+          This refers to your usual way of life in recent times
+        </Text>
+        <Text style = {{marginBottom: 20}}>
+          Even if you haven't done some of these things recently
+          try to work out how they would have affected you
+        </Text>
+        <Text>
+          Use the following scale to choose the most appropriate
+          number for each situation:
+        </Text>
         <Text>0 = would never doze</Text>
         <Text>1 = Slight chance of dozing</Text>
         <Text>2 = Moderate chance of dozing</Text>
         <Text>3 = High chance of dozing</Text>
+
+        {
+          /*
+          The below is a container that organises everything in a row by
+          row style. This is done in order to reflect the way the screen was
+          designed to look in its original storyboard
+          */
+        }
         <View style = {styles.rowSection}>
           <View style = {styles.row}>
             <Text style = {styles.rowHeader}>Situation Dozing</Text>
@@ -331,6 +357,8 @@ const AddEpworthData = ({ route }) => {
   )
 }
 
+// StyleSheet for the component - contains styling properties that make the
+// screen look the way it is e.g. alignments, sizes, etc
 const styles = StyleSheet.create({
   container: {
     flex: 1,
