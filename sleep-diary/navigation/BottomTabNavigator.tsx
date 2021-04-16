@@ -11,6 +11,7 @@ import AddSleepData from '../screens/AddSleepDataScreen';
 import AddEpworthData from '../screens/AddEpworthDataScreen';
 import ViewData from '../screens/ViewDataScreen';
 import Settings from '../screens/SettingsScreen';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
@@ -18,8 +19,8 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
-  const [isLoginScreen, setIsLoginScreen] = useState(true);
-  const ohai = 5;
+  const showLoginScreen = useSelector(state => state.loginVisibility)
+  const dispatch = useDispatch();
 
   return (
     <BottomTab.Navigator
@@ -34,7 +35,7 @@ export default function BottomTabNavigator() {
         }
       }}>
 
-      {isLoginScreen ?
+      {showLoginScreen ?
       <BottomTab.Screen
         name="Landing"
         component={LandingNavigator}
@@ -52,7 +53,7 @@ export default function BottomTabNavigator() {
         }}
         listeners={({ navigation }) => ({
           focus: () => {
-            setIsLoginScreen(false)
+            dispatch({type: "changeLoginVisibility", payload: false})
           },
         })}
       />
@@ -64,7 +65,7 @@ export default function BottomTabNavigator() {
         }}
         listeners={({ navigation }) => ({
           focus: () => {
-            setIsLoginScreen(false)
+            dispatch({type: "changeLoginVisibility", payload: false})
           },
         })}
       />
@@ -76,7 +77,7 @@ export default function BottomTabNavigator() {
         }}
         listeners={({ navigation }) => ({
           focus: () => {
-            setIsLoginScreen(false)
+            dispatch({type: "changeLoginVisibility", payload: false})
           },
         })}
       />
@@ -88,7 +89,7 @@ export default function BottomTabNavigator() {
         }}
         listeners={({ navigation }) => ({
           focus: () => {
-            setIsLoginScreen(false)
+            dispatch({type: "changeLoginVisibility", payload: false})
           },
         })}
       />
@@ -100,7 +101,7 @@ export default function BottomTabNavigator() {
         }}
         listeners={({ navigation }) => ({
           focus: () => {
-            setIsLoginScreen(false)
+            dispatch({type: "changeLoginVisibility", payload: false})
           },
         })}
       />

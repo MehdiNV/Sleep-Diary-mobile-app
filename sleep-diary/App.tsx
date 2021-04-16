@@ -19,14 +19,20 @@ const App = () => {
   // its payload before deciding how to apply it (e.g. add the payload to the state)
   const myReducer = (state, action) => {
     if (action.type === "setUUID"){ // Set a new UUID - return a state with this uuid
-      return {uuid: action.payload};
+      return {uuid: action.payload, loginVisibility: state.loginVisibility};
+    }
+    else if (action.type === "changeLoginVisibility"){
+      return {
+        uuid: state.uuid, loginVisibility: action.payload
+      }
     }
     else { // Return the state as it is
       return state;
     }
   }
 
-  const store = createStore(myReducer, {uuid: "N/A"});
+  const store = createStore(myReducer,
+    {uuid: "N/A", loginVisibility: true});
 
   if (!isLoadingComplete) {
     return null;

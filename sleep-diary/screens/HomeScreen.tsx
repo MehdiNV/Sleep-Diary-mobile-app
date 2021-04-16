@@ -11,6 +11,8 @@ import moment from "moment";
 const Home = ({ navigation, route }) => {
   // Getting UUID / Handing Login
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
+  console.log("This is the UUID at hand")
+  console.log(uuid)
 
   useEffect(() => {
     async function setInitialUser() {
