@@ -1,10 +1,14 @@
 import React, {useState, useEffect, useCallback} from 'react';
+import { useSelector } from 'react-redux';
+import { useFocusEffect } from '@react-navigation/native';
+
 import { StyleSheet, Text, ScrollView, Dimensions } from 'react-native';
 import { Button } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import { View } from '../components/Themed';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Toast from 'react-native-toast-message';
+import * as SecureStore from 'expo-secure-store';
 import {
   LineChart,
   BarChart,
@@ -13,15 +17,12 @@ import {
   ContributionGraph,
   StackedBarChart
 } from "react-native-chart-kit";
-import { useSelector } from 'react-redux';
-import * as SecureStore from 'expo-secure-store';
 import moment from "moment";
 import _ from 'lodash';
-import { useFocusEffect } from '@react-navigation/native';
-
 
 const ViewData = () => {
   // The UUID of the logged-in user
+  // useSelector hook just fetches the global state, and gives us the uuid from it
   const uuid = useSelector(state => state.uuid);
 
   // State used for holding the 'Start Date' entry
@@ -39,17 +40,25 @@ const ViewData = () => {
     avgWakeTime: "Insufficient data",
   });
 
+  // State variables holding a) the data used for the sleep chart and
+  // b) whether to show that sleep chart
   const [sleepChartData, setSleepChartData] = useState({})
   const [showSleepChart, setShowSleepChart] = useState(false);
 
+  // The same as the above, but for the Epworth variant
   const [epworthChartData, setEpworthChartData] = useState({});
   const [showEpworthChart, setShowEpworthChart] = useState(false);
 
-
+  // Hook that runs initially when the screen is rendered (e.g. navigated to for its very
+  // first time), as well as subsequently anytime the startDate or EndDate is altered
+  // For example, if the user changes the date range, useEffect will run again (to run
+  // new calculations)
   useEffect(() => {
     async function loadInitialData(){
       await calculateSleepingRecords();
     }
+    // Call to load the initial data for this screen (e.g. calculate the sleeping records
+    // and check if we have to display anything like a chart).
     loadInitialData();
   }, [startDate, endDate])
 
@@ -66,7 +75,9 @@ const ViewData = () => {
   // For Start Date - the onChange and Show methods
   const onStartDateChange = async (event, selectedDate) => {
       setShowStartDatePicker(Platform.OS === 'ios');
+      // Checks if the selected date is past the end date (e.g. weird range that overlap)
       if (moment(selectedDate).isAfter(endDate, "day")){
+        // If so, then we just display a warning to the user
         Toast.show({
           type: 'error',
           position: 'bottom',
@@ -79,16 +90,17 @@ const ViewData = () => {
         });
       }
       else {
+        // Otherwise, we set the startDate variable to be the input the user selected
         const currStartDate = selectedDate || startDate;
         setStartDate(currStartDate);
       }
 
   };
-
+  // showStartPicker: When called, shows the widget to allow a user to pick a start date
   const showStartPicker = () => {
     setShowStartDatePicker(true);
   }
-  // Likewise for the End Date
+  // Likewise like the startDateChange method, but for the End Date
   const onEndDateChange = async (event, selectedDate) => {
     setShowEndDatePicker(Platform.OS === 'ios');
     if (moment(selectedDate).isAfter(new Date(), "day")){
@@ -108,7 +120,7 @@ const ViewData = () => {
       setEndDate(currEndDate);
     }
   };
-
+  // Like the showStartPicker, but for the endDate instead
   const showEndPicker = () => {
     setShowEndDatePicker(true);
   }
@@ -119,7 +131,7 @@ const ViewData = () => {
     let sleepingRecords = await SecureStore.getItemAsync(uuid);
     sleepingRecords = JSON.parse(sleepingRecords);
 
-    // Filter the records to only the ones that are within range
+    // Filter the records to only the ones that are within range the user specified
     const entriesWithinRange = _.filter(sleepingRecords, function(element) {
       return (
         moment(element.date).isSameOrAfter(startDate, "day") &&
@@ -133,7 +145,7 @@ const ViewData = () => {
         element.type == "sleep"
       )
     });
-
+    // Like the above, but filters by the type = "epworth" instead
     const epworthEntries = _.filter(entriesWithinRange, function(element) {
       return (
         element.type == "epworth"
@@ -147,7 +159,7 @@ const ViewData = () => {
         avgWakeTime: "Insufficient data",
       })
     }
-    else { // We have some data we can use for averages!
+    else { // Else, we have some data we can use for averages!
       // Iterate through all the entries now
       // So at this point, we have an array like: [{}, ...., {}, {}] etc
       // Each object inside this array is a record we can use
@@ -245,22 +257,27 @@ const ViewData = () => {
         avgWakeTime: moment(avgWakeTime).format("HH:mmA"),
       })
     }
-
+    // Finally, now that we have the data for sleep entries and epworth, pass it to
+    // the chart function to see if it's something we can display or not
+    // This data is already cleaned by being filtered by their types and checked if
+    // they're within the specified date range - all that's needed is to format it for charts
     calculateChartData(sleepEntries, epworthEntries);
   }
 
   const calculateChartData = (sleepEntries, epworthEntries) => {
     // Sort the two arrays by their date
+    // This is necessary since the charts will need to be chronological from left to right
     sleepEntries = _.sortBy(sleepEntries, [function(record) {return record.date}]);
     epworthEntries = _.sortBy(epworthEntries, [function(record) {return record.date}]);
-    console.log(sleepEntries)
-    // Perform calculations to ensure we can show the sleep chart data corerctly
-    if (sleepEntries.length == 0) {
-      console.log("No Sleep Records")
+
+    // Now, we first perform calculations to ensure we can show the sleep chart data corerctly
+    if (sleepEntries.length == 0) { // If we have no sleep entries, then do not show the chart!
       setShowSleepChart(false);
       setSleepChartData({});
     }
     else {
+      // Otherwise, we have enough data to display something, so do the below
+
       // Get an array of all the sleep lengths in the records we have
       // So this may look like: [8, 9, 10, 11, 6, 7] each number being the
       // length of hours the user had
@@ -270,14 +287,13 @@ const ViewData = () => {
           return moment(awakeDate).diff(moment(sleepDate), "hours", true);
       })
 
+      // Go through the entries, and fetch the dates. When fetching, format them so they're
+      // in a more display-able state e.g. 13/04 becomes 13th, 14/04 becomes 14th etc
       const sleepDates = _.map(sleepEntries, function(record) {
           return moment(record.date).format("Do");
       })
 
-      console.log("Sleeping Chart Data")
-      console.log(sleepingLengths)
-      console.log(sleepDates)
-
+      // Give the chart data using what we scraped (e.g. dates, length of slepe, etc)
       setSleepChartData({
         labels: sleepDates,
         datasets: [
@@ -286,14 +302,14 @@ const ViewData = () => {
           }
         ]
       })
-
+      // Finally, display the chart since we have enough data (at least 1) to show something
       setShowSleepChart(true);
 
     }
 
-    // Perform calculations likewise for the Epworth data
+    // Perform calculations likewise for the Epworth chart, like it was done above for Sleep
     if (epworthEntries.length == 0) {
-      // No epworth scores are present, so no worth in displaying chart
+      // No epworth scores are present, so no worth in displaying its chart
       setShowEpworthChart(false);
       setEpworthChartData({});
     }
