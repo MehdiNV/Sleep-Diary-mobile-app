@@ -1,7 +1,9 @@
 import React, {useState} from 'react';
-import { Ionicons } from '@expo/vector-icons';
+import { useSelector, useDispatch } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+
+import { Ionicons } from '@expo/vector-icons';
 import Colors from '../constants/Colors';
 import useColorScheme from '../hooks/useColorScheme';
 import Landing from '../screens/LandingScreen';
@@ -10,7 +12,6 @@ import AddSleepData from '../screens/AddSleepDataScreen';
 import AddEpworthData from '../screens/AddEpworthDataScreen';
 import ViewData from '../screens/ViewDataScreen';
 import Settings from '../screens/SettingsScreen';
-import { useSelector, useDispatch } from 'react-redux';
 
 import { BottomTabParamList, TabOneParamList, TabTwoParamList } from '../types';
 
@@ -21,6 +22,7 @@ export default function BottomTabNavigator() {
   const showLoginScreen = useSelector(state => state.loginVisibility)
   const dispatch = useDispatch();
 
+  // Navigator that holds multiple screens (the screen components) in its stack structure
   return (
     <BottomTab.Navigator
       initialRouteName="Landing"
@@ -50,11 +52,6 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />
         }}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            dispatch({type: "changeLoginVisibility", payload: false})
-          },
-        })}
       />
       <BottomTab.Screen
         name="AddEpworthData"
@@ -62,11 +59,6 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="medkit" color={color} />
         }}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            dispatch({type: "changeLoginVisibility", payload: false})
-          },
-        })}
       />
       <BottomTab.Screen
         name="AddSleepData"
@@ -74,11 +66,6 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="add" color={color} />
         }}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            dispatch({type: "changeLoginVisibility", payload: false})
-          },
-        })}
       />
       <BottomTab.Screen
         name="ViewData"
@@ -86,11 +73,6 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="bar-chart" color={color} />
         }}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            dispatch({type: "changeLoginVisibility", payload: false})
-          },
-        })}
       />
       <BottomTab.Screen
         name="Settings"
@@ -98,11 +80,6 @@ export default function BottomTabNavigator() {
         options={{
           tabBarIcon: ({ color }) => <TabBarIcon name="settings" color={color} />
         }}
-        listeners={({ navigation }) => ({
-          focus: () => {
-            dispatch({type: "changeLoginVisibility", payload: false})
-          },
-        })}
       />
     </BottomTab.Navigator>
   );

@@ -254,6 +254,8 @@ const Landing = ({ navigation }) => {
                     // We first send to the Global Store the uuid of the user who just logged in - to
                     // retain for other screens (e.g. so they can use it for referring to the user)
                     dispatch({type: "setUUID", payload: userUuid})
+                    // Now, we make the Store hide the visibility of the Login / Landing screen since it's no longer needed
+                    dispatch({type: "changeLoginVisibility", payload: false})
                     // After this, we just navigate to the Home screen as the user is now logged in!
                     navigation.navigate("Home");
                   }
