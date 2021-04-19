@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "sleep-diary-application",
-    "description": "Project for CSC3122 Mobile Computer Systems Development"
+    "description": "Project for CSC3122 Mobile Computer Systems Development",
     "slug": "sleep-diary-application",
     "version": "1.0.0",
     "orientation": "portrait",
