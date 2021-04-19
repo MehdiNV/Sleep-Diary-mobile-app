@@ -2,9 +2,9 @@
   "expoServerPort": 19000,
   "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": "https://t6-qr7.anonymous.sleep-diary.exp.direct",
-  "packagerNgrokUrl": "https://packager.t6-qr7.anonymous.sleep-diary.exp.direct",
-  "ngrokPid": 9392,
+  "expoServerNgrokUrl": null,
+  "packagerNgrokUrl": null,
+  "ngrokPid": null,
   "webpackServerPort": null,
   "devToolsPort": 19002
 }

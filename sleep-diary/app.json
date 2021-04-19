@@ -1,10 +1,11 @@
 {
   "expo": {
-    "name": "sleep-diary",
-    "slug": "sleep-diary",
+    "name": "sleep-diary-application",
+    "description": "Project for CSC3122 Mobile Computer Systems Development"
+    "slug": "sleep-diary-application",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/diaryExpoIcon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
     "privacy": "unlisted",
@@ -31,6 +32,8 @@
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
-    }
+    },
+    "description": "",
+    "githubUrl": "https://github.com/MehdiNV/csc3122-mobileDev"
   }
 }
