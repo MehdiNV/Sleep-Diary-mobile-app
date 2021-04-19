@@ -12,7 +12,7 @@ import moment from "moment";
 
 const Home = ({ navigation }) => {
   // Getting UUID / Handing Login
-  const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
+  let uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
 
   // Function that connects to the global store - this acts as the pathway to pass data to the global store
   // So, if we do dispatch({data}), this will send that data to that global store and update the info held there
@@ -27,16 +27,9 @@ const Home = ({ navigation }) => {
   // Re-write!
   // This hook is wrong
   useEffect(() => {
-    async function setInitialUser() {
-      const uuidCheck = await SecureStore.getItemAsync(uuid);
-      if (!uuidCheck){ // If the value is Null, as in there is no uuid in the storage
-        // Then that means this user has no sleeping records at at all
-        // What we can do here is set them up with an empty [] initially
-        await SecureStore.setItemAsync(uuid, JSON.stringify([]))
-      }
-    }
-    setInitialUser();
-  },[]);
+    // Re-renders the component so that the UUID this screen relies on is accurate
+    // Otherwise, we may be referring to the UUID of some other random user accidentally
+  },[uuid]);
   // Re-write - this hook is wrong!
 
   // Hook that runs every time Home screen comes into focus / navigated to
@@ -62,6 +55,8 @@ const Home = ({ navigation }) => {
   else if (currHour >= 18 && currHour <= 23){ // Check if 18:00PM - 23:00PM
     dayPhase = "evening"
   }
+
+  console.log("My UUID is: " + uuid);
 
   return (
     <View style={styles.container}>
