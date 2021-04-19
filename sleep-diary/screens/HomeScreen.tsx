@@ -14,6 +14,11 @@ const Home = ({ navigation }) => {
   // Getting UUID / Handing Login
   let uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
 
+  // TODO - Comments
+  useEffect(() => {
+    // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
+  },[uuid]);
+
   // Function that connects to the global store - this acts as the pathway to pass data to the global store
   // So, if we do dispatch({data}), this will send that data to that global store and update the info held there
   const dispatch = useDispatch();
@@ -23,14 +28,6 @@ const Home = ({ navigation }) => {
   const [time, setTime] = useState(moment(new Date()).format("HH:mmA"))
 
   const [checkUser, setCheckUser] = useState(true);
-
-  // Re-write!
-  // This hook is wrong
-  useEffect(() => {
-    // Re-renders the component so that the UUID this screen relies on is accurate
-    // Otherwise, we may be referring to the UUID of some other random user accidentally
-  },[uuid]);
-  // Re-write - this hook is wrong!
 
   // Hook that runs every time Home screen comes into focus / navigated to
   // Once so, we just run a quick state change and update the date & time to reflect

@@ -25,6 +25,10 @@ const ViewData = () => {
   // useSelector hook just fetches the global state, and gives us the uuid from it
   const uuid = useSelector(state => state.uuid);
 
+  useEffect(() => {
+    // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
+  },[uuid]);
+
   // State used for holding the 'Start Date' entry
   const [startDate, setStartDate] = useState(new Date());
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -20,6 +20,11 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
   const showLoginScreen = useSelector(state => state.loginVisibility)
+  useEffect(() => {
+    // Monitors the showLoginScreen value in case it changes - if so, re-renders the component
+    // This is largely unnecessary and overkill, but I'd rather be safe than sorry
+  }, [showLoginScreen])
+
   const dispatch = useDispatch();
 
   // Navigator that holds multiple screens (the screen components) in its stack structure
