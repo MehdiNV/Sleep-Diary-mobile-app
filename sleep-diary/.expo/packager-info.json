@@ -2,9 +2,9 @@
   "expoServerPort": 19000,
   "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://t6-qr7.mehdinv.sleep-diary.exp.direct",
+  "packagerNgrokUrl": "https://packager.t6-qr7.mehdinv.sleep-diary.exp.direct",
+  "ngrokPid": 1836,
   "webpackServerPort": null,
   "devToolsPort": 19002
 }

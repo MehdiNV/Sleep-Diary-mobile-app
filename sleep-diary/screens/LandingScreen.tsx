@@ -9,6 +9,7 @@ import Toast from 'react-native-toast-message';
 import * as SecureStore from 'expo-secure-store';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
+import _ from 'lodash';
 
 const Landing = ({ navigation }) => {
   // Used for updating the Global Redux store e.g. when logging in
@@ -43,11 +44,20 @@ const Landing = ({ navigation }) => {
      Then link it to a unique uuid (e.g. in key-val relationship)
     */
     const userAndPassChain = "username" + username + "pass" + password
+
+    /*
+      Expo's Secure Storage seems to have an issue with dashes in the string
+      This seems to be from a bug within the library that was fixed ago, but for the sake of
+      being cautious I've removed the dashes just in case
+    */
+    let uuid = uuidv4()
+    uuid = _.replace(uuid, new RegExp("-","g"),"")
+
     // This now sets the process as: username+password -> uuid (the unique identifier to a users
     // sleep records). This ensures a form of safety since external actors would need the uuid
     // to actually access sleeping records - without it, all they can do is guess the username
     // and password in order to get that uuid (hence as a result, we have good level of security)
-    await SecureStore.setItemAsync(userAndPassChain, uuidv4());
+    await SecureStore.setItemAsync(userAndPassChain, uuid);
     Toast.show({
       type: 'success',
       position: 'bottom',
@@ -58,6 +68,9 @@ const Landing = ({ navigation }) => {
       topOffset: 30,
       bottomOffset: 40,
     });
+
+    // Now that the user is registered, set their account with an empty sleeping records array
+    await SecureStore.setItemAsync(uuid, JSON.stringify([]))
   }
 
   // loginUser: Using username & password specified, check if this user exists - if so,

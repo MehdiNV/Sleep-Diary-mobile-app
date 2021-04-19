@@ -22,11 +22,10 @@ const Home = ({ navigation }) => {
   const [date, setDate] = useState(moment(new Date()).format("Do MMMM YYYY"))
   const [time, setTime] = useState(moment(new Date()).format("HH:mmA"))
 
-  // Hook that runs when the component renders (/comes onto the app for the 1st time)
-  // This should occur when we've just logged in. What we do here is just check if the uuid
-  // user actually has records - if not, then they're likely a newly-registered account. If so,
-  // we assign them a empty array to act as their records (since the app relies on a
-  // UUID -> [Array of Records] relationship)
+  const [checkUser, setCheckUser] = useState(true);
+
+  // Re-write!
+  // This hook is wrong
   useEffect(() => {
     async function setInitialUser() {
       const uuidCheck = await SecureStore.getItemAsync(uuid);
@@ -38,8 +37,7 @@ const Home = ({ navigation }) => {
     }
     setInitialUser();
   },[]);
-  // The second parameter, the ,[] specifically, just ensures the useEffect hook is ran
-  // only once (that is, just when this component loads for the first time)
+  // Re-write - this hook is wrong!
 
   // Hook that runs every time Home screen comes into focus / navigated to
   // Once so, we just run a quick state change and update the date & time to reflect
@@ -87,6 +85,10 @@ const Home = ({ navigation }) => {
               topOffset: 30,
               bottomOffset: 10,
             });
+
+            setCheckUser(true); // Reset back to true - the next user may need to be verified again
+            console.log("06: Signing out. Value is now resetting to true");
+
             // Reset the UUID we hold in the global Redux store as well by sending
             // the "N/A" value - this makes the UUID be unusable value / ensure the
             // user is properly logged out as we no longer hold the uuid
@@ -116,6 +118,10 @@ const Home = ({ navigation }) => {
               topOffset: 30,
               bottomOffset: 10,
             });
+
+            setCheckUser(true); // Reset back to true - the next user may need to be verified again
+            console.log("06: Signing out. Value is now resetting to true");
+
             dispatch({type: "setUUID", payload: "N/A"})
             setTimeout(() => {
               navigation.navigate("Landing");
