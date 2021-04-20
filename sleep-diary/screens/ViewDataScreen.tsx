@@ -74,7 +74,6 @@ const ViewData = () => {
   useEffect(() => {
     // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
     // Resets everything in this screen
-    console.log("Triggering a reset")
 
     setStartDate(new Date());
     setShowStartDatePicker(false);
@@ -176,7 +175,6 @@ const ViewData = () => {
     });
 
     if (sleepEntries.length == 0){ // No data to use, so set the below
-      console.log("Resetting?")
       setAvgSleepData({
         avgDuration: "Insufficient data",
         avgAsleepTime: "Insufficient data",
