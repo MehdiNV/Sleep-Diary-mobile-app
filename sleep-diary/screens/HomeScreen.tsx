@@ -27,8 +27,6 @@ const Home = ({ navigation }) => {
   const [date, setDate] = useState(moment(new Date()).format("Do MMMM YYYY"))
   const [time, setTime] = useState(moment(new Date()).format("HH:mmA"))
 
-  const [checkUser, setCheckUser] = useState(true);
-
   // Hook that runs every time Home screen comes into focus / navigated to
   // Once so, we just run a quick state change and update the date & time to reflect
   // the current time at that moment
@@ -76,9 +74,6 @@ const Home = ({ navigation }) => {
               bottomOffset: 10,
             });
 
-            setCheckUser(true); // Reset back to true - the next user may need to be verified again
-            console.log("06: Signing out. Value is now resetting to true");
-
             // Reset the UUID we hold in the global Redux store as well by sending
             // the "N/A" value - this makes the UUID be unusable value / ensure the
             // user is properly logged out as we no longer hold the uuid
@@ -108,9 +103,6 @@ const Home = ({ navigation }) => {
               topOffset: 30,
               bottomOffset: 10,
             });
-
-            setCheckUser(true); // Reset back to true - the next user may need to be verified again
-            console.log("06: Signing out. Value is now resetting to true");
 
             dispatch({type: "setUUID", payload: "N/A"})
             setTimeout(() => {
