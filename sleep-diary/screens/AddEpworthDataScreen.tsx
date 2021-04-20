@@ -16,6 +16,20 @@ const AddEpworthData = () => {
 
   useEffect(() => {
     // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
+    // If the UUID changes, then the user has logged in or out - either way, we have to reset the screens
+    // so that they're ready for whichever new user we're now encountering / about to encounter / could encounter
+    setEpworthScore({
+      "row1":"",
+      "row2":"",
+      "row3":"",
+      "row4":"",
+      "row5":"",
+      "row6":"",
+      "row7":"",
+      "row8":"",
+    });
+    setDate(new Date());
+    setShow(false);
   },[uuid]);
 
   // Section for showing 'Date for' calendar entry
@@ -36,6 +50,7 @@ const AddEpworthData = () => {
     "row7":"",
     "row8":"",
   })
+
   /*
     Format for the code below in lodash is:
     1) Convert the data strcture to have numbers instead (_.toNumber and _.map)

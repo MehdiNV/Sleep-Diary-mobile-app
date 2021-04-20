@@ -11,12 +11,13 @@ import * as SecureStore from 'expo-secure-store';
 const Settings = () => {
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
 
-  useEffect(() => {
-    // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
-  },[uuid]);
-
   // State variable that holds visibility of warning modal / whether to show it or not
   const [showWarningModal, setWarningModal] = useState(false);
+
+  useEffect(() => {
+    // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
+    setWarningModal(false);
+  },[uuid]);
 
   // changeModalVisibility: When called, either shows or hides the warning Modal (modal which
   // is used to warn a user of whether they want to purge their data, before they make a final

@@ -14,11 +14,6 @@ const Home = ({ navigation }) => {
   // Getting UUID / Handing Login
   let uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
 
-  // TODO - Comments
-  useEffect(() => {
-    // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
-  },[uuid]);
-
   // Function that connects to the global store - this acts as the pathway to pass data to the global store
   // So, if we do dispatch({data}), this will send that data to that global store and update the info held there
   const dispatch = useDispatch();
@@ -50,6 +45,13 @@ const Home = ({ navigation }) => {
   else if (currHour >= 18 && currHour <= 23){ // Check if 18:00PM - 23:00PM
     dayPhase = "evening"
   }
+
+  // TODO - Comments
+  useEffect(() => {
+    // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
+    setDate(moment(new Date()).format("Do MMMM YYYY"));
+    setTime(moment(new Date()).format("HH:mmA"));
+  },[uuid]);
 
   return (
     <View style={styles.container}>

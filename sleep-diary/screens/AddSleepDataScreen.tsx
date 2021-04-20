@@ -14,10 +14,6 @@ import _ from 'lodash';
 const AddSleepData = () => {
   const uuid = useSelector(state => state.uuid); // Get the UUID of the logged in account
 
-  useEffect(() => {
-    // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
-  },[uuid]);
-
   // Section for showing 'Date for the night of' part
   const [date, setDate] = useState(new Date());
   const [mode, setMode] = useState('date');
@@ -34,6 +30,24 @@ const AddSleepData = () => {
   const [awakeTime, setAwakeTime] = useState(new Date());
   const [showAwakeDatePicker, setShowAwakeDatePicker] = useState(false);
   const [showAwakeTimePicker, setShowAwakeTimePicker] = useState(false);
+
+  useEffect(() => {
+    // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
+    // That's due to sign in / sign-out events - due to this, we reset the vars here to prep for next user
+    setDate(new Date());
+    setMode("date")
+    setShow(false);
+
+    setSleepDate(new Date());
+    setSleepTime(new Date());
+    setShowSleepDatePicker(false);
+    setShowSleepTimePicker(false);
+
+    setAwakeDate(new Date());
+    setAwakeTime(new Date());
+    setShowAwakeDatePicker(false);
+    setShowAwakeTimePicker(false);
+  },[uuid]);
 
   // Functions
   // Calendar Sleep Entry Picker

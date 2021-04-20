@@ -269,21 +269,10 @@ const Landing = ({ navigation }) => {
                   // If this is pressed, then we send the username and password the user has
                   // inputted so far to the registerNewUser function
                   const regResult = await registerNewUser(registerUserName, registerPassword);
-                  if (regResult){
-                    // Afterwards, we reset the states holding the username and password, and hide the modal
-                    // as it is no longer needed
-                    setRegisterUserName("");
-                    setRegisterPassword("");
-                    changeModalVisibility("registration");
-                  }
-                  else {
-                    // However, if registration fails (due to username taken already),
-                    // then we just notify the user to change their combination
-                    // We leave the username remaining so when the modal is re-opened the user can change it
-                    setRegisterPassword("");
-                    changeModalVisibility("registration");
-                  }
-
+                  // Afterwards, irrespective of result, hide the modal and reset the state vars
+                  setRegisterUserName("");
+                  setRegisterPassword("");
+                  changeModalVisibility("registration");
                 }}
               >
                 Register
