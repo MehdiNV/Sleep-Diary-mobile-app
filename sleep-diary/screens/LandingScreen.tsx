@@ -141,7 +141,7 @@ const Landing = ({ navigation }) => {
   async function loginUser(username, password) {
     if (username == "" || password == ""){
       showMissingCredsMessage();
-      return false;
+      return [false, null];
     }
 
     const linkedPassChain = await SecureStore.getItemAsync(username);

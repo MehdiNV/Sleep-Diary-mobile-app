@@ -74,7 +74,6 @@ const ViewData = () => {
   useEffect(() => {
     // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
     // Resets everything in this screen
-
     setStartDate(new Date());
     setShowStartDatePicker(false);
     setEndDate(new Date());
@@ -91,6 +90,7 @@ const ViewData = () => {
     setShowSleepChart(false);
     setEpworthChartData({});
     setShowEpworthChart(false);
+
   },[uuid]);
 
   // Methods used for changing the states
