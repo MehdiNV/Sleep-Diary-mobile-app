@@ -38,6 +38,22 @@ const Landing = ({ navigation }) => {
 
   // registerNewUser: Using the username & password state vars from above, create a new uuid / user
   async function registerNewUser(username, password) {
+    // Check if there's even a username or password - if not, then dismiss the reg attempt
+    if (username == "" || password == ""){
+      Toast.show({
+        type: 'error',
+        position: 'bottom',
+        text1: 'You must provide credentails',
+        text2: 'Please re-try and enter a username and password',
+        visibilityTime: 4000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+
+      return false;
+    }
+
     /*
      Create a new user - get the username, and password
      Combine those two values together to a usernameApassB
