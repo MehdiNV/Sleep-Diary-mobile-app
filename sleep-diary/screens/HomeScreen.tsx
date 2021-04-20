@@ -79,7 +79,7 @@ const Home = ({ navigation }) => {
             // Reset the UUID we hold in the global Redux store as well by sending
             // the "N/A" value - this makes the UUID be unusable value / ensure the
             // user is properly logged out as we no longer hold the uuid
-            dispatch({type: "setUUID", payload: "N/A"})
+            dispatch({type: "setUUID", payload: "f2eab443d488c0fdcf2411fa50c16dd471b47b1bb9ab97699f4deebf584dd4a2"})
             // There is a slight lag (about just by 1) when we dispatch to the Global Store
             // to make the Landing Screen visible / usable by the navigation - hence, I use the
             // setTimeout function to briefly wait for 5 (I believe milliseconds) before we call
@@ -105,8 +105,10 @@ const Home = ({ navigation }) => {
               topOffset: 30,
               bottomOffset: 10,
             });
-
-            dispatch({type: "setUUID", payload: "N/A"})
+            // The payload is a pre-gen UUID - it's the default one I use for the App (e.g. in the abscence of any,
+            // just use this one). This prevents issues with Expo in case some random call tries to refer to the UUID
+            // because it's late in a concurrent call
+            dispatch({type: "setUUID", payload: "f2eab443d488c0fdcf2411fa50c16dd471b47b1bb9ab97699f4deebf584dd4a2"})
             setTimeout(() => {
               navigation.navigate("Landing");
             }, 5);

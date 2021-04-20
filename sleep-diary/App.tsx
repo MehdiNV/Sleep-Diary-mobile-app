@@ -30,9 +30,12 @@ const App = () => {
       return state;
     }
   }
-
+  // UUID used is a simple default one - no user would be able to generate it, and its meaningless to use
+  // if anyone else steals it. It's just there as a default value (that cannot be generated) so that if something
+  // goes wrong with Expo (e.g. accidentally refers to a default uuid), then at least it has a usable uuid in place
+  // In essence, I've planned for everything even if it's impossible - hence, why I put a default uuid in
   const store = createStore(myReducer,
-    {uuid: "N/A", loginVisibility: true});
+    {uuid: "f2eab443d488c0fdcf2411fa50c16dd471b47b1bb9ab97699f4deebf584dd4a2", loginVisibility: true});
 
   if (!isLoadingComplete) {
     return null;
