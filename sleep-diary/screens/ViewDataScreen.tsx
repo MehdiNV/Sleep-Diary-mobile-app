@@ -68,7 +68,7 @@ const ViewData = () => {
         await calculateSleepingRecords();
       }
       loadInitialData();
-    }, [])
+    }, [startDate, endDate])
   );
 
   useEffect(() => {
