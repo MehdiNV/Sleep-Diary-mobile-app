@@ -44,6 +44,23 @@ const Landing = ({ navigation }) => {
      Then link it to a unique uuid (e.g. in key-val relationship)
     */
     const userAndPassChain = "username" + username + "pass" + password
+    // Looks up the username in storage, just in case this username is already taken
+    const isExistingUser = await SecureStore.getItemAsync(username);
+
+    if (isExistingUser){ // If this user already exists, then prevent registration
+      Toast.show({
+        type: 'error',
+        position: 'bottom',
+        text1: 'This username is already taken',
+        text2: 'Please try a different combination',
+        visibilityTime: 4000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+
+      return false;
+    }
 
     /*
       Expo's Secure Storage seems to have an issue with dashes in the string
@@ -53,11 +70,25 @@ const Landing = ({ navigation }) => {
     let uuid = uuidv4()
     uuid = _.replace(uuid, new RegExp("-","g"),"")
 
+    // Additional layer of security - process is (further explained below too)
+    // 1) username --> userAndPassChain (username + password)
+    // 2) userAndPassChain --> uuid
+    // 3) uuid --> Sleeping records (array)
+    // This 3 way structure not only allows us to maintain security, but also carry out utility operations
+    // For example, we can use Layer 1 to check if a user already exists so we don't overwrite accounts during registration
+    // Layer 2 and 3 would be then for security (e.g. hide the uuid in encrypted storage, use the passchain for it)
+    await SecureStore.setItemAsync(username, userAndPassChain);
+
     // This now sets the process as: username+password -> uuid (the unique identifier to a users
     // sleep records). This ensures a form of safety since external actors would need the uuid
     // to actually access sleeping records - without it, all they can do is guess the username
     // and password in order to get that uuid (hence as a result, we have good level of security)
+    // This basically now adds the Layer 2 of the security mentioned above
     await SecureStore.setItemAsync(userAndPassChain, uuid);
+    // And finally, Layer 3 (uuid --> sleeping records)
+    // Now that the user is registered, set their account with an empty sleeping records array
+    await SecureStore.setItemAsync(uuid, JSON.stringify([]))
+
     Toast.show({
       type: 'success',
       position: 'bottom',
@@ -68,32 +99,61 @@ const Landing = ({ navigation }) => {
       topOffset: 30,
       bottomOffset: 40,
     });
-
-    // Now that the user is registered, set their account with an empty sleeping records array
-    await SecureStore.setItemAsync(uuid, JSON.stringify([]))
+    return true; // Return True to denote successful registration process
   }
 
   // loginUser: Using username & password specified, check if this user exists - if so,
   // then navigate to the next screen
   async function loginUser(username, password) {
+    const linkedPassChain = await SecureStore.getItemAsync(username);
+    if (!linkedPassChain){
+      Toast.show({
+        type: 'error',
+        position: 'bottom',
+        text1: 'Incorrect username or password!',
+        text2: 'Your username or password was wrong, please re-try',
+        visibilityTime: 4000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+      return [false, null];
+    }
+
+    // Otherwise, we do have a username and passchain fetched from this username
     const userAndPassChain = "username" + username + "pass" + password
-    // The below checks if an actual Key-Val pairing exists for userAndPassChain
-    const loginResult = await SecureStore.getItemAsync(userAndPassChain);
-    if (loginResult) { // Check if the result is correct / user does exist
+    // Hence we check the input pass chain against the one linked to the username
+    // If they're not correct, display the approp message (likely that the user entered the wrong password)
+    if (linkedPassChain != userAndPassChain) {
+      Toast.show({
+        type: 'error',
+        position: 'bottom',
+        text1: 'Incorrect username or password!',
+        text2: 'Your username or password was wrong, please re-try',
+        visibilityTime: 4000,
+        autoHide: true,
+        topOffset: 30,
+        bottomOffset: 40,
+      });
+      return [false, null];
+    }
+
+    const linkedUUID = await SecureStore.getItemAsync(userAndPassChain);
+    if (linkedUUID) { // Check if the result is correct / user does exist
       // If so, then we display the Toast message below
       Toast.show({
         type: 'success',
         position: 'bottom',
-        text1: "Welcome back user " + username + "!",
+        text1: "Welcome user " + username + "!",
         text2: 'Logging you in now',
         visibilityTime: 4000,
         autoHide: true,
         topOffset: 30,
         bottomOffset: 40,
       });
-      // We now return 'true' and the loginResult (the resulting uuid that we fetched)
+      // We now return 'true' and the linkedUUID (the resulting uuid that we fetched)
       // to the function caller
-      return [true, loginResult];
+      return [true, linkedUUID];
     } else {
       // Else, we display the message below since the username + password combo fetched no value / uuid
       Toast.show({
@@ -182,15 +242,25 @@ const Landing = ({ navigation }) => {
                 style = {styles.modalButton}
                 labelStyle = {{ color: "black" }}
                 mode = "contained"
-                onPress ={() => {
+                onPress ={async () => {
                   // If this is pressed, then we send the username and password the user has
                   // inputted so far to the registerNewUser function
-                  registerNewUser(registerUserName, registerPassword);
-                  // Afterwards, we reset the states holding the username and password, and hide the modal
-                  // as it is no longer needed
-                  setRegisterUserName("");
-                  setRegisterPassword("");
-                  changeModalVisibility("registration");
+                  const regResult = await registerNewUser(registerUserName, registerPassword);
+                  if (regResult){
+                    // Afterwards, we reset the states holding the username and password, and hide the modal
+                    // as it is no longer needed
+                    setRegisterUserName("");
+                    setRegisterPassword("");
+                    changeModalVisibility("registration");
+                  }
+                  else {
+                    // However, if registration fails (due to username taken already),
+                    // then we just notify the user to change their combination
+                    // We leave the username remaining so when the modal is re-opened the user can change it
+                    setRegisterPassword("");
+                    changeModalVisibility("registration");
+                  }
+
                 }}
               >
                 Register
