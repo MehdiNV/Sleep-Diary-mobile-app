@@ -36,21 +36,39 @@ const Landing = ({ navigation }) => {
     }
   }
 
+  const showMissingCredsMessage = () => {
+    Toast.show({
+      type: 'error',
+      position: 'bottom',
+      text1: 'You must provide credentails',
+      text2: 'Please re-try and enter a username and password',
+      visibilityTime: 4000,
+      autoHide: true,
+      topOffset: 30,
+      bottomOffset: 40,
+    });
+  }
+
+  const showIncorrectCredsMessage = () => {
+    Toast.show({
+      type: 'error',
+      position: 'bottom',
+      text1: 'Incorrect username or password!',
+      text2: 'Your username or password was wrong, please re-try',
+      visibilityTime: 4000,
+      autoHide: true,
+      topOffset: 30,
+      bottomOffset: 40,
+    });
+  }
+
   // registerNewUser: Using the username & password state vars from above, create a new uuid / user
   async function registerNewUser(username, password) {
     // Check if there's even a username or password - if not, then dismiss the reg attempt
+    // There's no length or password strength imposed for now - all that's important is that
+    // there is at least some form of a credential to register with
     if (username == "" || password == ""){
-      Toast.show({
-        type: 'error',
-        position: 'bottom',
-        text1: 'You must provide credentails',
-        text2: 'Please re-try and enter a username and password',
-        visibilityTime: 4000,
-        autoHide: true,
-        topOffset: 30,
-        bottomOffset: 40,
-      });
-
+      showMissingCredsMessage(); // Make a call to show a toast about entering creds
       return false;
     }
 
@@ -121,18 +139,14 @@ const Landing = ({ navigation }) => {
   // loginUser: Using username & password specified, check if this user exists - if so,
   // then navigate to the next screen
   async function loginUser(username, password) {
+    if (username == "" || password == ""){
+      showMissingCredsMessage();
+      return false;
+    }
+
     const linkedPassChain = await SecureStore.getItemAsync(username);
     if (!linkedPassChain){
-      Toast.show({
-        type: 'error',
-        position: 'bottom',
-        text1: 'Incorrect username or password!',
-        text2: 'Your username or password was wrong, please re-try',
-        visibilityTime: 4000,
-        autoHide: true,
-        topOffset: 30,
-        bottomOffset: 40,
-      });
+      showIncorrectCredsMessage();
       return [false, null];
     }
 
@@ -141,16 +155,7 @@ const Landing = ({ navigation }) => {
     // Hence we check the input pass chain against the one linked to the username
     // If they're not correct, display the approp message (likely that the user entered the wrong password)
     if (linkedPassChain != userAndPassChain) {
-      Toast.show({
-        type: 'error',
-        position: 'bottom',
-        text1: 'Incorrect username or password!',
-        text2: 'Your username or password was wrong, please re-try',
-        visibilityTime: 4000,
-        autoHide: true,
-        topOffset: 30,
-        bottomOffset: 40,
-      });
+      showIncorrectCredsMessage();
       return [false, null];
     }
 
@@ -172,11 +177,13 @@ const Landing = ({ navigation }) => {
       return [true, linkedUUID];
     } else {
       // Else, we display the message below since the username + password combo fetched no value / uuid
+      // This shouldn't actually happen, but I included a error message in case it ever does - although the
+      // code shouldn't allow it and all tests on this passed, I thought to include this anyway just in case
       Toast.show({
         type: 'error',
         position: 'bottom',
-        text1: 'Incorrect username or password!',
-        text2: 'Your username or password was wrong, please re-try',
+        text1: 'Something went wrong',
+        text2: 'No UUID linked to account. This error is now logged, please try again later',
         visibilityTime: 4000,
         autoHide: true,
         topOffset: 30,

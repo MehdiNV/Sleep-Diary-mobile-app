@@ -53,8 +53,6 @@ const Home = ({ navigation }) => {
     dayPhase = "evening"
   }
 
-  console.log("My UUID is: " + uuid);
-
   return (
     <View style={styles.container}>
       <View style = {styles.signOutContainer}>
