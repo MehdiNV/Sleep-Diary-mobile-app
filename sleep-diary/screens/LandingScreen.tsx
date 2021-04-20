@@ -40,7 +40,7 @@ const Landing = ({ navigation }) => {
     Toast.show({
       type: 'error',
       position: 'bottom',
-      text1: 'You must provide credentails',
+      text1: 'You must provide credentials',
       text2: 'Please re-try and enter a username and password',
       visibilityTime: 4000,
       autoHide: true,
