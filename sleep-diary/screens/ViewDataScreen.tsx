@@ -62,6 +62,8 @@ const ViewData = () => {
     loadInitialData();
   }, [startDate, endDate])
 
+  // Hook that's called when the screen comes into effect
+  // Purpose is to kick-start the screen to load initial data (e.g. for graphs, stats, etc)
   useFocusEffect(
     useCallback(() => {
       async function loadInitialData(){
@@ -71,6 +73,8 @@ const ViewData = () => {
     }, [startDate, endDate])
   );
 
+  // Hook that kicks into effect when a user logs in or logs out - when uuid changes essentially
+  // This just resets the whole screen back into a default state
   useEffect(() => {
     // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
     // Resets everything in this screen
