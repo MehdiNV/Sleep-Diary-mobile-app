@@ -51,6 +51,10 @@ const AddSleepData = () => {
 
   // Functions
   // Calendar Sleep Entry Picker
+  // onChange method: Called when user picks a value within the 'date' picker
+  // Input: (event, selectedDate) - we're specifically more concerned with the 2nd parameter
+  // this is basically the value denoting the date the uesr picked in the widget.
+  // Return: Nothing
   const onChange = (event, selectedDate) => {
     setShow(Platform.OS === 'ios');
     if (moment(selectedDate).isAfter(new Date(), "day")) {
@@ -71,17 +75,17 @@ const AddSleepData = () => {
     }
   };
 
+  // showMode: Flips the visibility of the date-picker
+  // Input: Nothing, Return: Nothing
   const showMode = (currentMode) => {
     setShow(true);
     setMode(currentMode);
   };
 
+  // showDatepicker: Sets the mode of the date-picker to be solely date-based
+  // Input: Nothing, Return: Nothing
   const showDatepicker = () => {
     showMode('date');
-  };
-
-  const showTimepicker = () => {
-    showMode('time');
   };
 
   // Methods that are linked to the Awake Picker (Widgets for selecting time
@@ -90,6 +94,7 @@ const AddSleepData = () => {
   // This is called when the user selects a new time using the time Widget
   // Once they do, we recieve their new choice (or cancellation) and appropriately
   // update the state information we hold
+  // Input: Nothing, Return: Nothing
   const updateAwakeTime = (event, selectedTime) => {
     const currAwakeTime = selectedTime || awakeTime;
     setShowAwakeTimePicker(Platform.OS === 'ios');
@@ -97,12 +102,15 @@ const AddSleepData = () => {
   }
   // Func: updateAwakeDate
   // Likewise like the above, but for the date (that you wake up on) instead
+  // Input: Nothing, Return: Nothing
   const updateAwakeDate = (event, selectedDate) => {
     const currAwakeDate = selectedDate || awakeDate;
     setShowAwakeDatePicker(Platform.OS === 'ios');
     setAwakeDate(currAwakeDate);
   }
+
   // showAwakePickerWidgets: Shows the time and date widgets (for selecting time and date user woke up on)
+  // Input: Nothing, Return: Nothing
   const showAwakePickerWidgets = () => {
     setShowAwakeDatePicker(true);
     setShowAwakeTimePicker(true);
@@ -110,21 +118,26 @@ const AddSleepData = () => {
 
   // Methods for the Sleep picker / widget used for sleeping date & time
   // updateSleepTime: recieves the selected time inputted, and updates the state that holds it
+  // Input: Nothing, Return: Nothing
   const updateSleepTime = (event, selectedTime) => {
     const currSleepTime = selectedTime || sleepTime;
     setShowSleepTimePicker(Platform.OS === 'ios');
     setSleepTime(currSleepTime);
   }
+
   // updateSleepDate: Same as the above, but for dates instead
+  // Input: Nothing, Return: Nothing
   const updateSleepDate = (event, selectedDate) => {
     const currSleepDate = selectedDate || sleepDate;
     setShowSleepDatePicker(Platform.OS === 'ios');
     setSleepDate(currSleepDate);
   }
+
   // showSleepPickerWidgets: Shows both the time and date pickers
   // The calendar / date one is shown first (overlays the time) - idea here is that to the user,
   // they still get the option of adding both date and time without being aware that it's just
   // two widgets back-to-back
+  // Input: Nothing, Return: Nothing
   const showSleepPickerWidgets = () => {
     setShowSleepDatePicker(true);
     setShowSleepTimePicker(true);
@@ -135,6 +148,7 @@ const AddSleepData = () => {
   // Function that essentially saves the inputs of the user into Expo's SecureStore
   // If the record already exists, then we overwrite it there instead. This works near-identically
   // to the mechanism used in AddEpworthData, so all comments from there apply equally as well
+  // Input: Nothing, Return: Nothing
   const storeSleepData = async () => {
     // Format the Date and Time of both into one
     const sleepDateTime = moment((moment(sleepDate).format("DD/MM/YY") +
@@ -226,6 +240,9 @@ const AddSleepData = () => {
     }, 3500);
   }
 
+  // notifyStorageSuccess: Function used to display a 'success' message
+  // Called usually after we successfully store data for the user
+  // Input: Nothing, Return: Nothing
   const notifyStorageSuccess = async () => {
     Toast.show({
       type: 'success',

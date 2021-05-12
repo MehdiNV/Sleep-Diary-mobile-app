@@ -95,6 +95,7 @@ const ViewData = () => {
 
   // Methods used for changing the states
   // For Start Date - the onChange and Show methods
+  // Input: Nothing, Return: Nothing
   const onStartDateChange = async (event, selectedDate) => {
       setShowStartDatePicker(Platform.OS === 'ios');
       // Checks if the selected date is past the end date (e.g. weird range that overlap)
@@ -118,11 +119,15 @@ const ViewData = () => {
       }
 
   };
+
   // showStartPicker: When called, shows the widget to allow a user to pick a start date
+  // Input: Nothing, Return: Nothing
   const showStartPicker = () => {
     setShowStartDatePicker(true);
   }
+
   // Likewise like the startDateChange method, but for the End Date
+  // Input: Nothing, Return: Nothing
   const onEndDateChange = async (event, selectedDate) => {
     setShowEndDatePicker(Platform.OS === 'ios');
     if (moment(selectedDate).isAfter(new Date(), "day")){
@@ -142,12 +147,15 @@ const ViewData = () => {
       setEndDate(currEndDate);
     }
   };
+
   // Like the showStartPicker, but for the endDate instead
+  // Input: Nothing, Return: Nothing
   const showEndPicker = () => {
     setShowEndDatePicker(true);
   }
 
   // Calculate data needed for the date ranges specified
+  // Input: Nothing, Return: Nothing
   const calculateSleepingRecords = async () => {
     // Fetch all the sleeping records that are linked to this account
     let sleepingRecords = await SecureStore.getItemAsync(uuid);
@@ -286,6 +294,9 @@ const ViewData = () => {
     calculateChartData(sleepEntries, epworthEntries);
   }
 
+  // calculateChartData: Fetches stored entries, and formats them into appropriate structures
+  // so that the graphs can easily parse and make use of them correctly
+  // Input: Nothing, Return: Nothing
   const calculateChartData = (sleepEntries, epworthEntries) => {
     // Sort the two arrays by their date
     // This is necessary since the charts will need to be chronological from left to right
