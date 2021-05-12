@@ -22,12 +22,14 @@ const Settings = () => {
   // changeModalVisibility: When called, either shows or hides the warning Modal (modal which
   // is used to warn a user of whether they want to purge their data, before they make a final
   // decision)
+  // Input: Nothing, Return: Nothing
   const changeModalVisibility = () => {
     setWarningModal(!showWarningModal);
   }
 
   // purgeData: Deletes all the data associated with this user (uuid) - resets it all back to
   // a empty array (like they are a newly registered user)
+  // Input: Nothing, Return: Nothing
   const purgeData = async () => {
     // Reset all the data - reset the UUID to associate with an empty (data) array
     await SecureStore.setItemAsync(uuid, JSON.stringify([]));

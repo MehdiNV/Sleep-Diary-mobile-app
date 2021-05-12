@@ -27,6 +27,7 @@ const Landing = ({ navigation }) => {
   const [loginPassword, setLoginPassword] = useState("");
 
   // changeModalVisibility: Changes the visibility of the specified modal via the type parameter
+  // Input: type (type of modal to change the visibility of), Return: Nothing
   const changeModalVisibility = (type) => {
     if (type == "login"){
       setShowLoginModal(!showLoginModal);
@@ -36,6 +37,9 @@ const Landing = ({ navigation }) => {
     }
   }
 
+  // showMissingCredsMessage: Function used to display a Toast message
+  // This toast message displays an error emssage to the user that they must enter some credentials
+  // Input: Nothing, Return: Nothing
   const showMissingCredsMessage = () => {
     Toast.show({
       type: 'error',
@@ -49,6 +53,9 @@ const Landing = ({ navigation }) => {
     });
   }
 
+  // showIncorrectCredsMessage: Function used to display a Toast message
+  // This toast message displays an error emssage to the user their credentials are wrong
+  // Input: Nothing, Return: Nothing
   const showIncorrectCredsMessage = () => {
     Toast.show({
       type: 'error',
@@ -63,6 +70,7 @@ const Landing = ({ navigation }) => {
   }
 
   // registerNewUser: Using the username & password state vars from above, create a new uuid / user
+  // Input: Nothing, Return: Boolean (True for successful registration, False otherwise)
   async function registerNewUser(username, password) {
     // Check if there's even a username or password - if not, then dismiss the reg attempt
     // There's no length or password strength imposed for now - all that's important is that
@@ -138,6 +146,8 @@ const Landing = ({ navigation }) => {
 
   // loginUser: Using username & password specified, check if this user exists - if so,
   // then navigate to the next screen
+  // Input: Nothing, Return: Array [boolean, uuid] (1st index for whether login was successful or not
+  // , 2nd index is for the uuid if login was successful - otherwise, it's set to None / Null)
   async function loginUser(username, password) {
     if (username == "" || password == ""){
       showMissingCredsMessage();
