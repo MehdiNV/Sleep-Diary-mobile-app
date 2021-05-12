@@ -95,7 +95,9 @@ const AddEpworthData = () => {
     }
   };
 
-  // Text Handler for the number inputs (The epworth scoring)
+  // handleTextChange: Text Handler for the number inputs (The epworth scoring)
+  // Just checks basically if the text being given is correct / valid or not. If so, then we keep the text otherwise discard
+  // Input: Nothing, Return: Nothing
   const handleTextChange = (inputIdentifier, value) => {
     if (/^\d+$/.test(value) || value === '') { // Checks if it's actually a number
       if (_.toNumber(value) >= 0 && _.toNumber(value) <= 3){
@@ -110,7 +112,8 @@ const AddEpworthData = () => {
     // https://gist.github.com/AlexisLeon/80b5641eb30b43bc598288e41052ac39
   }
 
-  // Method that adds the data to the storage for the user
+  // addEpworthData: Method that adds the data to the storage for the user
+  // Input: Nothing, Return: Nothing
   const addEpworthData = async () => {
     let sleepingRecords = await SecureStore.getItemAsync(uuid);
     sleepingRecords = JSON.parse(sleepingRecords); // Convert it to its array format
@@ -185,7 +188,9 @@ const AddEpworthData = () => {
     }, 3500);
   }
 
-  // When called, shows a 'success' toast to denote the new entry was added in
+  // notifyStorageSuccess: Shows a 'success' toast to denote the new entry was added in
+  // Usually called after a successful storage operation
+  // Input: Nothing, Return: Nothing
   const notifyStorageSuccess = async () => {
     Toast.show({
       type: 'success',

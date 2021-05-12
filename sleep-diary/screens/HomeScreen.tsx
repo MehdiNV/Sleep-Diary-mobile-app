@@ -46,7 +46,7 @@ const Home = ({ navigation }) => {
     dayPhase = "evening"
   }
 
-  // TODO - Comments
+  // React hook that's called if the uuid held changes (e.g. user logs out or new user logs in)
   useEffect(() => {
     // Triggers if the uuid in Redux store changes - ensures the uuid held above is accurate as a result
     setDate(moment(new Date()).format("Do MMMM YYYY"));

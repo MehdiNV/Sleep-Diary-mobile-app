@@ -20,6 +20,8 @@ const BottomTab = createBottomTabNavigator<BottomTabParamList>();
 export default function BottomTabNavigator() {
   const colorScheme = useColorScheme();
   const showLoginScreen = useSelector(state => state.loginVisibility)
+  
+  // React hook that's called if the loginVisibility status changes
   useEffect(() => {
     // Monitors the showLoginScreen value in case it changes - if so, re-renders the component
     // This is largely unnecessary and overkill, but I'd rather be safe than sorry
