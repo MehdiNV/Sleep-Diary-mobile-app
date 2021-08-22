@@ -1,5 +1,7 @@
 # CSC3122 Mobile Computer Systems Development 
 ### By Mehdi Naderi Varandi
+##### (This was originally for University - more in-depth README & documentation coming soon!)
+
 
 Project made for the module's coursework assessment. This is a Sleep Diary application that has the following features:
 * Login and Registeration mechanisms 
